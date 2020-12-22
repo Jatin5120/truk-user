@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "453659943664",
+    "project_id": "truk-f6264",
+    "storage_bucket": "truk-f6264.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453659943664:android:ef4bd0a90c59c3d4e75835",
+        "android_client_info": {
+          "package_name": "com.agumentik.trukapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453659943664-c70m11q2q2btjm9qa9efs2iap74ljqp9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agumentik.trukapp",
+            "certificate_hash": "75ee8c2729eb8a9d098a75b312388bb8b6f2fc8c"
+          }
+        },
+        {
+          "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfoC5Dd27NZVDQB-5JeffPagYP_ztB5PY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
