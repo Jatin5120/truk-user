@@ -14,8 +14,6 @@ class _AboutState extends State<About> {
     return Scaffold(
       appBar: AppBar(
         title: Text('About Us'),
-        backgroundColor: Color.fromRGBO(255, 113, 1, 100),
-        elevation: 0.0,
       ),
       body: Container(
         child: SingleChildScrollView(

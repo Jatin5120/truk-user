@@ -3,6 +3,9 @@ import 'package:trukapp/screens/tellUsMore.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+import '../utils/constants.dart';
+
 class CarouselScreen extends StatefulWidget {
   @override
   CarouselScreenState createState() => CarouselScreenState();
@@ -29,7 +32,7 @@ class CarouselScreenState extends State<CarouselScreen> {
                 indicatorBgPadding: 8,
                 dotSize: 6,
                 dotIncreasedColor: Colors.grey,
-                dotColor: Color.fromRGBO(255, 113, 1, 100),
+                dotColor: primaryColor,
                 images: [
                   Container(
                     child: Column(
@@ -166,7 +169,7 @@ class CarouselScreenState extends State<CarouselScreen> {
                 width: width,
                 padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                 child: RaisedButton(
-                  color: Color.fromRGBO(255, 113, 1, 100),
+                  color: primaryColor,
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => MoreAbout(),

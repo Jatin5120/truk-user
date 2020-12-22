@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+
 class EditProfile extends StatefulWidget {
   @override
   _EditProfileState createState() => _EditProfileState();
@@ -17,8 +19,8 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Edit Profile'),
-          backgroundColor: Color.fromRGBO(255, 113, 1, 100)),
+        title: Text('Edit Profile'),
+      ),
       body: Container(
         child: SingleChildScrollView(
           child: Container(
@@ -88,7 +90,7 @@ class _EditProfileState extends State<EditProfile> {
                   width: width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                   child: RaisedButton(
-                    color: Color.fromRGBO(255, 113, 1, 100),
+                    color: primaryColor,
                     onPressed: () {},
                     child: Text(
                       'Update',

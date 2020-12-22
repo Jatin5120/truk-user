@@ -2,6 +2,8 @@ import 'package:trukapp/screens/carousel.dart';
 import 'package:trukapp/screens/signup.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+
 class Login extends StatefulWidget {
   @override
   LoginState createState() => LoginState();
@@ -183,7 +185,7 @@ class LoginState extends State<Login> {
                     width: width,
                     padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                     child: RaisedButton(
-                      color: Color.fromRGBO(255, 113, 1, 100),
+                      color: primaryColor,
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => CarouselScreen(),

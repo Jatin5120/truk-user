@@ -1,6 +1,8 @@
 import 'package:trukapp/screens/home.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+
 class MoreAbout extends StatefulWidget {
   @override
   _MoreAboutState createState() => _MoreAboutState();
@@ -175,7 +177,7 @@ class _MoreAboutState extends State<MoreAbout> {
                     width: width,
                     padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                     child: RaisedButton(
-                      color: Color.fromRGBO(255, 113, 1, 100),
+                      color: primaryColor,
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => HomeScreen(),

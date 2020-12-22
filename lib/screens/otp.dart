@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/utils/constants.dart';
+
+import 'home.dart';
 
 class OTP extends StatefulWidget {
   @override
@@ -116,7 +119,11 @@ class _OTPState extends State<OTP> {
                 padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                 child: RaisedButton(
                   color: primaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+                      builder: (context) => HomeScreen(),
+                    ));
+                  },
                   child: Text(
                     'Verify Now',
                     style: TextStyle(fontSize: 16, color: Colors.white),
