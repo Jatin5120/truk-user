@@ -1,4 +1,4 @@
-package com.example.trukapp
+package com.agumentik.trukapp
 
 import io.flutter.embedding.android.FlutterActivity
 
