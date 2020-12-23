@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trukapp/screens/tellUsMore.dart';
 import 'package:trukapp/utils/constants.dart';
 
 class OTP extends StatefulWidget {
@@ -12,6 +16,28 @@ class _OTPState extends State<OTP> {
   TextEditingController otp = TextEditingController();
   GlobalKey<FormState> otpKey = GlobalKey<FormState>();
   String phoneNumber = '+91 9987654321';
+  int secondsRemaining = 15;
+
+  @override
+  void initState() {
+    super.initState();
+    getRemainingTime();
+  }
+
+  getRemainingTime() {
+    Timer.periodic(
+      Duration(seconds: 1),
+      (timer) {
+        if (secondsRemaining == 0) {
+          timer.cancel();
+        } else {
+          secondsRemaining--;
+        }
+        setState(() {});
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,19 +117,22 @@ class _OTPState extends State<OTP> {
                   children: [
                     Container(
                       child: Text(
-                        '00:25',
+                        "00:${secondsRemaining < 10 ? '0${secondsRemaining.toString()}' : '${secondsRemaining.toString()}'}",
                         style: TextStyle(fontSize: 18),
                       ),
                     ),
-                    Container(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Text(
-                          'Resend OTP',
-                          style: TextStyle(fontSize: 18, color: Colors.blue),
-                        ),
-                      ),
-                    )
+                    secondsRemaining == 0
+                        ? Container(
+                            child: InkWell(
+                              onTap: () {},
+                              child: Text(
+                                'Resend OTP',
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.blue),
+                              ),
+                            ),
+                          )
+                        : Container()
                   ],
                 ),
               ),
@@ -116,7 +145,13 @@ class _OTPState extends State<OTP> {
                 padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                 child: RaisedButton(
                   color: primaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(
+                        builder: (context) => MoreAbout(),
+                      ),
+                    );
+                  },
                   child: Text(
                     'Verify Now',
                     style: TextStyle(fontSize: 16, color: Colors.white),

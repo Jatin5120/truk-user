@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget paymentSuccessful({String shipmentId, BuildContext context}) {
+paymentSuccessful({String shipmentId, BuildContext context}) {
   showDialog(
       context: context,
       builder: (context) {

@@ -1,5 +1,6 @@
 import 'package:trukapp/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:trukapp/utils/constants.dart';
 
 class MoreAbout extends StatefulWidget {
   @override
@@ -29,24 +30,46 @@ class _MoreAboutState extends State<MoreAbout> {
     ImageProvider image = AssetImage('assets/images/logo.png');
 
     return Scaffold(
-      body: Container(
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+          height: 65,
+          width: width,
+          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          child: RaisedButton(
+            color: primaryColor,
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ));
+            },
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          ),
+        ),
+      ),
+      body: SafeArea(
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 50,
+                  height: 60,
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  height: 40,
-                  child: Image(
-                    image: image,
+                Center(
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: 50,
                   ),
                 ),
                 SizedBox(
-                  height: height * 0.1,
+                  height: 40,
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 20),
@@ -58,136 +81,73 @@ class _MoreAboutState extends State<MoreAbout> {
                 SizedBox(
                   height: 10,
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: nameKey,
-                    child: TextFormField(
-                      controller: name,
-                      decoration: InputDecoration(
-                          // prefixIcon: Container(
-                          //   padding: EdgeInsets.only(left: 10),
-                          //   alignment: Alignment.centerLeft,
-                          //   width: 80,
-                          //   child: Image(
-                          //     height: 20,
-                          //     image: AssetImage('assets/images/india.png'),
-                          //   ),
-                          // ),
-                          hintText: 'Name *',
-                          border: OutlineInputBorder()),
+                TextFormField(
+                  controller: name,
+                  decoration: InputDecoration(
+                    labelText: 'Name*',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: email,
+                  decoration: InputDecoration(
+                    hintText: 'Email ID*',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Form(
+                  key: companyKey,
+                  child: TextFormField(
+                    controller: companyName,
+                    decoration: InputDecoration(
+                      hintText: 'Company Name*',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: emailKey,
-                    child: TextFormField(
-                      controller: email,
-                      decoration: InputDecoration(
-                          hintText: 'Email ID *', border: OutlineInputBorder()),
-                    ),
+                TextFormField(
+                  controller: city,
+                  decoration: InputDecoration(
+                    hintText: 'City*',
+                    border: OutlineInputBorder(),
                   ),
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: companyKey,
-                    child: TextFormField(
-                      controller: companyName,
-                      decoration: InputDecoration(
-                          hintText: 'Company Name *',
-                          border: OutlineInputBorder()),
-                    ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'State*',
+                    border: OutlineInputBorder(),
                   ),
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: cityKey,
-                    child: TextFormField(
-                      controller: city,
-                      decoration: InputDecoration(
-                          hintText: 'City *', border: OutlineInputBorder()),
-                    ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Enter Password*',
+                    border: OutlineInputBorder(),
                   ),
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: stateKey,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: 'State *', border: OutlineInputBorder()),
-                    ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Confirm Password*',
+                    border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: passwordKey,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: 'Enter Password *',
-                          border: OutlineInputBorder()),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: confirmPasswordKey,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: 'Confirm Password *',
-                          border: OutlineInputBorder()),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Flexible(
-                  flex: 0,
-                  child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                    height: 65,
-                    width: width,
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    child: RaisedButton(
-                      color: Color.fromRGBO(255, 113, 1, 100),
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => HomeScreen(),
-                        ));
-                      },
-                      child: Text(
-                        'Continue',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                  ),
-                )
               ],
             ),
           ),

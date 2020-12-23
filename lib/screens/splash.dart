@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:trukapp/screens/carousel.dart';
 import 'package:trukapp/screens/signup.dart';
 import 'package:flutter/material.dart';
+import 'package:trukapp/sessionmanagement/session_manager.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -14,16 +16,19 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
+    handleTimer();
+  }
+
+  handleTimer() async {
+    bool isOld = await SharedPref().isOld();
     Timer(
       Duration(seconds: 3),
       () => Navigator.of(context).pushReplacement(
         CupertinoPageRoute(
-          builder: (context) => Signup(),
+          builder: (context) => !isOld ? CarouselScreen() : Signup(),
         ),
       ),
     );
-
-    /// Initialize data, then navigator to Home screen.
   }
 
   @override

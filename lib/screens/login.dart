@@ -64,17 +64,18 @@ class LoginState extends State<Login> {
                     key: mobileNumberKey,
                     child: TextFormField(
                       decoration: InputDecoration(
-                          prefixIcon: Container(
-                            padding: EdgeInsets.only(left: 10),
-                            alignment: Alignment.centerLeft,
-                            width: 80,
-                            child: Image(
-                              height: 20,
-                              image: AssetImage('assets/images/india.png'),
-                            ),
+                        prefixIcon: Container(
+                          padding: EdgeInsets.only(left: 10),
+                          alignment: Alignment.centerLeft,
+                          width: 80,
+                          child: Image(
+                            height: 20,
+                            image: AssetImage('assets/images/india.png'),
                           ),
-                          hintText: 'Enter Mobile Number',
-                          border: OutlineInputBorder()),
+                        ),
+                        hintText: 'Enter Mobile Number',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                 ),

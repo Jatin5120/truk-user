@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   carousel_pro: ^1.0.0
   cupertino_icons: ^1.0.0
+  shared_preferences: ^0.5.12+4
 
 dev_dependencies:
   flutter_test:
