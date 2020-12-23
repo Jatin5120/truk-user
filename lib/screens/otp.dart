@@ -49,6 +49,7 @@ class _OTPState extends State<OTP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Container(
           height: height,
@@ -159,10 +160,6 @@ class _OTPState extends State<OTP> {
                         builder: (context) => MoreAbout(),
                       ),
                     );
-
-                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
-                      builder: (context) => HomeScreen(),
-                    ));
                   },
                   child: Text(
                     'Verify Now',

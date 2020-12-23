@@ -15,18 +15,23 @@ class _MoreAboutState extends State<MoreAbout> {
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _companyNameController.dispose();
+    _cityController.dispose();
+    _stateController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       bottomNavigationBar: BottomAppBar(
         child: Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
@@ -48,6 +53,7 @@ class _MoreAboutState extends State<MoreAbout> {
         ),
       ),
       body: Form(
+        key: _formKey,
         child: SafeArea(
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -69,12 +75,9 @@ class _MoreAboutState extends State<MoreAbout> {
                   SizedBox(
                     height: 40,
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 20),
-                    child: Text(
-                      'Tell us more about you:',
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  Text(
+                    'Tell us more about you:',
+                    style: TextStyle(fontSize: 18),
                   ),
                   SizedBox(
                     height: 10,
@@ -92,7 +95,7 @@ class _MoreAboutState extends State<MoreAbout> {
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                      hintText: 'Email ID*',
+                      labelText: 'Email ID*',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -102,7 +105,7 @@ class _MoreAboutState extends State<MoreAbout> {
                   TextFormField(
                     controller: _companyNameController,
                     decoration: InputDecoration(
-                      hintText: 'Company Name*',
+                      labelText: 'Company/Individual*',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -112,7 +115,7 @@ class _MoreAboutState extends State<MoreAbout> {
                   TextFormField(
                     controller: _cityController,
                     decoration: InputDecoration(
-                      hintText: 'City*',
+                      labelText: 'City*',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -122,7 +125,7 @@ class _MoreAboutState extends State<MoreAbout> {
                   TextFormField(
                     controller: _stateController,
                     decoration: InputDecoration(
-                      hintText: 'State*',
+                      labelText: 'State*',
                       border: OutlineInputBorder(),
                     ),
                   ),
