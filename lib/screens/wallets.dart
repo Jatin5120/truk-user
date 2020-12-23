@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/widgets.dart';
+
 class Wallets extends StatefulWidget {
   @override
   _WalletsState createState() => _WalletsState();
@@ -56,27 +58,32 @@ class _WalletsState extends State<Wallets> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Wallets'),
-        elevation: 0.0,
       ),
       body: Container(
-        padding: EdgeInsets.only(top: 30),
-        child: ListView.builder(
-          itemCount: wallets.length,
-          itemBuilder: (context, index) {
-            if (index == 0)
-              return Container(
-                  padding: EdgeInsets.only(left: 20, bottom: 20),
-                  child: Text(
-                    'Wallets',
-                    style: TextStyle(fontSize: 18),
-                  ));
-            return myWallet(
-                onTap: wallets[index]['onTap'],
-                name: wallets[index]['name'],
-                icon: wallets[index]['icon']);
-          },
-        ),
-      ),
+          padding: EdgeInsets.only(top: 30),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              myWallet(
+                  icon: 'paytm_logo.png',
+                  name: 'Paytm',
+                  onTap: () {
+                    print('hi');
+                    paymentSuccessful(context: context, shipmentId: '12345678');
+                  }),
+              myWallet(
+                  icon: 'phone-pe.png',
+                  name: 'Phonepe',
+                  onTap: () {
+                    print('hello');
+                  }),
+              myWallet(
+                  icon: 'amazon_logo.png', name: 'Amazon Pay', onTap: () {}),
+              myWallet(icon: 'gpay_logo.png', name: 'Google Pay', onTap: () {}),
+              myWallet(
+                  icon: 'wallet_logo.png', name: 'TrukMoney', onTap: () {}),
+            ],
+          )),
     );
   }
 }

@@ -7,6 +7,8 @@ import 'package:trukapp/sessionmanagement/session_manager.dart';
 import 'package:trukapp/utils/constants.dart';
 import 'package:trukapp/utils/walkthrough_widget.dart';
 
+import '../utils/constants.dart';
+
 class CarouselScreen extends StatefulWidget {
   @override
   CarouselScreenState createState() => CarouselScreenState();
@@ -60,13 +62,9 @@ class CarouselScreenState extends State<CarouselScreen> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Text(
-                    'Get Started',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

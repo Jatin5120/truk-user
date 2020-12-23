@@ -19,3 +19,4 @@ List<Map<String, dynamic>> walkthroughList = [
     'image': AssetImage('assets/images/walk_3.png')
   },
 ];
+// final Color primaryColor = Color(0xffFF7101);

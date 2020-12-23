@@ -27,6 +27,7 @@ class _QuotesState extends State<Quotes> {
               fit: FlexFit.tight,
               flex: 2,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FittedBox(

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:trukapp/screens/tellUsMore.dart';
 import 'package:trukapp/utils/constants.dart';
 
+import 'home.dart';
+
 class OTP extends StatefulWidget {
   @override
   _OTPState createState() => _OTPState();
@@ -151,6 +153,10 @@ class _OTPState extends State<OTP> {
                         builder: (context) => MoreAbout(),
                       ),
                     );
+
+                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+                      builder: (context) => HomeScreen(),
+                    ));
                   },
                   child: Text(
                     'Verify Now',

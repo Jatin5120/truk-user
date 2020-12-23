@@ -1,10 +1,16 @@
-import 'package:trukapp/screens/changePass.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:trukapp/screens/edit.dart';
+import 'package:trukapp/screens/notification.dart';
+import 'package:trukapp/screens/payments.dart';
+import 'package:trukapp/screens/promotions.dart';
 import 'package:trukapp/screens/quotes.dart';
 import 'package:trukapp/screens/request.dart';
 import 'package:trukapp/screens/settings.dart';
 import 'package:trukapp/screens/wallets.dart';
 import 'package:flutter/material.dart';
+
+import '../utils/constants.dart';
+import '../utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -106,8 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: 'Payments',
                   leading: Icon(Icons.payment),
                   onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => Wallets(),
+                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+                      builder: (context) => Payment(),
                     ));
                   }),
               myListTile(
@@ -116,7 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: 'Support',
                   leading: Icon(Icons.account_balance_wallet)),
               myListTile(
-                  title: 'Promotions', leading: Icon(Icons.card_giftcard)),
+                  title: 'Promotions',
+                  leading: Icon(Icons.card_giftcard),
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+                      builder: (context) => Promotion(),
+                    ));
+                  }),
               myListTile(
                   title: 'Settings',
                   leading: Icon(Icons.settings),
@@ -142,9 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(width: 10),
                       Text(
                         'Logout',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Color.fromRGBO(255, 113, 1, 100)),
+                        style: TextStyle(fontSize: 20, color: primaryColor),
                       )
                     ],
                   ),
@@ -176,7 +186,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Icons.notifications,
               color: Colors.black,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushReplacement(CupertinoPageRoute(
+                builder: (context) => NotificationScreen(),
+              ));
+            },
           )
         ],
       ),
@@ -228,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                 child: RaisedButton(
                   visualDensity: VisualDensity.comfortable,
-                  color: Color.fromRGBO(255, 113, 1, 100),
+                  color: primaryColor,
                   onPressed: () {},
                   child: Text(
                     'Continue Booking',

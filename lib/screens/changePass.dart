@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+
 class ChangePassword extends StatefulWidget {
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
@@ -23,9 +25,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
         title: Text('Password'),
-        backgroundColor: Color.fromRGBO(255, 113, 1, 100),
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -122,7 +122,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     width: width,
                     padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                     child: RaisedButton(
-                      color: Color.fromRGBO(255, 113, 1, 100),
+                      color: primaryColor,
                       onPressed: () {},
                       child: Text(
                         'Save',

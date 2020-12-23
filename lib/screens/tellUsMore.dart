@@ -10,25 +10,22 @@ class MoreAbout extends StatefulWidget {
 class _MoreAboutState extends State<MoreAbout> {
   double get height => MediaQuery.of(context).size.height;
   double get width => MediaQuery.of(context).size.width;
-  TextEditingController name = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController companyName = TextEditingController();
-  TextEditingController city = TextEditingController();
-  TextEditingController state = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
-  GlobalKey<FormState> nameKey = GlobalKey<FormState>();
-  GlobalKey<FormState> emailKey = GlobalKey<FormState>();
-  GlobalKey<FormState> companyKey = GlobalKey<FormState>();
-  GlobalKey<FormState> cityKey = GlobalKey<FormState>();
-  GlobalKey<FormState> stateKey = GlobalKey<FormState>();
-  GlobalKey<FormState> passwordKey = GlobalKey<FormState>();
-  GlobalKey<FormState> confirmPasswordKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _companyNameController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    ImageProvider image = AssetImage('assets/images/logo.png');
-
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         child: Container(
@@ -50,105 +47,90 @@ class _MoreAboutState extends State<MoreAbout> {
           ),
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 60,
-                ),
-                Center(
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    height: 50,
+      body: Form(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 60,
                   ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'Tell us more about you:',
-                    style: TextStyle(fontSize: 18),
+                  Center(
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      height: 50,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: name,
-                  decoration: InputDecoration(
-                    labelText: 'Name*',
-                    border: OutlineInputBorder(),
+                  SizedBox(
+                    height: 40,
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  controller: email,
-                  decoration: InputDecoration(
-                    hintText: 'Email ID*',
-                    border: OutlineInputBorder(),
+                  Container(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(
+                      'Tell us more about you:',
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Form(
-                  key: companyKey,
-                  child: TextFormField(
-                    controller: companyName,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Name*',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      hintText: 'Email ID*',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    controller: _companyNameController,
                     decoration: InputDecoration(
                       hintText: 'Company Name*',
                       border: OutlineInputBorder(),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  controller: city,
-                  decoration: InputDecoration(
-                    hintText: 'City*',
-                    border: OutlineInputBorder(),
+                  SizedBox(
+                    height: 15,
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'State*',
-                    border: OutlineInputBorder(),
+                  TextFormField(
+                    controller: _cityController,
+                    decoration: InputDecoration(
+                      hintText: 'City*',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Enter Password*',
-                    border: OutlineInputBorder(),
+                  SizedBox(
+                    height: 15,
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Confirm Password*',
-                    border: OutlineInputBorder(),
+                  TextFormField(
+                    controller: _stateController,
+                    decoration: InputDecoration(
+                      hintText: 'State*',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+
 class Request extends StatefulWidget {
   @override
   _RequestState createState() => _RequestState();
@@ -53,8 +55,6 @@ class _RequestState extends State<Request> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Request Quote'),
-        backgroundColor: Color.fromRGBO(255, 113, 1, 100),
-        elevation: 0.0,
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -157,7 +157,7 @@ class _RequestState extends State<Request> {
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                   child: RaisedButton(
                     visualDensity: VisualDensity.comfortable,
-                    color: Color.fromRGBO(255, 113, 1, 100),
+                    color: primaryColor,
                     onPressed: () {},
                     child: Text(
                       'Request Quote',

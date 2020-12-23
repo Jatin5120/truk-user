@@ -20,8 +20,6 @@ class _MaterialDetailsState extends State<MaterialDetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Material Details'),
-        backgroundColor: Color.fromRGBO(255, 113, 1, 100),
-        elevation: 0.0,
       ),
       body: Container(
         child: SingleChildScrollView(
