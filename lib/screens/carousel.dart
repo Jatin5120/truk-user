@@ -1,12 +1,9 @@
-import 'package:trukapp/screens/login.dart';
 import 'package:trukapp/screens/signup.dart';
-import 'package:trukapp/screens/tellUsMore.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/sessionmanagement/session_manager.dart';
 import 'package:trukapp/utils/constants.dart';
 import 'package:trukapp/utils/walkthrough_widget.dart';
-
 import '../utils/constants.dart';
 
 class CarouselScreen extends StatefulWidget {
