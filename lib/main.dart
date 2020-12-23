@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:trukapp/screens/splash.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,9 @@ import 'package:trukapp/utils/constants.dart';
 
 import 'utils/constants.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

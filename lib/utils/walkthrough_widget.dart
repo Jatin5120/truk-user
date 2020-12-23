@@ -35,8 +35,10 @@ class WalkthroughWidget extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               textSubHead,
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
           )

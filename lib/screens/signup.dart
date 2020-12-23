@@ -14,6 +14,12 @@ class SignupState extends State<Signup> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void dispose() {
+    _mobileController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ImageProvider image = AssetImage('assets/images/india.png');
     final size = MediaQuery.of(context).size;
