@@ -9,9 +9,9 @@ class Signup extends StatefulWidget {
 }
 
 class SignupState extends State<Signup> {
-  TextEditingController mobileNumber = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _mobileController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +56,7 @@ class SignupState extends State<Signup> {
                     autofocus: false,
                     maxLength: 10,
                     keyboardType: TextInputType.number,
+                    controller: _mobileController,
                     decoration: InputDecoration(
                       prefixIcon: Image(
                         height: 18,
@@ -82,7 +83,9 @@ class SignupState extends State<Signup> {
                   onPressed: () {
                     Navigator.of(context).push(
                       CupertinoPageRoute(
-                        builder: (context) => OTP(),
+                        builder: (context) => OTP(
+                          number: _mobileController.text.trim(),
+                        ),
                       ),
                     );
                   },

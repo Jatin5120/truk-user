@@ -8,6 +8,8 @@ import 'package:trukapp/utils/constants.dart';
 import 'home.dart';
 
 class OTP extends StatefulWidget {
+  final String number;
+  OTP({this.number});
   @override
   _OTPState createState() => _OTPState();
 }
@@ -17,13 +19,15 @@ class _OTPState extends State<OTP> {
   double get width => MediaQuery.of(context).size.width;
   TextEditingController otp = TextEditingController();
   GlobalKey<FormState> otpKey = GlobalKey<FormState>();
-  String phoneNumber = '+91 9987654321';
+  String phoneNumber = '';
   int secondsRemaining = 15;
 
   @override
   void initState() {
     super.initState();
     getRemainingTime();
+    phoneNumber = '+91 ${widget.number}';
+    //if (mounted) setState(() {});
   }
 
   getRemainingTime() {
@@ -35,7 +39,9 @@ class _OTPState extends State<OTP> {
         } else {
           secondsRemaining--;
         }
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       },
     );
   }
