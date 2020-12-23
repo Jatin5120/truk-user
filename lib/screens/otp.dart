@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:trukapp/screens/tellUsMore.dart';
 import 'package:trukapp/utils/constants.dart';
 
-import 'home.dart';
-
 class OTP extends StatefulWidget {
   final String number;
   OTP({this.number});
