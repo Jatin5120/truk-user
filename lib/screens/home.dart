@@ -8,6 +8,8 @@ import 'package:trukapp/screens/request.dart';
 import 'package:trukapp/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/screens/shipmentDetails.dart';
+import 'package:trukapp/screens/support.dart';
+import 'package:trukapp/screens/trukmoney.dart';
 
 import '../utils/constants.dart';
 
@@ -149,9 +151,19 @@ class _BodyState extends State<Body> {
                     ));
                   }),
               myListTile(
-                  title: 'TruckMoney', leading: Icon(Icons.attach_money)),
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => TrukMoney(),
+                    ));
+                  },
+                  title: 'TruckMoney',
+                  leading: Icon(Icons.attach_money)),
               myListTile(
                   title: 'Support',
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Support()));
+                  },
                   leading: Icon(Icons.account_balance_wallet)),
               myListTile(
                   title: 'Promotions',
