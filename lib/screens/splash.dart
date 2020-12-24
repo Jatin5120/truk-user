@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:trukapp/screens/carousel.dart';
 import 'package:trukapp/screens/home.dart';
 import 'package:trukapp/screens/signup.dart';
@@ -27,7 +25,8 @@ class _SplashState extends State<Splash> {
       Duration(seconds: 3),
       () => Navigator.of(context).pushReplacement(
         CupertinoPageRoute(
-          builder: (context) => !isOld ? CarouselScreen() : (isLogin ? HomeScreen() : Signup()),
+          builder: (context) =>
+              !isOld ? CarouselScreen() : (isLogin ? HomeScreen() : Signup()),
         ),
       ),
     );
