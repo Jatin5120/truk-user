@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:trukapp/firebase_helper/firebase_helper.dart';
@@ -14,7 +12,14 @@ class UserModel {
   String company;
   int joining;
   UserModel(
-      {this.uid, this.name, this.mobile, this.email, this.city, this.state, this.company, this.joining});
+      {this.uid,
+      this.name,
+      this.mobile,
+      this.email,
+      this.city,
+      this.state,
+      this.company,
+      this.joining});
 
   UserModel copyWith({
     String uid,
