@@ -14,8 +14,7 @@ class LoginState extends State<Login> {
   double get width => MediaQuery.of(context).size.width;
   TextEditingController mobileNumber = TextEditingController();
   TextEditingController password = TextEditingController();
-  GlobalKey<FormState> mobileNumberKey = GlobalKey<FormState>();
-  GlobalKey<FormState> passwordKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
   bool visibility = true;
@@ -30,40 +29,40 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     ImageProvider image = AssetImage('assets/images/logo.png');
     return Scaffold(
-      body: Container(
-        child: SingleChildScrollView(
-          child: Container(
-            height: height,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  height: 40,
-                  child: Image(
-                    image: image,
+      body: Form(
+        key: _formKey,
+        child: Container(
+          child: SingleChildScrollView(
+            child: Container(
+              height: height,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 50,
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'Welcome back! Sign in with your mobile number',
-                    style: TextStyle(fontSize: 18),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 40,
+                    child: Image(
+                      image: image,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: mobileNumberKey,
+                  SizedBox(
+                    height: height * 0.15,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(
+                      'Welcome back! Sign in with your mobile number',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 15),
                     child: TextFormField(
                       decoration: InputDecoration(
                         prefixIcon: Container(
@@ -75,19 +74,16 @@ class LoginState extends State<Login> {
                             image: AssetImage('assets/images/india.png'),
                           ),
                         ),
-                        hintText: 'Enter Mobile Number',
+                        labelText: 'Enter Mobile Number',
                         border: OutlineInputBorder(),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
-                    key: passwordKey,
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 15),
                     child: TextFormField(
                       obscureText: visibility,
                       decoration: InputDecoration(
@@ -99,7 +95,7 @@ class LoginState extends State<Login> {
                                 Icons.lock_outline,
                                 size: 30,
                               )),
-                          hintText: 'Enter Password',
+                          labelText: 'Enter Password',
                           suffixIcon: IconButton(
                             onPressed: () {
                               toggleVisibility();
@@ -117,89 +113,89 @@ class LoginState extends State<Login> {
                           border: OutlineInputBorder()),
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Forgot your password?',
-                        style: TextStyle(color: Colors.grey, fontSize: 18),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Text(
-                          'Reset here',
-                          style: TextStyle(fontSize: 18, color: Colors.blue),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Forgot your password?',
+                          style: TextStyle(color: Colors.grey, fontSize: 18),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Flexible(
-                  flex: 3,
-                  child: SizedBox(
-                    height: height * 0.3,
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Don\'t have an account?',
-                        style: TextStyle(color: Colors.grey, fontSize: 18),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => Signup(),
-                            ));
-                          },
+                        SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          onTap: () {},
                           child: Text(
-                            'Sign up',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.blue,
-                            ),
-                          ))
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                    height: 65,
-                    width: width,
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    child: RaisedButton(
-                      color: primaryColor,
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => CarouselScreen(),
-                        ));
-                      },
-                      child: Text(
-                        'Sign in',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
+                            'Reset here',
+                            style: TextStyle(fontSize: 18, color: Colors.blue),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                )
-              ],
+                  Flexible(
+                    flex: 3,
+                    child: SizedBox(
+                      height: height * 0.3,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Don\'t have an account?',
+                          style: TextStyle(color: Colors.grey, fontSize: 18),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Signup(),
+                              ));
+                            },
+                            child: Text(
+                              'Sign up',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.blue,
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
+                      height: 65,
+                      width: width,
+                      padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                      child: RaisedButton(
+                        color: primaryColor,
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CarouselScreen(),
+                          ));
+                        },
+                        child: Text(
+                          'Sign in',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
