@@ -12,8 +12,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   double get width => MediaQuery.of(context).size.width;
   TextEditingController newPassword = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
-  GlobalKey<FormState> passwordKey = GlobalKey<FormState>();
-  GlobalKey<FormState> confirmPasswordKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool visibility = true;
   void toggleVisibility() {
     setState(() {
@@ -27,32 +26,32 @@ class _ChangePasswordState extends State<ChangePassword> {
       appBar: AppBar(
         title: Text('Password'),
       ),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'Change Your Password',
-                    style: TextStyle(fontSize: 18),
+      body: Form(
+        key: _formKey,
+        child: Container(
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 50,
                   ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  padding: EdgeInsets.only(
-                    right: 20,
-                    left: 20,
+                  Container(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(
+                      'Change Your Password',
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
-                  child: Form(
-                    key: passwordKey,
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
+                      right: 20,
+                      left: 20,
+                    ),
                     child: TextFormField(
                       controller: newPassword,
                       decoration: InputDecoration(
@@ -74,17 +73,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                           hintText: 'New Password'),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: EdgeInsets.only(
-                    right: 20,
-                    left: 20,
+                  SizedBox(
+                    height: 20,
                   ),
-                  child: Form(
-                    key: confirmPasswordKey,
+                  Container(
+                    padding: EdgeInsets.only(
+                      right: 20,
+                      left: 20,
+                    ),
                     child: TextFormField(
                       controller: newPassword,
                       decoration: InputDecoration(
@@ -106,32 +102,32 @@ class _ChangePasswordState extends State<ChangePassword> {
                           hintText: 'Confirm New Password'),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: height * 0.3,
-                  ),
-                ),
-                Flexible(
-                  flex: 0,
-                  child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                    height: 65,
-                    width: width,
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    child: RaisedButton(
-                      color: primaryColor,
-                      onPressed: () {},
-                      child: Text(
-                        'Save',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: height * 0.3,
                     ),
                   ),
-                )
-              ],
+                  Flexible(
+                    flex: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
+                      height: 65,
+                      width: width,
+                      padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                      child: RaisedButton(
+                        color: primaryColor,
+                        onPressed: () {},
+                        child: Text(
+                          'Save',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
