@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:trukapp/screens/carousel.dart';
+import 'package:trukapp/screens/home.dart';
 import 'package:trukapp/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/sessionmanagement/session_manager.dart';
@@ -21,11 +22,12 @@ class _SplashState extends State<Splash> {
 
   handleTimer() async {
     bool isOld = await SharedPref().isOld();
+    bool isLogin = await SharedPref().isLoggedIn();
     Timer(
       Duration(seconds: 3),
       () => Navigator.of(context).pushReplacement(
         CupertinoPageRoute(
-          builder: (context) => !isOld ? CarouselScreen() : Signup(),
+          builder: (context) => !isOld ? CarouselScreen() : (isLogin ? HomeScreen() : Signup()),
         ),
       ),
     );

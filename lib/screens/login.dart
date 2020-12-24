@@ -86,6 +86,12 @@ class LoginState extends State<Login> {
                     padding: EdgeInsets.only(left: 20, right: 15),
                     child: TextFormField(
                       obscureText: visibility,
+                      validator: (st) {
+                        if (st.isEmpty) {
+                          return '*Required';
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                           prefixIcon: Container(
                               padding: EdgeInsets.only(left: 10),
@@ -183,9 +189,12 @@ class LoginState extends State<Login> {
                       child: RaisedButton(
                         color: primaryColor,
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CarouselScreen(),
-                          ));
+                          if (_formKey.currentState.validate()) {
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) => CarouselScreen(),
+                            ));
+                          }
                         },
                         child: Text(
                           'Sign in',
