@@ -11,6 +11,8 @@ import 'package:trukapp/screens/home.dart';
 import 'package:trukapp/screens/tellUsMore.dart';
 import 'package:trukapp/utils/constants.dart';
 
+import 'home.dart';
+
 class OTP extends StatefulWidget {
   final String number;
   OTP({this.number});
@@ -245,7 +247,12 @@ class _OTPState extends State<OTP> {
                       secondsRemaining == 0
                           ? Container(
                               child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushReplacement(MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ));
+                                },
                                 child: Text(
                                   'Resend OTP',
                                   style: TextStyle(fontSize: 18, color: Colors.blue),

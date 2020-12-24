@@ -6,10 +6,9 @@ import 'package:trukapp/screens/promotions.dart';
 import 'package:trukapp/screens/quotes.dart';
 import 'package:trukapp/screens/request.dart';
 import 'package:trukapp/screens/settings.dart';
-import 'package:trukapp/screens/wallets.dart';
 import 'package:flutter/material.dart';
+import 'package:trukapp/screens/shipmentDetails.dart';
 
-import '../utils/constants.dart';
 import '../utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +19,53 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double get width => MediaQuery.of(context).size.width;
   double get height => MediaQuery.of(context).size.height;
+  int currentIndex;
 
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = 0;
+  }
+
+  void onTabTap(int value) {
+    setState(() {
+      currentIndex = value;
+    });
+  }
+
+  List<Widget> children = [Body(), MyShipment()];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: onTabTap,
+          selectedItemColor: primaryColor,
+          selectedFontSize: 18,
+          elevation: 12,
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: true,
+          type: BottomNavigationBarType.shifting,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home), title: Text('Home')),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.local_shipping), title: Text('My Shipments'))
+          ],
+        ),
+        body: children[currentIndex]);
+  }
+}
+
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  double get height => MediaQuery.of(context).size.height;
+  double get width => MediaQuery.of(context).size.width;
   Widget myListTile({String title, void Function() onTap, Widget leading}) {
     return ListTile(
       leading: leading,
@@ -33,19 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Color.fromRGBO(255, 113, 1, 100),
-        selectedFontSize: 18,
-        elevation: 12,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.shifting,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.local_shipping), title: Text('My Shipments'))
-        ],
-      ),
       drawer: Theme(
         data: ThemeData(disabledColor: Colors.black),
         child: Drawer(
