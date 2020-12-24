@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trukapp/screens/addCard.dart';
 
 import '../utils/constants.dart';
 
@@ -82,7 +83,10 @@ class _PaymentState extends State<Payment> {
                     Icons.add,
                     size: 30,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => AddCard()));
+                  },
                 ),
               ),
             ),
