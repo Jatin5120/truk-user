@@ -89,6 +89,7 @@ class MyUser with ChangeNotifier {
   getUserFromDatabase() async {
     isUserLoading = true;
     userModel = await FirebaseHelper().getCurrentUser();
+    isUserLoading = false;
     notifyListeners();
   }
 }

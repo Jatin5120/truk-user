@@ -189,7 +189,7 @@ class LoginState extends State<Login> {
                         color: primaryColor,
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => CarouselScreen(),
                             ));
                           }

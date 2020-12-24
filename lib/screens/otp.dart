@@ -81,7 +81,7 @@ class _OTPState extends State<OTP> {
       isLoading = true;
     });
     AuthCredential authCredential;
-    if (authCredential != null) {
+    if (credential != null) {
       authCredential = credential;
     } else {
       smsCode = _otpController.text.trim();
@@ -248,8 +248,7 @@ class _OTPState extends State<OTP> {
                           ? Container(
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.of(context)
-                                      .pushReplacement(MaterialPageRoute(
+                                  Navigator.of(context).pushReplacement(MaterialPageRoute(
                                     builder: (context) => HomeScreen(),
                                   ));
                                 },
