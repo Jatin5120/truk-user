@@ -55,10 +55,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
         title: Text('Notification'),
       ),
       body: Container(
-        padding: EdgeInsets.only(top: 20),
         child: ListView(
-          shrinkWrap: true,
+          // shrinkWrap: true,
           children: [
+            SizedBox(
+              height: 20,
+            ),
             notificationWidget(
                 time: '5 Min ago',
                 notification:

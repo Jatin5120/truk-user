@@ -24,7 +24,12 @@ class _MyAppState extends State<MyApp> {
         SystemUiOverlayStyle(statusBarColor: primaryColor));
     return MaterialApp(
       theme: ThemeData(
-          appBarTheme: AppBarTheme(color: primaryColor, elevation: 8.0)),
+          appBarTheme: AppBarTheme(
+              textTheme: TextTheme(
+                  headline6: TextStyle(color: Colors.black, fontSize: 20)),
+              iconTheme: IconThemeData(color: Colors.black),
+              color: Colors.white,
+              elevation: 8.0)),
       debugShowCheckedModeBanner: false,
       home: Splash(),
     );
