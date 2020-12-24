@@ -14,91 +14,86 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController mobileNumber = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController companyName = TextEditingController();
-
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
       ),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
+      body: Form(
+        key: _formKey,
+        child: Container(
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 15),
                     child: TextFormField(
                       controller: companyName,
                       decoration: InputDecoration(
-                          hintText: 'Name', border: OutlineInputBorder()),
+                          labelText: 'Name', border: OutlineInputBorder()),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 15),
                     child: TextFormField(
                       controller: mobileNumber,
                       decoration: InputDecoration(
-                          hintText: 'Mobile Number',
+                          labelText: 'Mobile Number',
                           border: OutlineInputBorder()),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 15),
                     child: TextFormField(
                       controller: email,
                       decoration: InputDecoration(
-                          hintText: 'Email ID', border: OutlineInputBorder()),
+                          labelText: 'Email ID', border: OutlineInputBorder()),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Form(
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 15),
                     child: TextFormField(
                       controller: companyName,
                       decoration: InputDecoration(
-                          hintText: 'Company Name',
+                          labelText: 'Company Name',
                           border: OutlineInputBorder()),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.4,
-                ),
-                Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                  height: 65,
-                  width: width,
-                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                  child: RaisedButton(
-                    color: primaryColor,
-                    onPressed: () {},
-                    child: Text(
-                      'Update',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                  SizedBox(
+                    height: height * 0.4,
+                  ),
+                  Container(
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                    height: 65,
+                    width: width,
+                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    child: RaisedButton(
+                      color: primaryColor,
+                      onPressed: () {},
+                      child: Text(
+                        'Update',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
