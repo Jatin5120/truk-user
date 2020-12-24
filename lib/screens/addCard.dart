@@ -19,17 +19,6 @@ class _AddCardState extends State<AddCard> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Widget textField({String labelText, TextEditingController controller}) {
-    return Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
-        child: TextFormField(
-          controller: controller,
-          onChanged: (st) {},
-          decoration: InputDecoration(
-              labelText: labelText, border: OutlineInputBorder()),
-        ));
-  }
-
   bool isCvvFocused = true;
   void onCreditCardModelChange(CreditCardModel creditCardModel) {
     setState(() {
