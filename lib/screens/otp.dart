@@ -5,7 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:trukapp/firebase_helper/firebase_helper.dart';
+import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/screens/home.dart';
+import 'package:trukapp/screens/tellUsMore.dart';
 import 'package:trukapp/utils/constants.dart';
 
 class OTP extends StatefulWidget {
@@ -34,8 +37,7 @@ class _OTPState extends State<OTP> {
       _message = '';
       isLoading = true;
     });
-    final PhoneVerificationCompleted verificationCompleted =
-        (AuthCredential phoneAuthCredential) {
+    final PhoneVerificationCompleted verificationCompleted = (AuthCredential phoneAuthCredential) {
       _signInWithPhoneNumber(credential: phoneAuthCredential);
     };
 
@@ -48,9 +50,9 @@ class _OTPState extends State<OTP> {
       Fluttertoast.showToast(msg: _message);
     };
 
-    final PhoneCodeSent codeSent =
-        (String verificationId, [int forceResendingToken]) async {
+    final PhoneCodeSent codeSent = (String verificationId, [int forceResendingToken]) async {
       Fluttertoast.showToast(msg: "OTP sent");
+      getRemainingTime();
       setState(() {
         isLoading = false;
         isCodeNotSent = false;
@@ -58,8 +60,7 @@ class _OTPState extends State<OTP> {
       _verificationId = verificationId;
     };
 
-    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-        (String verificationId) {
+    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout = (String verificationId) {
       _verificationId = verificationId;
     };
 
@@ -90,8 +91,7 @@ class _OTPState extends State<OTP> {
 
     Fluttertoast.showToast(msg: "Verification in progress...");
 
-    UserCredential _results =
-        await _auth.signInWithCredential(authCredential).catchError((onError) {
+    UserCredential _results = await _auth.signInWithCredential(authCredential).catchError((onError) {
       Fluttertoast.showToast(msg: "Invalid OTP");
       setState(() {
         isLoading = false;
@@ -120,7 +120,7 @@ class _OTPState extends State<OTP> {
   @override
   void initState() {
     super.initState();
-    getRemainingTime();
+
     phoneNumber = '+91 ${widget.number}';
     _auth = FirebaseAuth.instance;
     _verifyPhoneNumber();
@@ -152,6 +152,7 @@ class _OTPState extends State<OTP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       body: Form(
         key: _formKey,
@@ -247,8 +248,7 @@ class _OTPState extends State<OTP> {
                                 onTap: () {},
                                 child: Text(
                                   'Resend OTP',
-                                  style: TextStyle(
-                                      fontSize: 18, color: Colors.blue),
+                                  style: TextStyle(fontSize: 18, color: Colors.blue),
                                 ),
                               ),
                             )
@@ -258,8 +258,7 @@ class _OTPState extends State<OTP> {
                 ),
                 Spacer(),
                 Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   height: 65,
                   width: width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
@@ -274,8 +273,7 @@ class _OTPState extends State<OTP> {
                           },
                     child: isLoading
                         ? CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           )
                         : Text(
                             'Verify Now',
@@ -298,26 +296,23 @@ class _OTPState extends State<OTP> {
         return AlertDialog(
           title: Text("Successfully"),
           content: Text("Otp matched successfully."),
-          actions: <Widget>[
+          actions: [
             IconButton(
               icon: Icon(Icons.check),
               onPressed: () {
                 SchedulerBinding.instance.addPostFrameCallback((_) async {
-                  Navigator.pushAndRemoveUntil(
+                  UserModel userModel = await FirebaseHelper().getCurrentUser(uid: user.uid);
+                  if (userModel == null) {
+                    //new user
+                    Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (_) => HomeScreen()),
-                      (b) => false);
-                  //Navigator.of(context).pop();
-                  // bool isOld = await FirebaseCheck.checkOldUser(uid: user.uid);
-                  // if(isOld){
-                  //   bool isLocation = await FirebaseCheck.checkLocation(uid: user.uid);
-                  //   if(!isLocation)
-                  //     Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_)=> MyCurrentLocationScreen()));
-                  //   else
-                  //     Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_)=> HomeScreen()));
-                  // }else {
-                  //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=> SignUpScreen(isGoogle: false,)), (b) => false);
-                  // }
+                      MaterialPageRoute(builder: (_) => MoreAbout()),
+                    );
+                  } else {
+                    //existing user
+                    Navigator.pushAndRemoveUntil(
+                        context, MaterialPageRoute(builder: (_) => HomeScreen()), (b) => false);
+                  }
                 });
               },
             )

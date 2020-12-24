@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/utils/constants.dart';
@@ -20,13 +22,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: primaryColor));
-    return MaterialApp(
-      theme: ThemeData(
-          appBarTheme: AppBarTheme(color: primaryColor, elevation: 8.0)),
-      debugShowCheckedModeBanner: false,
-      home: Splash(),
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: primaryColor));
+    return MultiProvider(
+      providers: [
+        Provider<MyUser>(
+          create: (context) => MyUser(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(appBarTheme: AppBarTheme(color: primaryColor, elevation: 8.0)),
+        debugShowCheckedModeBanner: false,
+        home: Splash(),
+      ),
     );
   }
 }

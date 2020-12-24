@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:trukapp/firebase_helper/firebase_helper.dart';
 import 'package:trukapp/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/utils/constants.dart';
+import 'package:trukapp/helper/email_validator.dart';
 
 class MoreAbout extends StatefulWidget {
   @override
@@ -8,6 +11,8 @@ class MoreAbout extends StatefulWidget {
 }
 
 class _MoreAboutState extends State<MoreAbout> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  User user;
   double get height => MediaQuery.of(context).size.height;
   double get width => MediaQuery.of(context).size.width;
   final TextEditingController _nameController = TextEditingController();
@@ -17,6 +22,13 @@ class _MoreAboutState extends State<MoreAbout> {
   final TextEditingController _stateController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    user = _auth.currentUser;
+  }
 
   @override
   void dispose() {
@@ -32,6 +44,7 @@ class _MoreAboutState extends State<MoreAbout> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
       bottomNavigationBar: BottomAppBar(
         child: Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
@@ -40,15 +53,39 @@ class _MoreAboutState extends State<MoreAbout> {
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
           child: RaisedButton(
             color: primaryColor,
-            onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ));
+            onPressed: () async {
+              if (_formKey.currentState.validate()) {
+                setState(() {
+                  isLoading = true;
+                });
+                if (user != null) {
+                  String uid = user.uid;
+                  String mobile = user.phoneNumber;
+                  String email = _emailController.text.trim();
+                  String name = _nameController.text.trim();
+                  String city = _cityController.text.trim();
+                  String state = _stateController.text.trim();
+                  String company = _companyNameController.text.trim();
+                  await FirebaseHelper().insertUser(uid, name, email, mobile, company, city, state);
+                  setState(() {
+                    isLoading = false;
+                  });
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                      (b) => false);
+                } else {}
+              }
             },
-            child: Text(
-              'Continue',
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
+            child: isLoading
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  )
+                : Text(
+                    'Continue',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
           ),
         ),
       ),
@@ -84,6 +121,12 @@ class _MoreAboutState extends State<MoreAbout> {
                   ),
                   TextFormField(
                     controller: _nameController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '*Required';
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       labelText: 'Name*',
                       border: OutlineInputBorder(),
@@ -94,6 +137,7 @@ class _MoreAboutState extends State<MoreAbout> {
                   ),
                   TextFormField(
                     controller: _emailController,
+                    validator: (input) => input.isValidEmail() ? null : "*Invalid email",
                     decoration: InputDecoration(
                       labelText: 'Email ID*',
                       border: OutlineInputBorder(),
@@ -104,6 +148,12 @@ class _MoreAboutState extends State<MoreAbout> {
                   ),
                   TextFormField(
                     controller: _companyNameController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '*Required';
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       labelText: 'Company/Individual*',
                       border: OutlineInputBorder(),
@@ -114,6 +164,12 @@ class _MoreAboutState extends State<MoreAbout> {
                   ),
                   TextFormField(
                     controller: _cityController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '*Required';
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       labelText: 'City*',
                       border: OutlineInputBorder(),
@@ -123,6 +179,12 @@ class _MoreAboutState extends State<MoreAbout> {
                     height: 15,
                   ),
                   TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '*Required';
+                      }
+                      return null;
+                    },
                     controller: _stateController,
                     decoration: InputDecoration(
                       labelText: 'State*',

@@ -25,6 +25,7 @@ class SignupState extends State<Signup> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
       key: _scaffoldKey,
       body: Form(
         key: _formKey,
