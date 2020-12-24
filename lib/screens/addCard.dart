@@ -75,6 +75,7 @@ class _AddCardState extends State<AddCard> {
                         height: 10,
                       ),
                       Expanded(
+                        flex: 0,
                         child: CreditCardForm(
                           cardHolderName: _cardHolderNameController.text,
                           cardNumber: _cardNumberController.text,
