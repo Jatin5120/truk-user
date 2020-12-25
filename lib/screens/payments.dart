@@ -84,7 +84,7 @@ class _PaymentState extends State<Payment> {
                     size: 30,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
+                    Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => AddCard()));
                   },
                 ),
