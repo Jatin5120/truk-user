@@ -6,7 +6,21 @@ class TrukMoney extends StatefulWidget {
   _TrukMoneyState createState() => _TrukMoneyState();
 }
 
-class _TrukMoneyState extends State<TrukMoney> {
+class _TrukMoneyState extends State<TrukMoney>
+    with SingleTickerProviderStateMixin {
+  static int initialIndex = 0;
+  TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(
+      initialIndex: initialIndex,
+      length: 3,
+      vsync: this,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final EdgeInsetsGeometry padding = EdgeInsets.only(left: 20, right: 20);
@@ -18,6 +32,7 @@ class _TrukMoneyState extends State<TrukMoney> {
       body: Container(
         child: SingleChildScrollView(
           child: Container(
+            padding: padding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -25,7 +40,11 @@ class _TrukMoneyState extends State<TrukMoney> {
                   height: 15,
                 ),
                 Container(
+                  height: 80,
+                  alignment: Alignment.center,
+                  width: size.width,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('TrukMoney Balance'),
                       SizedBox(
@@ -37,8 +56,9 @@ class _TrukMoneyState extends State<TrukMoney> {
                       )
                     ],
                   ),
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(5)),
                 ),
                 // SizedBox(height: 10,),
                 Container(
@@ -58,25 +78,54 @@ class _TrukMoneyState extends State<TrukMoney> {
                       style: TextStyle(color: Colors.grey, fontSize: 18)),
                 ),
                 Container(
-                  padding: padding,
+                  width: size.width * 0.7,
+                  // padding: padding,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Text('₹ 500'),
+                        child: Container(
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Text('₹ 500'),
+                          ),
                         ),
                       ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Text('₹ 1,000'),
-                        ),
+                      SizedBox(
+                        width: 10,
                       ),
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Text('₹ 2,000'),
+                        child: Container(
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Text('₹ 1,000'),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Text('₹ 2,000'),
+                          ),
                         ),
                       )
                     ],
@@ -87,12 +136,47 @@ class _TrukMoneyState extends State<TrukMoney> {
                   child: Text('Debit From',
                       style: TextStyle(color: Colors.grey, fontSize: 18)),
                 ),
+                TabBar(
+                  controller: tabController,
+                  indicatorColor: primaryColor,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  isScrollable: true,
+                  labelColor: primaryColor,
+                  unselectedLabelColor: Colors.black,
+                  tabs: [
+                    Text(
+                      'BHIM UPI',
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
+                    Text(
+                      'DEBIT CARD',
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
+                    Text(
+                      'CREDIT CARD',
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    )
+                  ],
+                ),
+                Container(
+                  height: 60,
+                  child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      Text('hi'),
+                      Text('hi'),
+                      Text('hi'),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
                 Container(
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                  height: 65,
+                  height: 55,
                   width: size.width,
-                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: RaisedButton(
                     color: primaryColor,
                     onPressed: () {},
