@@ -138,7 +138,7 @@ class _BodyState extends State<Body> {
                   title: 'Quotes',
                   leading: Icon(Icons.format_quote),
                   onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Quotes(),
                     ));
                   }),
@@ -146,13 +146,13 @@ class _BodyState extends State<Body> {
                   title: 'Payments',
                   leading: Icon(Icons.payment),
                   onTap: () {
-                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+                    Navigator.of(context).push(CupertinoPageRoute(
                       builder: (context) => Payment(),
                     ));
                   }),
               myListTile(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => TrukMoney(),
                     ));
                   },
@@ -169,7 +169,7 @@ class _BodyState extends State<Body> {
                   title: 'Promotions',
                   leading: Icon(Icons.card_giftcard),
                   onTap: () {
-                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+                    Navigator.of(context).push(CupertinoPageRoute(
                       builder: (context) => Promotion(),
                     ));
                   }),
@@ -178,7 +178,7 @@ class _BodyState extends State<Body> {
                   leading: Icon(Icons.settings),
                   onTap: () {
                     // Navigator.of(context).pop(true);
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) {
                         return Settings();
                       },
