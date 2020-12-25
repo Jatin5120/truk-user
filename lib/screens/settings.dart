@@ -51,14 +51,6 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.lock_open),
-              title: Text('Change Password'),
-              trailing: IconButton(
-                icon: Icon(Icons.arrow_right),
-                onPressed: () {},
-              ),
-            ),
-            ListTile(
               leading: Icon(Icons.info_outline),
               title: Text('About Truk App'),
               trailing: IconButton(

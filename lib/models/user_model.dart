@@ -13,8 +13,9 @@ class UserModel {
   String state;
   String company;
   int joining;
+  String token;
   UserModel(
-      {this.uid, this.name, this.mobile, this.email, this.city, this.state, this.company, this.joining});
+      {this.uid, this.name, this.mobile, this.email, this.city, this.state, this.company, this.joining, this.token});
 
   UserModel copyWith({
     String uid,
@@ -25,6 +26,7 @@ class UserModel {
     String state,
     String company,
     int joining,
+    String token,
   }) {
     return UserModel(
         uid: uid ?? this.uid,
@@ -34,7 +36,8 @@ class UserModel {
         city: city ?? this.city,
         state: state ?? this.state,
         company: company ?? this.company,
-        joining: joining ?? this.joining);
+        joining: joining ?? this.joining,
+        token: token ?? this.token);
   }
 
   Map<String, dynamic> toMap() {
@@ -46,7 +49,8 @@ class UserModel {
       'city': city,
       'state': state,
       'company': company,
-      'joining': joining
+      'joining': joining,
+      'token': token
     };
   }
 
@@ -61,6 +65,7 @@ class UserModel {
         city: map['city'],
         state: map['state'],
         company: map['company'],
+        token: map['token'],
         joining: map['joining']);
   }
 
@@ -68,15 +73,15 @@ class UserModel {
     if (map == null) return null;
 
     return UserModel(
-      uid: map.get('uid'),
-      name: map.get('name'),
-      mobile: map.get('mobile'),
-      email: map.get('email'),
-      city: map.get('city'),
-      state: map.get('state'),
-      company: map.get('company'),
-      joining: map.get('joining'),
-    );
+        uid: map.get('uid'),
+        name: map.get('name'),
+        mobile: map.get('mobile'),
+        email: map.get('email'),
+        city: map.get('city'),
+        state: map.get('state'),
+        company: map.get('company'),
+        joining: map.get('joining'),
+        token: map.get('token'));
   }
 }
 

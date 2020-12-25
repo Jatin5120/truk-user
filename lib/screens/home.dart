@@ -1,24 +1,18 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/firebase_helper/notification_helper.dart';
 import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/screens/edit.dart';
+import 'package:trukapp/screens/matDetails.dart';
 import 'package:trukapp/screens/notification.dart';
-import 'package:trukapp/screens/payments.dart';
-import 'package:trukapp/screens/promotions.dart';
-import 'package:trukapp/screens/quotes.dart';
-import 'package:trukapp/screens/request.dart';
-import 'package:trukapp/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/screens/shipmentDetails.dart';
-import 'package:trukapp/sessionmanagement/session_manager.dart';
 import 'package:trukapp/utils/drawer_part.dart';
 
 import '../utils/constants.dart';
@@ -32,18 +26,21 @@ class _HomeScreenState extends State<HomeScreen> {
   double get width => MediaQuery.of(context).size.width;
   double get height => MediaQuery.of(context).size.height;
   int currentIndex;
+  final PageController _pageController = PageController(initialPage: 0, keepPage: true);
 
   @override
   void initState() {
     super.initState();
     currentIndex = 0;
     Provider.of<MyUser>(context, listen: false).getUserFromDatabase();
+    NotificationHelper().registerNotification();
   }
 
   void onTabTap(int value) {
     setState(() {
       currentIndex = value;
     });
+    _pageController.animateToPage(currentIndex, duration: Duration(milliseconds: 400), curve: Curves.easeIn);
   }
 
   List<Widget> children = [Body(), MyShipment()];
@@ -110,7 +107,19 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: children[currentIndex],
+      body: PageView.builder(
+        onPageChanged: (ind) {
+          setState(() {
+            currentIndex = ind;
+          });
+        },
+        itemCount: children.length,
+        itemBuilder: (context, index) {
+          return children[index];
+        },
+        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
+      ),
     );
   }
 }
@@ -120,7 +129,7 @@ class Body extends StatefulWidget {
   _BodyState createState() => _BodyState();
 }
 
-class _BodyState extends State<Body> {
+class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
   double get height => MediaQuery.of(context).size.height;
   double get width => MediaQuery.of(context).size.width;
   final _sourceTextController = TextEditingController();
@@ -170,8 +179,7 @@ class _BodyState extends State<Body> {
                 FlatButton(
                   child: Text('Ok'),
                   onPressed: () {
-                    final AndroidIntent intent =
-                        AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+                    final AndroidIntent intent = AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS');
 
                     intent.launch();
                     Navigator.of(context, rootNavigator: true).pop();
@@ -240,6 +248,7 @@ class _BodyState extends State<Body> {
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return Container(
       height: height,
@@ -369,8 +378,15 @@ class _BodyState extends State<Body> {
                     Fluttertoast.showToast(msg: 'Please give source and destination of shipment');
                     return;
                   }
-                  Fluttertoast.showToast(
-                      msg: '${_sourceTextController.text}\n${_destinationTextController.text}');
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => MaterialDetails(
+                        source: myMarker['source'].position,
+                        destination: myMarker['destination'].position,
+                      ),
+                    ),
+                  );
                 },
                 child: Text(
                   'Continue Booking',
@@ -383,4 +399,7 @@ class _BodyState extends State<Body> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

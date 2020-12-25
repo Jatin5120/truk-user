@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:trukapp/models/material_model.dart';
 import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/sessionmanagement/session_manager.dart';
 
@@ -38,5 +41,41 @@ class FirebaseHelper {
     };
     await reference.doc(uid).set(userData);
     await SharedPref().createSession(uid, name, email, mobile);
+  }
+
+  Future<String> insertRequest({
+    @required String pickupDate,
+    @required List<MaterialModel> materials,
+    @required LatLng source,
+    @required LatLng destination,
+    @required String trukType,
+    @required String loadType,
+    @required String mandateType,
+    @required bool isInsured,
+  }) async {
+    User user = FirebaseAuth.instance.currentUser;
+    String phoneNumber = user.phoneNumber;
+    String uid = user.uid;
+    final int bookingDate = DateTime.now().millisecondsSinceEpoch;
+    CollectionReference reference = FirebaseFirestore.instance.collection("Request");
+    List<Map<String, dynamic>> materialMap = [];
+    for (MaterialModel m in materials) {
+      materialMap.add(m.toMap());
+    }
+    await reference.add({
+      'bookingId': bookingDate,
+      'uid': uid,
+      'bookingDate': bookingDate,
+      'mobile': phoneNumber,
+      'materials': materialMap,
+      'pickupDate': pickupDate,
+      'source': "${source.latitude},${source.longitude}",
+      'destination': "${destination.latitude},${destination.longitude}",
+      'insured': isInsured,
+      'mandate': mandateType,
+      'load': loadType,
+      'truk': trukType,
+    });
+    return bookingDate.toString();
   }
 }

@@ -5,8 +5,9 @@ class MyShipment extends StatefulWidget {
   _MyShipmentState createState() => _MyShipmentState();
 }
 
-class _MyShipmentState extends State<MyShipment> {
+class _MyShipmentState extends State<MyShipment> with AutomaticKeepAliveClientMixin {
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -14,4 +15,7 @@ class _MyShipmentState extends State<MyShipment> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

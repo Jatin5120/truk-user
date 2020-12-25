@@ -100,8 +100,6 @@ class DrawerMenu extends StatelessWidget {
             leading: Icon(Icons.settings),
             onTap: () {
               Navigator.pop(context);
-              // Navigator.of(context).pop(true);
-              Navigator.pop(context);
               Navigator.of(context).push(CupertinoPageRoute(
                 builder: (context) {
                   return Settings();
