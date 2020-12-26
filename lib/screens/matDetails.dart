@@ -21,7 +21,6 @@ class MaterialDetails extends StatefulWidget {
 class _MaterialDetailsState extends State<MaterialDetails> {
   double get deviceWidth => MediaQuery.of(context).size.width;
   double get deviceHeight => MediaQuery.of(context).size.height;
-<<<<<<< HEAD
   final TextEditingController _lengthController = TextEditingController();
   final TextEditingController _widthController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
@@ -33,12 +32,6 @@ class _MaterialDetailsState extends State<MaterialDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   String trukTypeValue, mandateTypeValue, loadTypeValue;
-=======
-  TextEditingController length = TextEditingController();
-  TextEditingController width = TextEditingController();
-  TextEditingController height = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +41,6 @@ class _MaterialDetailsState extends State<MaterialDetails> {
         centerTitle: true,
         title: Text('Material Details'),
       ),
-<<<<<<< HEAD
       bottomNavigationBar: BottomAppBar(
         child: Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
@@ -236,95 +228,12 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                             decoration: InputDecoration(
                               labelText: 'Height',
                               border: OutlineInputBorder(),
-=======
-      body: Form(
-        key: _formKey,
-        child: Container(
-          child: SingleChildScrollView(
-            child: Container(
-              height: deviceHeight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Material'),
-                        items: [],
-                        onChanged: (value) {}),
-                  ),
-                  SizedBox(height: 15),
-                  Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Quantity'),
-                        items: [],
-                        onChanged: (value) {}),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 20),
-                    child: Text(
-                      'Load Dimensions (Cm)',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    width: deviceWidth,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: TextFormField(
-                              controller: length,
-                              decoration: InputDecoration(
-                                  hintText: 'Length',
-                                  border: OutlineInputBorder()),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: TextFormField(
-                              controller: width,
-                              decoration: InputDecoration(
-                                  hintText: 'Width',
-                                  border: OutlineInputBorder()),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: TextFormField(
-                              controller: height,
-                              decoration: InputDecoration(
-                                  hintText: 'Height',
-                                  border: OutlineInputBorder()),
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-<<<<<<< HEAD
                 ),
                 SizedBox(
                   height: 15,
@@ -512,33 +421,6 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                   height: 20,
                 )
               ],
-=======
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 20),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Text(
-                        '+ Add Material',
-                        style: TextStyle(color: Colors.blue, fontSize: 18),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: 20, left: 20),
-                    child: InputDatePickerFormField(
-                        firstDate: DateTime(1990, 1, 1, 0, 0),
-                        lastDate: DateTime.now()),
-                  )
-                ],
-              ),
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
             ),
           ),
         ),

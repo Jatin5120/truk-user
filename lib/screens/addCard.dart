@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_credit_card/credit_card_model.dart';
-import 'package:flutter_credit_card/flutter_credit_card.dart';
-
+import 'package:flutter_credit_card/credit_card_widget.dart';
 import '../utils/constants.dart';
+import 'package:flutter_credit_card/credit_card_form.dart';
+import 'package:flutter_credit_card/credit_card_model.dart';
 
 class AddCard extends StatefulWidget {
   @override
@@ -75,12 +75,10 @@ class _AddCardState extends State<AddCard> {
                       ),
                       Spacer(),
                       Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                         height: 65,
                         width: width,
-                        padding:
-                            EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                         child: RaisedButton(
                           color: primaryColor,
                           onPressed: () {},

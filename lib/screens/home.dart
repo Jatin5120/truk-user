@@ -14,12 +14,7 @@ import 'package:trukapp/screens/matDetails.dart';
 import 'package:trukapp/screens/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/screens/shipmentDetails.dart';
-<<<<<<< HEAD
 import 'package:trukapp/utils/drawer_part.dart';
-=======
-import 'package:trukapp/screens/support.dart';
-import 'package:trukapp/screens/trukmoney.dart';
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
 
 import '../utils/constants.dart';
 
@@ -265,7 +260,6 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return Container(
       height: height,
       width: width,
@@ -274,120 +268,6 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
           isLoading
               ? Center(
                   child: Column(
-=======
-    return Scaffold(
-      drawer: Theme(
-        data: ThemeData(disabledColor: Colors.black),
-        child: Drawer(
-          child: ListView(
-            children: [
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Mukesh Kumar',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        '+91 9987654321',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile()));
-                        },
-                        child: Text('Edit',
-                            style: TextStyle(color: Colors.blue, fontSize: 18)),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                  ],
-                ),
-              ),
-              myListTile(
-                  title: 'Quotes',
-                  leading: Icon(Icons.format_quote),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Quotes(),
-                    ));
-                  }),
-              myListTile(
-                  title: 'Payments',
-                  leading: Icon(Icons.payment),
-                  onTap: () {
-                    Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (context) => Payment(),
-                    ));
-                  }),
-              myListTile(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => TrukMoney(),
-                    ));
-                  },
-                  title: 'TruckMoney',
-                  leading: Icon(Icons.attach_money)),
-              myListTile(
-                  title: 'Support',
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Support()));
-                  },
-                  leading: Icon(Icons.account_balance_wallet)),
-              myListTile(
-                  title: 'Promotions',
-                  leading: Icon(Icons.card_giftcard),
-                  onTap: () {
-                    Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (context) => Promotion(),
-                    ));
-                  }),
-              myListTile(
-                  title: 'Settings',
-                  leading: Icon(Icons.settings),
-                  onTap: () {
-                    // Navigator.of(context).pop(true);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return Settings();
-                      },
-                    ));
-                  }),
-              SizedBox(height: 50),
-              Container(
-                height: 50,
-                width: width,
-                alignment: Alignment.center,
-                child: GestureDetector(
-                  child: Row(
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Getting your location"),

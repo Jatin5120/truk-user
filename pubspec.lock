@@ -167,15 +167,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
-  flutter_datetime_picker:
-    dependency: "direct main"
-    description:
-      name: flutter_datetime_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.0"
-=======
   flutter_credit_card:
     dependency: "direct main"
     description:
@@ -183,7 +174,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
+  flutter_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_datetime_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.0"
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -256,7 +253,7 @@ packages:
       name: google_maps_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.33"
+    version: "1.0.6"
   google_maps_flutter_platform_interface:
     dependency: transitive
     description:
@@ -326,11 +323,7 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.3.0-nullsafety.3"
-=======
-    version: "1.1.8"
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
   nested:
     dependency: transitive
     description:
@@ -510,11 +503,7 @@ packages:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "2.1.0-nullsafety.1"
-=======
-    version: "2.0.0"
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
   stream_transform:
     dependency: transitive
     description:
@@ -542,11 +531,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.2.19-nullsafety.2"
-=======
-    version: "0.2.17"
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
   timezone:
     dependency: transitive
     description:
@@ -590,10 +575,5 @@ packages:
     source: hosted
     version: "4.5.1"
 sdks:
-<<<<<<< HEAD
   dart: ">=2.10.0-110 <2.11.0"
   flutter: ">=1.22.0 <2.0.0"
-=======
-  dart: ">=2.9.0-14.0.dev <3.0.0"
-  flutter: ">=1.18.0-6.0.pre <2.0.0"
->>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
