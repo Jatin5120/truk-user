@@ -163,9 +163,9 @@ class _TrukMoneyState extends State<TrukMoney>
                   child: TabBarView(
                     controller: tabController,
                     children: [
-                      Text('hi'),
-                      Text('hi'),
-                      Text('hi'),
+                      Text(''),
+                      Text(''),
+                      Text(''),
                     ],
                   ),
                 ),
