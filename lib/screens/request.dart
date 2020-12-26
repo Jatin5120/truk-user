@@ -16,14 +16,14 @@ class _RequestState extends State<Request> {
   TextEditingController material = TextEditingController();
 
   Widget myCustomTextField(
-      {TextEditingController controller, String hintText}) {
+      {TextEditingController controller, String labelText}) {
     return Container(
       padding: EdgeInsets.only(right: 20, left: 20),
       child: Form(
         child: TextFormField(
           controller: controller,
-          decoration:
-              InputDecoration(hintText: hintText, border: OutlineInputBorder()),
+          decoration: InputDecoration(
+              labelText: labelText, border: OutlineInputBorder()),
         ),
       ),
     );
@@ -64,19 +64,19 @@ class _RequestState extends State<Request> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 30),
-                myCustomTextField(hintText: 'Pickup Location'),
+                myCustomTextField(labelText: 'Pickup Location'),
                 SizedBox(
                   height: 15,
                 ),
-                myCustomTextField(hintText: 'Drop Location'),
+                myCustomTextField(labelText: 'Drop Location'),
                 SizedBox(
                   height: 15,
                 ),
-                myCustomTextField(hintText: 'Date of Booking'),
+                myCustomTextField(labelText: 'Date of Booking'),
                 SizedBox(
                   height: 15,
                 ),
-                myCustomTextField(hintText: 'Material'),
+                myCustomTextField(labelText: 'Material'),
                 SizedBox(
                   height: 15,
                 ),

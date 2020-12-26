@@ -74,7 +74,7 @@ class LoginState extends State<Login> {
                             image: AssetImage('assets/images/india.png'),
                           ),
                         ),
-                        hintText: 'Enter Mobile Number',
+                        labelText: 'Enter Mobile Number',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -101,7 +101,7 @@ class LoginState extends State<Login> {
                                 Icons.lock_outline,
                                 size: 30,
                               )),
-                          hintText: 'Enter Password',
+                          labelText: 'Enter Password',
                           suffixIcon: IconButton(
                             onPressed: () {
                               toggleVisibility();
@@ -181,7 +181,8 @@ class LoginState extends State<Login> {
                   Flexible(
                     flex: 1,
                     child: Container(
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
                       height: 65,
                       width: width,
                       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
@@ -189,7 +190,12 @@ class LoginState extends State<Login> {
                         color: primaryColor,
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
+<<<<<<< HEAD
                             Navigator.of(context).push(MaterialPageRoute(
+=======
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+>>>>>>> f75a1563b070b19f0d13e53444df121fb504e393
                               builder: (context) => CarouselScreen(),
                             ));
                           }
