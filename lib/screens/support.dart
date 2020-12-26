@@ -13,7 +13,7 @@ class _SupportState extends State<Support> {
 
   Widget messageBubble({String message, String time, bool sender}) {
     return Container(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: EdgeInsets.only(left: 10, right: 10, bottom: 8),
       alignment: sender ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
         mainAxisAlignment:
@@ -58,7 +58,7 @@ class _SupportState extends State<Support> {
                             bottomRight: Radius.circular(15)),
                     child: Container(
                       padding: EdgeInsets.only(
-                          left: 10, right: 10, top: 20, bottom: 20),
+                          left: 10, right: 10, top: 15, bottom: 15),
                       // height: 60,
                       alignment: Alignment.center,
                       child: Text('$message',
@@ -84,31 +84,77 @@ class _SupportState extends State<Support> {
     );
   }
 
+  TextEditingController _messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Support'),
       ),
-      body: Container(
-        child: SingleChildScrollView(
+      body: LayoutBuilder(
+        builder: (context, constraint) => Container(
           child: Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
+            width: size.width,
             child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: 20,
                 ),
-                messageBubble(
-                  message: 'Hi, How can I help you?',
-                  sender: false,
-                  time: '20:01',
+                Flexible(
+                  flex: 9,
+                  child: ListView(
+                    children: [
+                      messageBubble(
+                        message: 'Hi, How can I help you?',
+                        sender: false,
+                        time: '20:01',
+                      ),
+                      messageBubble(
+                          message: 'Can I know fare for truk?',
+                          sender: true,
+                          time: '20:05'),
+                    ],
+                  ),
                 ),
-                messageBubble(
-                    message: 'Can I know fare for truk?',
-                    sender: true,
-                    time: '20:05')
+                Flexible(
+                  flex: 0,
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(maxWidth: size.width, maxHeight: 100),
+                    child: IntrinsicHeight(
+                      child: TextFormField(
+                        expands: true,
+                        cursorColor: Colors.black,
+                        controller: _messageController,
+                        maxLines: null,
+                        minLines: null,
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                Icons.send,
+                                color: primaryColor,
+                              ),
+                              onPressed: () {},
+                            ),
+                            prefixIcon: IconButton(
+                              icon: Icon(
+                                Icons.add,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {},
+                            ),
+                            hintText: 'Add text to this message',
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.zero,
+                                borderSide: BorderSide(color: Colors.black)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.zero,
+                                borderSide: BorderSide(color: Colors.black))),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

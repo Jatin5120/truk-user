@@ -33,7 +33,11 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
         width: size.width,
         padding: const EdgeInsets.all(16),
         child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('Request').where('uid', isEqualTo: user.uid).snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('Request')
+              .where('uid', isEqualTo: user.uid)
+              .orderBy('bookingId', descending: true)
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
