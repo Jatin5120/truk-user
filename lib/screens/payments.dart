@@ -85,7 +85,7 @@ class _PaymentState extends State<Payment> {
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => AddCard()));
+                        CupertinoPageRoute(builder: (context) => AddCard()));
                   },
                 ),
               ),
