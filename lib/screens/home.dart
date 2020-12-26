@@ -27,7 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   double get width => MediaQuery.of(context).size.width;
   double get height => MediaQuery.of(context).size.height;
   int currentIndex;
-  final PageController _pageController = PageController(initialPage: 0, keepPage: true);
+  final PageController _pageController =
+      PageController(initialPage: 0, keepPage: true);
 
   @override
   void initState() {
@@ -101,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            title: Text('Home'),
           ),
           BottomNavigationBarItem(
             icon: Padding(
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: currentIndex == 1 ? primaryColor : Colors.grey,
               ),
             ),
-            label: 'My Shipments',
+            title: Text('My Shipments'),
           )
         ],
       ),
@@ -162,7 +163,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
         if (_permissionStatus != PermissionStatus.granted) {
           await requestPermission(_permission);
         }
-        if (_permissionStatus == PermissionStatus.granted) _getLocation(context);
+        if (_permissionStatus == PermissionStatus.granted)
+          _getLocation(context);
       }
     });
   }
@@ -184,12 +186,14 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text("GPS disabled"),
-              content: const Text('Please make sure you enable GPS and try again'),
+              content:
+                  const Text('Please make sure you enable GPS and try again'),
               actions: <Widget>[
                 FlatButton(
                   child: Text('Ok'),
                   onPressed: () {
-                    final AndroidIntent intent = AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+                    final AndroidIntent intent = AndroidIntent(
+                        action: 'android.settings.LOCATION_SOURCE_SETTINGS');
 
                     intent.launch();
                     Navigator.of(context, rootNavigator: true).pop();
@@ -219,7 +223,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
     setState(() {
       isLoading = true;
     });
-    Position pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    Position pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
     final lat = pos.latitude;
     final lng = pos.longitude;
     if (pos != null) {
@@ -242,7 +247,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
   Future setLocationText(int type) async {
     LatLng latLng = myMarker[type == 0 ? 'source' : 'destination'].position;
     final coordinates = Coordinates(latLng.latitude, latLng.longitude);
-    var address = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var address =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     String street = address.first.featureName;
     String area = address.first.subLocality;
     String pincode = address.first.postalCode;
@@ -298,7 +304,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
                       myMarker['source'] = Marker(
                         markerId: MarkerId('source'),
                         position: latlng,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueGreen),
                         infoWindow: InfoWindow(title: 'Source'),
                       );
                       await setLocationText(0);
@@ -306,7 +313,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
                       myMarker['destination'] = Marker(
                         markerId: MarkerId('destination'),
                         position: latlng,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRed),
                         infoWindow: InfoWindow(title: 'destination'),
                       );
                       await setLocationText(1);
@@ -315,7 +323,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
                       myMarker['source'] = Marker(
                         markerId: MarkerId('source'),
                         position: latlng,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueGreen),
                         infoWindow: InfoWindow(title: 'Source'),
                       );
                       await setLocationText(0);
@@ -335,7 +344,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
                     child: TextFormField(
                       controller: _sourceTextController,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 10, top: 15),
+                        contentPadding:
+                            const EdgeInsets.only(left: 10, top: 15),
                         prefixIcon: Icon(
                           Icons.map,
                         ),
@@ -357,7 +367,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
                     child: TextFormField(
                       controller: _destinationTextController,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 10, top: 15),
+                        contentPadding:
+                            const EdgeInsets.only(left: 10, top: 15),
                         prefixIcon: Icon(
                           Icons.pin_drop,
                         ),
@@ -374,7 +385,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
           Positioned(
             bottom: 20,
             child: Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
               height: 65,
               width: width,
               padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
@@ -385,7 +397,8 @@ class _BodyState extends State<Body> with AutomaticKeepAliveClientMixin {
                   bool isSourceEmpty = myMarker['source'] == null;
                   bool isDestinationEmpty = myMarker['destination'] == null;
                   if (isSourceEmpty || isDestinationEmpty) {
-                    Fluttertoast.showToast(msg: 'Please give source and destination of shipment');
+                    Fluttertoast.showToast(
+                        msg: 'Please give source and destination of shipment');
                     return;
                   }
                   Navigator.push(
