@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:trukapp/screens/edit.dart';
+import 'package:trukapp/screens/matDetails.dart';
 import 'package:trukapp/screens/notification.dart';
 import 'package:trukapp/screens/payments.dart';
 import 'package:trukapp/screens/promotions.dart';
@@ -193,8 +194,7 @@ class _BodyState extends State<Body> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.exit_to_app,
-                          color: Color.fromRGBO(255, 113, 1, 100)),
+                      Icon(Icons.exit_to_app, color: primaryColor),
                       SizedBox(width: 10),
                       Text(
                         'Logout',
@@ -287,7 +287,11 @@ class _BodyState extends State<Body> {
                 child: RaisedButton(
                   visualDensity: VisualDensity.comfortable,
                   color: primaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MaterialDetails(),
+                    ));
+                  },
                   child: Text(
                     'Continue Booking',
                     style: TextStyle(fontSize: 18, color: Colors.white),
