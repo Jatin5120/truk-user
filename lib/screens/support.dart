@@ -96,17 +96,15 @@ class _SupportState extends State<Support> {
         builder: (context, constraint) => Container(
           child: Container(
             width: size.width,
-            // height: size.height,
             child: Column(
               children: [
+                SizedBox(
+                  height: 20,
+                ),
                 Flexible(
                   flex: 9,
                   child: ListView(
-                    // shrinkWrap: true,
                     children: [
-                      SizedBox(
-                        height: 20,
-                      ),
                       messageBubble(
                         message: 'Hi, How can I help you?',
                         sender: false,
@@ -119,7 +117,6 @@ class _SupportState extends State<Support> {
                     ],
                   ),
                 ),
-                // Spacer(),
                 Flexible(
                   flex: 0,
                   child: ConstrainedBox(
