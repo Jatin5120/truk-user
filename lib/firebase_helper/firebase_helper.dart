@@ -78,4 +78,11 @@ class FirebaseHelper {
     });
     return bookingDate.toString();
   }
+
+  Future updateQuoteStatus(String id, String status) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection('Quote');
+    await reference.doc(id).update({
+      'status': status,
+    });
+  }
 }

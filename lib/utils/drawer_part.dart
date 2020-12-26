@@ -5,7 +5,7 @@ import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/screens/edit.dart';
 import 'package:trukapp/screens/payments.dart';
 import 'package:trukapp/screens/promotions.dart';
-import 'package:trukapp/screens/quotes.dart';
+import 'package:trukapp/screens/quotes_screen.dart';
 import 'package:trukapp/screens/request.dart';
 import 'package:trukapp/screens/settings.dart';
 
@@ -72,7 +72,7 @@ class DrawerMenu extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) => Quotes(),
+                builder: (context) => QuotesScreen(),
               ));
             }),
         myListTile(

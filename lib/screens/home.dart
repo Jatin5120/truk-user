@@ -1,6 +1,7 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       currentIndex = value;
     });
-    _pageController.animateToPage(currentIndex, duration: Duration(milliseconds: 400), curve: Curves.easeIn);
+    _pageController.jumpToPage(currentIndex);
   }
 
   List<Widget> children = [Body(), MyShipment()];
@@ -91,7 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: currentIndex,
         onTap: onTabTap,
         selectedItemColor: primaryColor,
-        selectedFontSize: 18,
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
         elevation: 12,
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
@@ -102,7 +104,15 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.local_shipping),
+            icon: Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: SvgPicture.asset(
+                'assets/svg/truck_svg.svg',
+                height: 15,
+                width: 20,
+                color: currentIndex == 1 ? primaryColor : Colors.grey,
+              ),
+            ),
             label: 'My Shipments',
           )
         ],
