@@ -8,6 +8,8 @@ import 'package:trukapp/screens/promotions.dart';
 import 'package:trukapp/screens/quotes_screen.dart';
 import 'package:trukapp/screens/request.dart';
 import 'package:trukapp/screens/settings.dart';
+import 'package:trukapp/screens/support.dart';
+import 'package:trukapp/screens/trukmoney.dart';
 
 import 'constants.dart';
 
@@ -55,9 +57,11 @@ class DrawerMenu extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).push(CupertinoPageRoute(builder: (context) => EditProfile()));
+                    Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) => EditProfile()));
                   },
-                  child: Text('Edit', style: TextStyle(color: Colors.blue, fontSize: 18)),
+                  child: Text('Edit',
+                      style: TextStyle(color: Colors.blue, fontSize: 18)),
                 ),
               ),
               SizedBox(
@@ -84,8 +88,24 @@ class DrawerMenu extends StatelessWidget {
                 builder: (context) => Payment(),
               ));
             }),
-        myListTile(title: 'TruckMoney', leading: Icon(Icons.attach_money)),
-        myListTile(title: 'Support', leading: Icon(Icons.account_balance_wallet)),
+        myListTile(
+            title: 'TruckMoney',
+            leading: Icon(Icons.attach_money),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => TrukMoney(),
+              ));
+            }),
+        myListTile(
+            title: 'Support',
+            leading: Icon(Icons.account_balance_wallet),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => Support(),
+              ));
+            }),
         myListTile(
             title: 'Promotions',
             leading: Icon(Icons.card_giftcard),
@@ -115,7 +135,8 @@ class DrawerMenu extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.exit_to_app, color: Color.fromRGBO(255, 113, 1, 100)),
+                Icon(Icons.exit_to_app,
+                    color: Color.fromRGBO(255, 113, 1, 100)),
                 SizedBox(width: 10),
                 Text(
                   'Logout',
@@ -138,7 +159,8 @@ class DrawerMenu extends StatelessWidget {
   Widget myListTile({String title, void Function() onTap, Widget leading}) {
     return ListTile(
       leading: leading,
-      title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+      title: Text(title,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
       onTap: onTap,
     );
   }
