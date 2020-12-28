@@ -25,16 +25,27 @@ class DrawerMenu extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 30,
+              Container(
+                padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
+                height: 80,
+                width: width,
+                alignment: Alignment.centerLeft,
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundColor: primaryColor,
+                  child: Text(
+                      pUser.isUserLoading ? '...' : '${pUser.user.name[0]}',
+                      style: TextStyle(
+                          fontSize: 26,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(left: 20),
                 child: Text(
                   pUser.isUserLoading ? 'Loading...' : '${pUser.user.name}',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -64,6 +75,8 @@ class DrawerMenu extends StatelessWidget {
                       style: TextStyle(color: Colors.blue, fontSize: 18)),
                 ),
               ),
+              SizedBox(height: 5),
+              Divider(height: 2),
               SizedBox(
                 height: 15,
               ),
