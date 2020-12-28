@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:trukapp/models/material_model.dart';
-import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/sessionmanagement/session_manager.dart';
+import '../models/material_model.dart';
+import '../models/user_model.dart';
+import '../sessionmanagement/session_manager.dart';
 
 class FirebaseHelper {
   static final String walletCollection = 'Wallet';
@@ -101,6 +101,11 @@ class FirebaseHelper {
     await reference.doc(id).update({
       'status': status,
     });
+  }
+
+  Future deleteRequest(String id) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection(requestCollection);
+    await reference.doc(id).delete();
   }
 
   Future<void> updateWallet(String tid, double amount, int type) async {

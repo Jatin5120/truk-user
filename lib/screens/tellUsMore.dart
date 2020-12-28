@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
-import 'package:trukapp/screens/home.dart';
+import '../firebase_helper/firebase_helper.dart';
+import '../screens/home.dart';
 import 'package:flutter/material.dart';
-import 'package:trukapp/utils/constants.dart';
-import 'package:trukapp/helper/email_validator.dart';
+import '../utils/constants.dart';
+import '../helper/email_validator.dart';
 
 class MoreAbout extends StatefulWidget {
   @override

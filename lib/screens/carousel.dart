@@ -1,9 +1,9 @@
-import 'package:trukapp/screens/signup.dart';
+import '../screens/signup.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
-import 'package:trukapp/sessionmanagement/session_manager.dart';
-import 'package:trukapp/utils/constants.dart';
-import 'package:trukapp/utils/walkthrough_widget.dart';
+import '../sessionmanagement/session_manager.dart';
+import '../utils/constants.dart';
+import '../utils/walkthrough_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../utils/constants.dart';

@@ -4,9 +4,9 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:trukapp/models/material_model.dart';
-import 'package:trukapp/screens/shipmentSummary.dart';
-import 'package:trukapp/utils/constants.dart';
+import '../models/material_model.dart';
+import '../screens/shipmentSummary.dart';
+import '../utils/constants.dart';
 
 class MaterialDetails extends StatefulWidget {
   final LatLng source;

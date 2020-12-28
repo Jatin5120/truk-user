@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:trukapp/screens/addCard.dart';
+import '../screens/addCard.dart';
 import '../utils/constants.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 

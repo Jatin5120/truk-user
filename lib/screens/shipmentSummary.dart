@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
-import 'package:trukapp/helper/helper.dart';
+import '../firebase_helper/firebase_helper.dart';
+import '../helper/helper.dart';
 
-import 'package:trukapp/models/material_model.dart';
-import 'package:trukapp/screens/home.dart';
-import 'package:trukapp/utils/constants.dart';
-import 'package:trukapp/widgets/widgets.dart';
+import '../models/material_model.dart';
+import '../screens/home.dart';
+import '../utils/constants.dart';
+import '../widgets/widgets.dart';
 
 class ShipmentSummary extends StatefulWidget {
   final List<MaterialModel> materials;

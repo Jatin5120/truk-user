@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
-import 'package:trukapp/helper/helper.dart';
-import 'package:trukapp/models/material_model.dart';
-import 'package:trukapp/models/quote_model.dart';
-import 'package:trukapp/screens/my_request_screen.dart';
-import 'package:trukapp/utils/constants.dart';
-import 'package:trukapp/utils/no_data_page.dart';
+import '../firebase_helper/firebase_helper.dart';
+import '../helper/helper.dart';
+import '../models/material_model.dart';
+import '../models/quote_model.dart';
+import '../screens/my_request_screen.dart';
+import '../utils/constants.dart';
+import '../utils/no_data_page.dart';
 
 class QuotesScreen extends StatefulWidget {
   @override

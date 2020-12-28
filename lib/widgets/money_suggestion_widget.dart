@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trukapp/utils/constants.dart';
+import '../utils/constants.dart';
 
 class MoneySuggestion extends StatelessWidget {
   final String text;

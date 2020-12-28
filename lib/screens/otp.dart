@@ -5,11 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
-import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/screens/home.dart';
-import 'package:trukapp/screens/tellUsMore.dart';
-import 'package:trukapp/utils/constants.dart';
+import '../firebase_helper/firebase_helper.dart';
+import '../models/user_model.dart';
+import '../screens/home.dart';
+import '../screens/tellUsMore.dart';
+import '../utils/constants.dart';
 
 import 'home.dart';
 
@@ -46,8 +46,7 @@ class _OTPState extends State<OTP> {
     final PhoneVerificationFailed verificationFailed = (authException) {
       setState(() {
         isLoading = false;
-        _message =
-            'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}';
+        _message = 'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}';
       });
       Fluttertoast.showToast(msg: _message);
     };

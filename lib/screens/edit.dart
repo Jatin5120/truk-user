@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
-import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/helper/email_validator.dart';
+import '../firebase_helper/firebase_helper.dart';
+import '../models/user_model.dart';
+import '../helper/email_validator.dart';
 import '../utils/constants.dart';
 
 class EditProfile extends StatefulWidget {
@@ -26,8 +26,10 @@ class _EditProfileState extends State<EditProfile> {
     return LoadingOverlay(
       isLoading: isLoading,
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('Edit Profile'),
+          centerTitle: true,
         ),
         body: Consumer<MyUser>(
           builder: (context, model, child) {

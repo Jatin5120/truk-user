@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
-import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/models/wallet_model.dart';
-import 'package:trukapp/utils/constants.dart';
-import 'package:trukapp/widgets/money_suggestion_widget.dart';
-import 'package:trukapp/widgets/widgets.dart';
+import '../firebase_helper/firebase_helper.dart';
+import '../models/user_model.dart';
+import '../models/wallet_model.dart';
+import '../utils/constants.dart';
+import '../widgets/money_suggestion_widget.dart';
+import '../widgets/widgets.dart';
 
 class TrukMoney extends StatefulWidget {
   @override

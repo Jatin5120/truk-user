@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trukapp/utils/constants.dart';
+import '../utils/constants.dart';
 
 class Support extends StatefulWidget {
   @override
@@ -16,17 +16,17 @@ class _SupportState extends State<Support> {
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 8),
       alignment: sender ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
-        mainAxisAlignment:
-            sender ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: sender ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (sender)
             Padding(
-                padding: const EdgeInsets.only(right: 5.0),
-                child: Text(
-                  '$time',
-                  style: TextStyle(fontSize: 12),
-                )),
+              padding: const EdgeInsets.only(right: 5.0),
+              child: Text(
+                '$time',
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
           Flexible(
             flex: 1,
             child: Container(
@@ -57,13 +57,11 @@ class _SupportState extends State<Support> {
                             bottomLeft: Radius.circular(15),
                             bottomRight: Radius.circular(15)),
                     child: Container(
-                      padding: EdgeInsets.only(
-                          left: 10, right: 10, top: 15, bottom: 15),
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
                       // height: 60,
                       alignment: Alignment.center,
-                      child: Text('$message',
-                          style: sender ? senderStyle : receiverStyle,
-                          overflow: TextOverflow.visible),
+                      child:
+                          Text('$message', style: sender ? senderStyle : receiverStyle, overflow: TextOverflow.visible),
                       decoration: BoxDecoration(
                         color: sender ? Colors.white : primaryColor,
                       ),
@@ -91,6 +89,7 @@ class _SupportState extends State<Support> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Support'),
+        centerTitle: true,
       ),
       body: LayoutBuilder(
         builder: (context, constraint) => Container(
@@ -110,18 +109,14 @@ class _SupportState extends State<Support> {
                         sender: false,
                         time: '20:01',
                       ),
-                      messageBubble(
-                          message: 'Can I know fare for truk?',
-                          sender: true,
-                          time: '20:05'),
+                      messageBubble(message: 'Can I know fare for truk?', sender: true, time: '20:05'),
                     ],
                   ),
                 ),
                 Flexible(
                   flex: 0,
                   child: ConstrainedBox(
-                    constraints:
-                        BoxConstraints(maxWidth: size.width, maxHeight: 100),
+                    constraints: BoxConstraints(maxWidth: size.width, maxHeight: 100),
                     child: IntrinsicHeight(
                       child: TextFormField(
                         expands: true,
@@ -146,11 +141,9 @@ class _SupportState extends State<Support> {
                             ),
                             hintText: 'Add text to this message',
                             focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(color: Colors.black)),
+                                borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.black)),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(color: Colors.black))),
+                                borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.black))),
                       ),
                     ),
                   ),

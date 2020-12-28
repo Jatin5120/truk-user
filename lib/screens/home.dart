@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/firebase_helper/notification_helper.dart';
-import 'package:trukapp/fragments/home_map_fragment.dart';
-import 'package:trukapp/fragments/my_shipment_fragment.dart';
-import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/models/wallet_model.dart';
-import 'package:trukapp/screens/notification.dart';
+import '../firebase_helper/notification_helper.dart';
+import '../fragments/home_map_fragment.dart';
+import '../fragments/my_shipment_fragment.dart';
+import '../models/user_model.dart';
+import '../models/wallet_model.dart';
+import '../screens/notification.dart';
 import 'package:flutter/material.dart';
 
-import 'package:trukapp/utils/drawer_part.dart';
+import '../utils/drawer_part.dart';
 
 import '../utils/constants.dart';
 
@@ -21,8 +22,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double get width => MediaQuery.of(context).size.width;
   double get height => MediaQuery.of(context).size.height;
-  int currentIndex;
-  final PageController _pageController = PageController(initialPage: 0, keepPage: true);
+  int currentIndex, backTaps = 0;
+  bool back = false;
+  static final PageController _pageController = PageController(initialPage: 0, keepPage: true);
 
   @override
   void initState() {
@@ -33,6 +35,31 @@ class _HomeScreenState extends State<HomeScreen> {
     NotificationHelper().registerNotification();
   }
 
+  Future<bool> _onBackPress() async {
+    if (currentIndex != 0) {
+      setState(() {
+        currentIndex = 0;
+      });
+      _pageController.jumpToPage(currentIndex);
+      return false;
+    }
+    Fluttertoast.showToast(msg: "Press back again to exit");
+    Future.delayed(Duration(seconds: 3), () {
+      setState(() {
+        backTaps = 0;
+      });
+    });
+    if (backTaps == 0) {
+      setState(() {
+        backTaps = 1;
+      });
+      _onBackPress();
+    } else {
+      return true;
+    }
+    return false;
+  }
+
   void onTabTap(int value) {
     setState(() {
       currentIndex = value;
@@ -40,91 +67,101 @@ class _HomeScreenState extends State<HomeScreen> {
     _pageController.jumpToPage(currentIndex);
   }
 
-  List<Widget> children = [HomeMapFragment(), MyShipment()];
+  final List<Widget> children = [
+    HomeMapFragment(),
+    MyShipment(
+      onAppbarBack: () {
+        _pageController.jumpToPage(0);
+      },
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Theme(
-        data: ThemeData(disabledColor: Colors.black),
-        child: Drawer(
-          child: DrawerMenu(),
+    return WillPopScope(
+      onWillPop: _onBackPress,
+      child: Scaffold(
+        drawer: Theme(
+          data: ThemeData(disabledColor: Colors.black),
+          child: Drawer(
+            child: DrawerMenu(),
+          ),
         ),
-      ),
-      appBar: currentIndex == 1
-          ? AppBar(
-              toolbarHeight: 0,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-            )
-          : AppBar(
-              iconTheme: IconThemeData(color: Colors.black),
-              backgroundColor: Colors.white,
-              title: Container(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  height: 100,
-                  width: 100,
+        appBar: currentIndex == 1
+            ? AppBar(
+                toolbarHeight: 0,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+              )
+            : AppBar(
+                iconTheme: IconThemeData(color: Colors.black),
+                backgroundColor: Colors.white,
+                title: Container(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: 100,
+                    width: 100,
+                  ),
+                ),
+                actions: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.notifications,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (context) => NotificationScreen(),
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: onTabTap,
+          selectedItemColor: primaryColor,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          elevation: 12,
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: true,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: SvgPicture.asset(
+                  'assets/svg/truck_svg.svg',
+                  height: 15,
+                  width: 20,
+                  color: currentIndex == 1 ? primaryColor : Colors.grey,
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.notifications,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      CupertinoPageRoute(
-                        builder: (context) => NotificationScreen(),
-                      ),
-                    );
-                  },
-                )
-              ],
-            ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: onTabTap,
-        selectedItemColor: primaryColor,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        elevation: 12,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: SvgPicture.asset(
-                'assets/svg/truck_svg.svg',
-                height: 15,
-                width: 20,
-                color: currentIndex == 1 ? primaryColor : Colors.grey,
-              ),
-            ),
-            label: 'My Shipments',
-          )
-        ],
-      ),
-      body: PageView.builder(
-        onPageChanged: (ind) {
-          setState(() {
-            currentIndex = ind;
-          });
-        },
-        itemCount: children.length,
-        itemBuilder: (context, index) {
-          return children[index];
-        },
-        controller: _pageController,
-        physics: NeverScrollableScrollPhysics(),
+              label: 'My Shipments',
+            )
+          ],
+        ),
+        body: PageView.builder(
+          onPageChanged: (ind) {
+            setState(() {
+              currentIndex = ind;
+            });
+          },
+          itemCount: children.length,
+          itemBuilder: (context, index) {
+            return children[index];
+          },
+          controller: _pageController,
+          physics: NeverScrollableScrollPhysics(),
+        ),
       ),
     );
   }
