@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/screens/addCard.dart';
-
+import '../helper/payment_helper.dart';
 import '../utils/constants.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class Payment extends StatefulWidget {
   @override
@@ -11,10 +12,50 @@ class Payment extends StatefulWidget {
 
 class _PaymentState extends State<Payment> {
   int selected;
+
+  Razorpay _razorpay;
+
+  createOrder(double amount) async {
+    var options = {
+      'key': 'rzp_test_mJh9QWD7lZ8ToY',
+      'amount': 500, //in the smallest currency sub-unit.
+      'name': 'Test Truk',
+      'description': 'Fine T-Shirt',
+      'timeout': 60, // in seconds
+      'prefill': {'contact': '9123456789', 'email': 'something@example.com'}
+    };
+    _razorpay.open(options);
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Do something when payment succeeds
+    print("Payment Success : ${response.paymentId}");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    print("Payment Error : ${response.message}");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet is selected
+    print(response.walletName);
+  }
+
   @override
   void initState() {
     super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     selected = 0;
+  }
+
+  @override
+  void dispose() {
+    _razorpay.clear();
+    super.dispose();
   }
 
   double get height => MediaQuery.of(context).size.height;
@@ -84,8 +125,7 @@ class _PaymentState extends State<Payment> {
                     size: 30,
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => AddCard()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddCard()));
                   },
                 ),
               ),
@@ -94,17 +134,14 @@ class _PaymentState extends State<Payment> {
               height: 20,
             ),
             Container(
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
               height: 65,
               width: width,
               padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
               child: RaisedButton(
                 color: primaryColor,
-                onPressed: () {
-                  // Navigator.of(context).pushReplacement(CupertinoPageRoute(
-                  //   builder: (context) => HomeScreen(),
-                  // ));
+                onPressed: () async {
+                  createOrder(1.00);
                 },
                 child: Text(
                   'Continue',
