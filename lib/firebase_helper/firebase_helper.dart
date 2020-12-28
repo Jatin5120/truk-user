@@ -7,16 +7,22 @@ import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/sessionmanagement/session_manager.dart';
 
 class FirebaseHelper {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  static final String walletCollection = 'Wallet';
+  static final String walletTranscationCollection = 'WalletTransaction';
+  static final String userCollection = 'Users';
+  static final String transactionCollection = 'Transaction';
+  static final String requestCollection = 'Request';
+  static final String quoteCollection = 'Quote';
 
+  static FirebaseAuth _auth = FirebaseAuth.instance;
+  User user = _auth.currentUser;
   Future<UserModel> getCurrentUser({String uid}) async {
     String u = uid;
     if (uid == null) {
-      User user = _auth.currentUser;
       u = user.uid;
     }
 
-    CollectionReference reference = FirebaseFirestore.instance.collection("Users");
+    CollectionReference reference = FirebaseFirestore.instance.collection(userCollection);
 
     final d = await reference.doc(u).get();
     if (d.exists) {
@@ -28,7 +34,7 @@ class FirebaseHelper {
   Future insertUser(
       String uid, String name, String email, String mobile, String company, String city, String state) async {
     int joiningTime = DateTime.now().millisecondsSinceEpoch;
-    CollectionReference reference = FirebaseFirestore.instance.collection("Users");
+    CollectionReference reference = FirebaseFirestore.instance.collection(userCollection);
     Map<String, dynamic> userData = {
       'uid': uid,
       'name': name,
@@ -41,6 +47,17 @@ class FirebaseHelper {
     };
     await reference.doc(uid).set(userData);
     await SharedPref().createSession(uid, name, email, mobile);
+  }
+
+  Future<void> updateUser({String name, String email, String company}) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection(userCollection);
+    Map<String, dynamic> userData = {
+      'uid': user.uid,
+      'name': name,
+      'email': email,
+      'company': company,
+    };
+    await reference.doc(user.uid).update(userData);
   }
 
   Future<String> insertRequest({
@@ -80,9 +97,45 @@ class FirebaseHelper {
   }
 
   Future updateQuoteStatus(String id, String status) async {
-    CollectionReference reference = FirebaseFirestore.instance.collection('Quote');
+    CollectionReference reference = FirebaseFirestore.instance.collection(quoteCollection);
     await reference.doc(id).update({
       'status': status,
+    });
+  }
+
+  Future<void> updateWallet(String tid, double amount, int type) async {
+    //type is  0 = debit and 1 = credit
+
+    final currentTimeMilli = DateTime.now().millisecondsSinceEpoch;
+    CollectionReference reference = FirebaseFirestore.instance.collection(walletCollection);
+    final snapWallet = await reference.doc(user.uid).get();
+    await transaction(tid, amount, type, currentTimeMilli, walletTranscationCollection);
+    await transaction(tid, amount, type, currentTimeMilli, transactionCollection);
+    if (snapWallet.exists) {
+      double amt = type == 1 ? snapWallet.get("amount") + amount : snapWallet.get("amount") - amount;
+      reference.doc(user.uid).update({
+        'amount': amt,
+        'lastUpdate': currentTimeMilli,
+      });
+    } else {
+      await reference.doc(user.uid).set({
+        'amount': amount,
+        'lastUpdate': currentTimeMilli,
+      });
+    }
+  }
+
+  Future transaction(String transactionId, double amount, int type, int time, String collection) async {
+    //type is  0 = debit and 1 = credit
+
+    CollectionReference reference = FirebaseFirestore.instance.collection(collection);
+
+    await reference.add({
+      'tid': transactionId,
+      'amount': amount,
+      'type': type == 1 ? "Credit" : "Debit",
+      'uid': user.uid,
+      'time': time,
     });
   }
 }

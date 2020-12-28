@@ -5,6 +5,7 @@ import 'package:trukapp/helper/helper.dart';
 import 'package:trukapp/models/material_model.dart';
 import 'package:trukapp/models/request_model.dart';
 import 'package:trukapp/utils/constants.dart';
+import 'package:trukapp/utils/no_data_page.dart';
 
 class MyRequestScreen extends StatefulWidget {
   @override
@@ -52,8 +53,8 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
               );
             }
             if (snapshot.data.size <= 0) {
-              return Center(
-                child: Text('No Data'),
+              return NoDataPage(
+                text: 'No Quotes Requested',
               );
             }
             return ListView.builder(

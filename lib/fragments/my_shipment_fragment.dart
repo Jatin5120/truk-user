@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trukapp/utils/no_data_page.dart';
 
 class MyShipment extends StatefulWidget {
   @override
@@ -11,6 +12,9 @@ class _MyShipmentState extends State<MyShipment> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Shipments'),
+      ),
+      body: NoDataPage(
+        text: 'No Shipment',
       ),
     );
   }

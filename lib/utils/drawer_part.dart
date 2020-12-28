@@ -8,6 +8,7 @@ import 'package:trukapp/screens/promotions.dart';
 import 'package:trukapp/screens/quotes_screen.dart';
 import 'package:trukapp/screens/request.dart';
 import 'package:trukapp/screens/settings.dart';
+import 'package:trukapp/screens/trukmoney.dart';
 
 import 'constants.dart';
 
@@ -76,15 +77,30 @@ class DrawerMenu extends StatelessWidget {
               ));
             }),
         myListTile(
-            title: 'Payments',
-            leading: Icon(Icons.payment),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(CupertinoPageRoute(
+          title: 'Payments',
+          leading: Icon(Icons.payment),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              CupertinoPageRoute(
                 builder: (context) => Payment(),
-              ));
-            }),
-        myListTile(title: 'TruckMoney', leading: Icon(Icons.attach_money)),
+              ),
+            );
+          },
+        ),
+        myListTile(
+          title: 'TruckMoney',
+          leading: Icon(Icons.attach_money),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => TrukMoney(),
+              ),
+            );
+          },
+        ),
         myListTile(title: 'Support', leading: Icon(Icons.account_balance_wallet)),
         myListTile(
             title: 'Promotions',

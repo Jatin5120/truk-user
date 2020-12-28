@@ -33,10 +33,12 @@ void paymentSuccessful({String shipmentId, BuildContext context, bool isPayment 
             SizedBox(
               height: isPayment ? 15 : 50,
             ),
-            Text(
-              'Shipment ID: $shipmentId',
-              style: TextStyle(fontSize: 18),
-            )
+            shipmentId == null
+                ? Container()
+                : Text(
+                    'Shipment ID: $shipmentId',
+                    style: TextStyle(fontSize: 18),
+                  )
           ],
         ),
         actions: [

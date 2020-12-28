@@ -83,6 +83,7 @@ class _PaymentState extends State<Payment> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Payments'),
+        centerTitle: true,
       ),
       body: Container(
         child: ListView(

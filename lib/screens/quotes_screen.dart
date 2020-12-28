@@ -8,6 +8,7 @@ import 'package:trukapp/models/material_model.dart';
 import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/screens/my_request_screen.dart';
 import 'package:trukapp/utils/constants.dart';
+import 'package:trukapp/utils/no_data_page.dart';
 
 class QuotesScreen extends StatefulWidget {
   @override
@@ -74,8 +75,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
               );
             }
             if (snapshot.data.size <= 0) {
-              return Center(
-                child: Text('No Data'),
+              return NoDataPage(
+                text: 'No Quotes',
               );
             }
             return ListView.builder(
