@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
-import 'package:trukapp/utils/constants.dart';
+import '../utils/constants.dart';
 
 class DebitCard extends StatefulWidget {
   @override
@@ -26,8 +26,7 @@ class _DebitCardState extends State<DebitCard> {
 
   Widget payMoney({String amount}) {
     return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), color: primaryColor),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: primaryColor),
       child: RaisedButton(
         onPressed: () {},
         child: Text(
@@ -105,8 +104,7 @@ class _DebitCardState extends State<DebitCard> {
                     ),
                     Spacer(),
                     Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                       height: 65,
                       width: size.width,
                       padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),

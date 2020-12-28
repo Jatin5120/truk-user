@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trukapp/utils/constants.dart';
+import '../utils/constants.dart';
 
 void paymentSuccessful({String shipmentId, BuildContext context, bool isPayment = true, Function onTap}) {
   showDialog(
@@ -33,10 +33,12 @@ void paymentSuccessful({String shipmentId, BuildContext context, bool isPayment 
             SizedBox(
               height: isPayment ? 15 : 50,
             ),
-            Text(
-              'Shipment ID: $shipmentId',
-              style: TextStyle(fontSize: 18),
-            )
+            shipmentId == null
+                ? Container()
+                : Text(
+                    'Shipment ID: $shipmentId',
+                    style: TextStyle(fontSize: 18),
+                  )
           ],
         ),
         actions: [
@@ -56,5 +58,39 @@ void paymentSuccessful({String shipmentId, BuildContext context, bool isPayment 
         ],
       );
     },
+  );
+}
+
+void showConfirmationDialog({BuildContext context, String title, String subTitle, Function onTap}) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('$title'),
+      content: Text('$subTitle'),
+      actions: [
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+            onTap();
+          },
+          child: Center(
+            child: Text(
+              'Yes',
+              style: TextStyle(color: primaryColor),
+            ),
+          ),
+        ),
+        RaisedButton(
+          color: primaryColor,
+          onPressed: () => Navigator.pop(context),
+          child: Center(
+            child: Text(
+              'No',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    ),
   );
 }

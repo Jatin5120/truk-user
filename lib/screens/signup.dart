@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:trukapp/screens/otp.dart';
+import '../screens/otp.dart';
 import 'package:flutter/material.dart';
-import 'package:trukapp/utils/constants.dart';
+import '../utils/constants.dart';
 
 class Signup extends StatefulWidget {
   @override

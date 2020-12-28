@@ -62,7 +62,7 @@ class SharedPref {
     return pref.get(SharedPref.KEY_ISLOGIN) ?? false;
   }
 
-  createLocationData(double lat, double lng, {bool isAllowed = false}) async {
+  Future<void> createLocationData(double lat, double lng, {bool isAllowed = false}) async {
     bool b = await isLocation();
     if (!b || isAllowed) {
       String street, area, pincode, city, state;

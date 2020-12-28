@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:trukapp/models/material_model.dart';
+import '../models/material_model.dart';
 
 class RequestModel {
   String uid;

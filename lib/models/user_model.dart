@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
+import '../firebase_helper/firebase_helper.dart';
 
 class UserModel {
   String uid;
@@ -91,7 +92,14 @@ class MyUser with ChangeNotifier {
 
   getUserFromDatabase() async {
     isUserLoading = true;
-    userModel = await FirebaseHelper().getCurrentUser();
+    final User user = FirebaseAuth.instance.currentUser;
+    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.userCollection);
+    final d = reference.doc(user.uid).snapshots();
+    d.forEach((element) {
+      if (element.exists) {
+        userModel = UserModel.fromSnapshot(element);
+      }
+    });
     isUserLoading = false;
     notifyListeners();
   }

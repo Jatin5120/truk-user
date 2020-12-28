@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/screens/edit.dart';
-import 'package:trukapp/screens/payments.dart';
-import 'package:trukapp/screens/promotions.dart';
-import 'package:trukapp/screens/quotes_screen.dart';
-import 'package:trukapp/screens/request.dart';
-import 'package:trukapp/screens/settings.dart';
-import 'package:trukapp/screens/support.dart';
-import 'package:trukapp/screens/trukmoney.dart';
+import '../models/user_model.dart';
+import '../screens/edit.dart';
+import '../screens/payments.dart';
+import '../screens/promotions.dart';
+import '../screens/quotes_screen.dart';
+import '../screens/request.dart';
+import '../screens/settings.dart';
+import '../screens/support_ticket_screen.dart';
+import '../screens/trukmoney.dart';
 
 import 'constants.dart';
 
@@ -80,32 +80,43 @@ class DrawerMenu extends StatelessWidget {
               ));
             }),
         myListTile(
-            title: 'Payments',
-            leading: Icon(Icons.payment),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(CupertinoPageRoute(
+          title: 'Payments',
+          leading: Icon(Icons.payment),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              CupertinoPageRoute(
                 builder: (context) => Payment(),
-              ));
-            }),
+              ),
+            );
+          },
+        ),
         myListTile(
-            title: 'TruckMoney',
-            leading: Icon(Icons.attach_money),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(CupertinoPageRoute(
+          title: 'TruckMoney',
+          leading: Icon(Icons.attach_money),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
                 builder: (context) => TrukMoney(),
-              ));
-            }),
+              ),
+            );
+          },
+        ),
         myListTile(
-            title: 'Support',
-            leading: Icon(Icons.account_balance_wallet),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) => Support(),
-              ));
-            }),
+          title: 'Support',
+          leading: Icon(Icons.account_balance_wallet),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => SupportTicketScreen(),
+              ),
+            );
+          },
+        ),
         myListTile(
             title: 'Promotions',
             leading: Icon(Icons.card_giftcard),

@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/screens/splash.dart';
+import 'models/user_model.dart';
+import 'models/wallet_model.dart';
+import 'screens/splash.dart';
 import 'package:flutter/material.dart';
-import 'package:trukapp/utils/constants.dart';
+import 'utils/constants.dart';
 
 import 'utils/constants.dart';
 
@@ -27,6 +28,9 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => MyUser(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MyWallet(),
         ),
       ],
       child: MaterialApp(
