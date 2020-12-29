@@ -1,5 +1,6 @@
 import 'package:geocoder/geocoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SharedPref {
   SharedPreferences pref;
@@ -53,6 +54,7 @@ class SharedPref {
   }
 
   logoutUser() async {
+    await FirebaseAuth.instance.signOut();
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setBool(SharedPref.KEY_ISLOGIN, false);
   }

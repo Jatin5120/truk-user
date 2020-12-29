@@ -72,15 +72,16 @@ class UserModel {
     if (map == null) return null;
 
     return UserModel(
-        uid: map.get('uid'),
-        name: map.get('name'),
-        mobile: map.get('mobile'),
-        email: map.get('email'),
-        city: map.get('city'),
-        state: map.get('state'),
-        company: map.get('company'),
-        joining: map.get('joining'),
-        token: map.get('token'));
+      uid: map.get('uid'),
+      name: map.get('name'),
+      mobile: map.get('mobile'),
+      email: map.get('email'),
+      city: map.get('city'),
+      state: map.get('state'),
+      company: map.get('company'),
+      joining: map.get('joining'),
+      token: map.data().containsKey('token') ? map.get('token') : 'token',
+    );
   }
 }
 

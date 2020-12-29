@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/widgets/widgets.dart';
 import '../models/user_model.dart';
 import '../screens/edit.dart';
 import '../screens/payments.dart';
 import '../screens/promotions.dart';
 import '../screens/quotes_screen.dart';
-import '../screens/request.dart';
+import '../sessionmanagement/session_manager.dart';
 import '../screens/settings.dart';
 import '../screens/support_ticket_screen.dart';
 import '../screens/trukmoney.dart';
-
+import '../screens/signup.dart';
 import 'constants.dart';
 
 class DrawerMenu extends StatelessWidget {
@@ -153,10 +154,21 @@ class DrawerMenu extends StatelessWidget {
               ],
             ),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) => Request(),
-              ));
+              showConfirmationDialog(
+                title: 'Logout',
+                subTitle: 'Do you want to logout?',
+                context: context,
+                onTap: () {
+                  SharedPref().logoutUser();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Signup(),
+                    ),
+                    (route) => false,
+                  );
+                },
+              );
             },
           ),
         )
