@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:trukapp/firebase_helper/firebase_helper.dart';
 
 class ChattingModel {
@@ -12,6 +14,7 @@ class ChattingModel {
   int time;
   bool isSeen;
   int bookingId;
+  bool isVendor;
   ChattingModel({
     this.sender,
     this.receiver,
@@ -19,7 +22,21 @@ class ChattingModel {
     this.time,
     this.isSeen,
     this.bookingId,
+    this.isVendor = false,
   });
+
+  factory ChattingModel.fromSnap(QueryDocumentSnapshot snap) {
+    if (snap == null) return null;
+
+    return ChattingModel(
+        sender: snap.get('sender'),
+        receiver: snap.get('receiver'),
+        message: snap.get('message'),
+        time: snap.get('time'),
+        isSeen: snap.get('isSeen'),
+        bookingId: snap.get('bookingId'),
+        isVendor: snap.data().containsKey('isVendor') ? snap.get('isVendor') : false);
+  }
 
   ChattingModel copyWith({
     String sender,
@@ -28,6 +45,7 @@ class ChattingModel {
     int time,
     bool isSeen,
     int bookingId,
+    bool isVendor,
   }) {
     return ChattingModel(
       sender: sender ?? this.sender,
@@ -36,6 +54,7 @@ class ChattingModel {
       time: time ?? this.time,
       isSeen: isSeen ?? this.isSeen,
       bookingId: bookingId ?? this.bookingId,
+      isVendor: isVendor ?? this.isVendor,
     );
   }
 
@@ -47,6 +66,7 @@ class ChattingModel {
       'time': time,
       'isSeen': isSeen,
       'bookingId': bookingId,
+      'isVendor': isVendor,
     };
   }
 
@@ -60,19 +80,7 @@ class ChattingModel {
       time: map['time'],
       isSeen: map['isSeen'],
       bookingId: map['bookingId'],
-    );
-  }
-
-  factory ChattingModel.fromSnap(QueryDocumentSnapshot snap) {
-    if (snap == null) return null;
-
-    return ChattingModel(
-      sender: snap.get('sender'),
-      receiver: snap.get('receiver'),
-      message: snap.get('message'),
-      time: snap.get('time'),
-      isSeen: snap.get('isSeen'),
-      bookingId: snap.get('bookingId'),
+      isVendor: map['isVendor'],
     );
   }
 }

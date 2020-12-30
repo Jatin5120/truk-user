@@ -6,10 +6,17 @@ import 'package:trukapp/models/chatting_model.dart';
 
 class MessageHelper {
   final User user = FirebaseAuth.instance.currentUser;
-  sendMessage(String message, String receiver, int bookingId) async {
+  sendMessage(String message, String receiver, int bookingId, bool isVendor) async {
     final int currentTime = DateTime.now().millisecondsSinceEpoch;
     ChattingModel model = ChattingModel(
-        bookingId: bookingId, isSeen: false, message: message, receiver: receiver, sender: user.uid, time: currentTime);
+      isVendor: isVendor,
+      bookingId: bookingId,
+      isSeen: false,
+      message: message,
+      receiver: receiver,
+      sender: user.uid,
+      time: currentTime,
+    );
 
     updateChatList(user.uid, false, currentTime, bookingId, receiver);
     updateChatList(receiver, true, currentTime, bookingId, receiver);
