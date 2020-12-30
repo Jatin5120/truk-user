@@ -1,9 +1,7 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:trukapp/firebase_helper/firebase_helper.dart';
 
 class ChattingListModel {
@@ -61,33 +59,5 @@ class ChattingListModel {
       vendorId: snap.get('vendorId'),
       time: snap.get('time'),
     );
-  }
-}
-
-class MyChattingList with ChangeNotifier {
-  final User user = FirebaseAuth.instance.currentUser;
-  bool isChatListLoading = true;
-  List<ChattingListModel> chatList = [];
-  List<ChattingListModel> get chats => chatList;
-  getAllChats() async {
-    isChatListLoading = true;
-    Stream<QuerySnapshot> snap = FirebaseFirestore.instance
-        .collection(FirebaseHelper.userCollection)
-        .doc(user.uid)
-        .collection(FirebaseHelper.chatListCollection)
-        .orderBy('time', descending: true)
-        .snapshots();
-    List<QueryDocumentSnapshot> d = [];
-    await snap.forEach((element) {
-      d.addAll(element.docs);
-    });
-    if (d.length <= 0) {
-      chatList = [];
-    } else {
-      d.forEach((element) {
-        chatList.add(ChattingListModel.fromSnap(element));
-      });
-    }
-    notifyListeners();
   }
 }

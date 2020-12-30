@@ -90,7 +90,7 @@ class MyChatting with ChangeNotifier {
   bool isChatLoading = true;
   List<ChattingModel> chattings = [];
   List<ChattingModel> get chats => chattings;
-  getAllChats(String vendor, int bookingId) async {
+  getAllMessages(String vendor, int bookingId) async {
     isChatLoading = true;
     Stream<QuerySnapshot> snap = FirebaseFirestore.instance
         .collection(FirebaseHelper.chatCollection)
