@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/models/chatting_list_model.dart';
 import '../firebase_helper/notification_helper.dart';
 import '../fragments/home_map_fragment.dart';
 import '../fragments/my_shipment_fragment.dart';
@@ -33,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     currentIndex = 0;
     Provider.of<MyUser>(context, listen: false).getUserFromDatabase();
     Provider.of<MyWallet>(context, listen: false).getWalletBalance();
+
     NotificationHelper().registerNotification();
   }
 

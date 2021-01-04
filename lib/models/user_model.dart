@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+
 import '../firebase_helper/firebase_helper.dart';
 
 class UserModel {
@@ -72,15 +73,16 @@ class UserModel {
     if (map == null) return null;
 
     return UserModel(
-        uid: map.get('uid'),
-        name: map.get('name'),
-        mobile: map.get('mobile'),
-        email: map.get('email'),
-        city: map.get('city'),
-        state: map.get('state'),
-        company: map.get('company'),
-        joining: map.get('joining'),
-        token: map.get('token'));
+      uid: map.get('uid'),
+      name: map.get('name'),
+      mobile: map.get('mobile'),
+      email: map.get('email'),
+      city: map.get('city'),
+      state: map.get('state'),
+      company: map.get('company'),
+      joining: map.get('joining'),
+      token: map.data().containsKey('token') ? map.get('token') : 'token',
+    );
   }
 }
 

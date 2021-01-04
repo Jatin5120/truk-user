@@ -28,7 +28,7 @@ class NotificationHelper {
     });
 
     firebaseMessaging.getToken().then((token) {
-      print('token: $token');
+      //print('token: $token');
       FirebaseFirestore.instance.collection('Users').doc(user.uid).update({'token': token});
     }).catchError((err) {
       Fluttertoast.showToast(msg: err.message.toString());
@@ -44,10 +44,10 @@ class NotificationHelper {
   }
 
   void showNotification(message) async {
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      Platform.isAndroid ? 'com.cyl18f.puranabazzar' : 'com.cyl18fios.puranabazzar',
-      'Purana Bazzar',
-      'Message notification for purana bazzar',
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      Platform.isAndroid ? 'com.augmentik.trukapp' : 'com.augmentik.trukappios',
+      'TruK',
+      'Notification from TruK App',
       playSound: true,
       enableVibration: true,
       importance: Importance.max,
@@ -55,7 +55,7 @@ class NotificationHelper {
     );
     var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
     var platformChannelSpecifics =
-        new NotificationDetails(iOS: iOSPlatformChannelSpecifics, android: androidPlatformChannelSpecifics);
+        NotificationDetails(iOS: iOSPlatformChannelSpecifics, android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
       0,

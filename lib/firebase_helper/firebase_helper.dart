@@ -13,6 +13,10 @@ class FirebaseHelper {
   static final String transactionCollection = 'Transaction';
   static final String requestCollection = 'Request';
   static final String quoteCollection = 'Quote';
+  static final String driverCollection = 'Drivers';
+  static final String fleetOwnerCollection = 'FleetOwners';
+  static final String chatListCollection = 'ChatList';
+  static final String chatCollection = 'Chats';
 
   static FirebaseAuth _auth = FirebaseAuth.instance;
   User user = _auth.currentUser;

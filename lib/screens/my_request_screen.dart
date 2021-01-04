@@ -99,6 +99,7 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
         ),
       ],
       child: Card(
+        elevation: 8,
         child: Container(
           padding: const EdgeInsets.all(10),
           child: Row(
