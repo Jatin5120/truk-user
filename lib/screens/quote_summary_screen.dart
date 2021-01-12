@@ -19,9 +19,11 @@ import '../utils/constants.dart';
 
 class QuoteSummaryScreen extends StatefulWidget {
   final QuoteModel quoteModel;
+  final bool onlyView;
   const QuoteSummaryScreen({
     Key key,
     @required this.quoteModel,
+    this.onlyView = false,
   }) : super(key: key);
 
   @override
@@ -44,7 +46,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     });
     var options = {
       'key': 'rzp_test_mJh9QWD7lZ8ToY',
-      'amount': amount, //in the smallest currency sub-unit.
+      'amount': amount * 100, //in the smallest currency sub-unit.
       'name': '$name',
       'description': 'Quotation Payment ID - ${widget.quoteModel.bookingId}',
       'timeout': 300, // in seconds
@@ -120,54 +122,58 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
           centerTitle: true,
           title: Text('Quotation Summary'),
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            height: 60,
-            width: size.width,
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: RaisedButton(
-              color: primaryColor,
-              onPressed: () async {
-                if (payment == null) {
-                  Fluttertoast.showToast(msg: 'Please select payment type');
-                  return;
-                }
+        bottomNavigationBar: widget.onlyView
+            ? Container(
+                height: 1,
+              )
+            : BottomAppBar(
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  height: 60,
+                  width: size.width,
+                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                  child: RaisedButton(
+                    color: primaryColor,
+                    onPressed: () async {
+                      if (payment == null) {
+                        Fluttertoast.showToast(msg: 'Please select payment type');
+                        return;
+                      }
 
-                setState(() {
-                  isLoading = true;
-                });
-                if (payment == PaymentType.online) {
-                  createOrder(int.parse(widget.quoteModel.price), pUser.user.email, pUser.user.name);
-                } else {
-                  await FirebaseHelper()
-                      .updateQuoteStatus(widget.quoteModel.id, RequestStatus.accepted, paymentStatus: payment);
-                }
-                setState(() {
-                  isLoading = false;
-                });
-                // paymentSuccessful(
-                //   context: context,
-                //   shipmentId: "$id",
-                //   isPayment: false,
-                //   onTap: () {
-                //     Navigator.pushAndRemoveUntil(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => HomeScreen(),
-                //       ),
-                //       (route) => false,
-                //     );
-                //   },
-                // );
-              },
-              child: Text(
-                'Accept Quotation',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                      setState(() {
+                        isLoading = true;
+                      });
+                      if (payment == PaymentType.online) {
+                        createOrder(int.parse(widget.quoteModel.price), pUser.user.email, pUser.user.name);
+                      } else {
+                        await FirebaseHelper()
+                            .updateQuoteStatus(widget.quoteModel.id, RequestStatus.accepted, paymentStatus: payment);
+                      }
+                      setState(() {
+                        isLoading = false;
+                      });
+                      // paymentSuccessful(
+                      //   context: context,
+                      //   shipmentId: "$id",
+                      //   isPayment: false,
+                      //   onTap: () {
+                      //     Navigator.pushAndRemoveUntil(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => HomeScreen(),
+                      //       ),
+                      //       (route) => false,
+                      //     );
+                      //   },
+                      // );
+                    },
+                    child: Text(
+                      'Accept Quotation',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
         body: Container(
           child: ListView(
             children: [
@@ -213,72 +219,75 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   textAlign: TextAlign.left,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  children: [
-                    Radio(
-                      value: PaymentType.cod,
-                      groupValue: payment,
-                      onChanged: (b) {
-                        setState(() {
-                          payment = b;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: Text(PaymentType.paymentKeys[PaymentType.cod]),
-                    ),
-                  ],
+              if (!widget.onlyView)
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Row(
+                    children: [
+                      Radio(
+                        value: PaymentType.cod,
+                        groupValue: payment,
+                        onChanged: (b) {
+                          setState(() {
+                            payment = b;
+                          });
+                        },
+                      ),
+                      Expanded(
+                        child: Text(PaymentType.paymentKeys[PaymentType.cod]),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  children: [
-                    Radio(
-                      value: PaymentType.online,
-                      groupValue: payment,
-                      onChanged: (b) {
-                        setState(() {
-                          payment = b;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: Text("${PaymentType.paymentKeys[PaymentType.online]}(Discount of 200)"),
-                    ),
-                  ],
+              if (!widget.onlyView)
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Row(
+                    children: [
+                      Radio(
+                        value: PaymentType.online,
+                        groupValue: payment,
+                        onChanged: (b) {
+                          setState(() {
+                            payment = b;
+                          });
+                        },
+                      ),
+                      Expanded(
+                        child: Text("${PaymentType.paymentKeys[PaymentType.online]}(Discount of 200)"),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  children: [
-                    Radio(
-                      value: PaymentType.trukMoney,
-                      groupValue: payment,
-                      onChanged: double.parse(widget.quoteModel.price) > pWallet.myWallet.amount
-                          ? null
-                          : (b) {
-                              setState(() {
-                                payment = b;
-                              });
-                            },
-                    ),
-                    Expanded(
-                      child: Text(
-                        "${PaymentType.paymentKeys[PaymentType.trukMoney]} ${double.parse(widget.quoteModel.price) > pWallet.myWallet.amount ? '(Not Enough balance)' : ''}",
-                        style: TextStyle(
-                          color: double.parse(widget.quoteModel.price) > pWallet.myWallet.amount
-                              ? Colors.red
-                              : Colors.black,
+              if (!widget.onlyView)
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Row(
+                    children: [
+                      Radio(
+                        value: PaymentType.trukMoney,
+                        groupValue: payment,
+                        onChanged: double.parse(widget.quoteModel.price) > pWallet.myWallet.amount
+                            ? null
+                            : (b) {
+                                setState(() {
+                                  payment = b;
+                                });
+                              },
+                      ),
+                      Expanded(
+                        child: Text(
+                          "${PaymentType.paymentKeys[PaymentType.trukMoney]} ${double.parse(widget.quoteModel.price) > pWallet.myWallet.amount ? '(Not Enough balance)' : ''}",
+                          style: TextStyle(
+                            color: double.parse(widget.quoteModel.price) > pWallet.myWallet.amount
+                                ? Colors.red
+                                : Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),

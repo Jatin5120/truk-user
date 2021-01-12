@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 final Color primaryColor = Color(0xffFF7101);
 final String testApiKey = 'rzp_test_mJh9QWD7lZ8ToY';
+const kGoogleApiKey = "AIzaSyD2i2ei-OODxzCSPvki5CaqxAtbKCJXlsM";
 
 List<Map<String, dynamic>> walkthroughList = [
   {

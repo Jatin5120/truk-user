@@ -18,6 +18,7 @@ class FirebaseHelper {
   static final String fleetOwnerCollection = 'FleetOwners';
   static final String chatListCollection = 'ChatList';
   static final String chatCollection = 'Chats';
+  static final String shipmentCollection = 'Shipment';
 
   static FirebaseAuth _auth = FirebaseAuth.instance;
   User user = _auth.currentUser;
@@ -154,6 +155,7 @@ class FirebaseHelper {
       'type': type == 1 ? "Credit" : "Debit",
       'uid': user.uid,
       'time': time,
+      'note': note
     });
   }
 }

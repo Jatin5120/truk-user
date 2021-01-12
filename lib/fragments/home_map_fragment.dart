@@ -1,14 +1,19 @@
 import 'package:android_intent/android_intent.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart' as places;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:uuid/uuid.dart';
 import '../screens/matDetails.dart';
 import '../sessionmanagement/session_manager.dart';
 import '../utils/constants.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:google_maps_webservice/src/core.dart';
 
 class HomeMapFragment extends StatefulWidget {
   @override
@@ -25,9 +30,10 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
   final Permission _permission = Permission.location;
   PermissionStatus _permissionStatus = PermissionStatus.undetermined;
   GoogleMapController mapController;
-
+  places.Mode _mode = places.Mode.overlay;
   LatLng myLatLng;
   Map<String, Marker> myMarker = {};
+  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
 
   @override
   void initState() {
@@ -131,7 +137,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
       _destinationTextController.text = '$street, $area, $city';
     }
 
-    setState(() {});
+    //setState(() {});
   }
 
   @override
@@ -210,6 +216,33 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                   child: Card(
                     elevation: 12.0,
                     child: TextFormField(
+                      onTap: () async {
+                        Prediction p = await places.PlacesAutocomplete.show(
+                          context: context,
+                          apiKey: kGoogleApiKey,
+                          mode: _mode, // Mode.fullscreen
+                          language: "en",
+                          components: [
+                            Component(Component.country, 'in'),
+                          ],
+                        );
+                        if (p == null) {
+                          return;
+                        }
+                        if (p != null) {
+                          _sourceTextController.text = p.description;
+                          PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
+                          double lat = detail.result.geometry.location.lat;
+                          double lng = detail.result.geometry.location.lng;
+                          myMarker['source'] = Marker(
+                            markerId: MarkerId('source'),
+                            position: LatLng(lat, lng),
+                            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                            infoWindow: InfoWindow(title: 'Source'),
+                          );
+                          setState(() {});
+                        }
+                      },
                       controller: _sourceTextController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(left: 10, top: 15),
@@ -233,6 +266,34 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                     elevation: 12.0,
                     child: TextFormField(
                       controller: _destinationTextController,
+                      onTap: () async {
+                        Prediction p = await places.PlacesAutocomplete.show(
+                          context: context,
+                          apiKey: kGoogleApiKey,
+                          mode: _mode, // Mode.fullscreen
+                          language: "en",
+                          components: [
+                            Component(Component.country, 'in'),
+                          ],
+                        );
+                        if (p == null) {
+                          return;
+                        }
+                        if (p != null) {
+                          _destinationTextController.text = p.description;
+                          PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
+                          double lat = detail.result.geometry.location.lat;
+                          double lng = detail.result.geometry.location.lng;
+                          myMarker['destination'] = Marker(
+                            markerId: MarkerId('destination'),
+                            position: LatLng(lat, lng),
+                            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                            infoWindow: InfoWindow(title: 'Destination'),
+                          );
+                          print(lat);
+                          setState(() {});
+                        }
+                      },
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(left: 10, top: 15),
                         prefixIcon: Icon(
