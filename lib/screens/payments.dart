@@ -125,7 +125,8 @@ class _PaymentState extends State<Payment> {
                     size: 30,
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddCard()));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => AddCard()));
                   },
                 ),
               ),
@@ -134,7 +135,8 @@ class _PaymentState extends State<Payment> {
               height: 20,
             ),
             Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
               height: 65,
               width: width,
               padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),

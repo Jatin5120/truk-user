@@ -15,7 +15,8 @@ class TrukMoney extends StatefulWidget {
   _TrukMoneyState createState() => _TrukMoneyState();
 }
 
-class _TrukMoneyState extends State<TrukMoney> with SingleTickerProviderStateMixin {
+class _TrukMoneyState extends State<TrukMoney>
+    with SingleTickerProviderStateMixin {
   static int initialIndex = 0;
   TabController tabController;
   List<String> moneySuggest = ['500', '1000', '2000'];
@@ -37,7 +38,10 @@ class _TrukMoneyState extends State<TrukMoney> with SingleTickerProviderStateMix
       'description': 'Wallet topup',
       'timeout': 300, // in seconds
       'currency': 'INR',
-      'prefill': {'contact': '${user.phoneNumber.substring(3)}', 'email': '$email'}
+      'prefill': {
+        'contact': '${user.phoneNumber.substring(3)}',
+        'email': '$email'
+      }
     };
     _razorpay.open(options);
   }
@@ -276,7 +280,8 @@ class _TrukMoneyState extends State<TrukMoney> with SingleTickerProviderStateMix
                 // ),
                 Spacer(),
                 Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   width: size.width,
                   padding: const EdgeInsets.only(bottom: 16),
                   child: RaisedButton(
@@ -284,7 +289,8 @@ class _TrukMoneyState extends State<TrukMoney> with SingleTickerProviderStateMix
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         int amount = int.parse(_amountController.text) * 100;
-                        await createOrder(amount, pUser.user.email, pUser.user.name);
+                        await createOrder(
+                            amount, pUser.user.email, pUser.user.name);
                         //pWallet.getWalletBalance();
                       }
                     },

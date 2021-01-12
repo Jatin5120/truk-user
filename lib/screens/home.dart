@@ -24,7 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
   double get height => MediaQuery.of(context).size.height;
   int currentIndex, backTaps = 0;
   bool back = false;
-  static final PageController _pageController = PageController(initialPage: 0, keepPage: true);
+  static final PageController _pageController =
+      PageController(initialPage: 0, keepPage: true);
 
   @override
   void initState() {
@@ -134,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: 'Home',
+              title: Text('Home'),
             ),
             BottomNavigationBarItem(
               icon: Padding(
@@ -146,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: currentIndex == 1 ? primaryColor : Colors.grey,
                 ),
               ),
-              label: 'My Shipments',
+              title: Text('My Shipments'),
             )
           ],
         ),
