@@ -64,9 +64,8 @@ class MyWallet extends ChangeNotifier {
       } else {
         model = WalletModel(amount: 0, lastUpdate: 0);
       }
+      isLoading = false;
+      notifyListeners();
     });
-
-    isLoading = false;
-    notifyListeners();
   }
 }

@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
-import 'package:trukapp/models/chatting_list_model.dart';
-import 'package:trukapp/utils/constants.dart';
+import '../firebase_helper/firebase_helper.dart';
+import '../models/chatting_list_model.dart';
+import '../utils/chat_list_row.dart';
+import '../utils/constants.dart';
 import '../screens/support.dart';
 import '../utils/no_data_page.dart';
 
@@ -50,7 +51,6 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 text: 'Error',
               );
             }
-
             return buildChatList(snapshot.data.docs);
           }),
     );
@@ -61,14 +61,32 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
         ? NoDataPage(
             text: 'No Support Tickets',
           )
-        : ListView.builder(
+        : ListView.separated(
+            separatorBuilder: (context, index) => Divider(
+              height: 1,
+              thickness: 0.5,
+            ),
             itemCount: docss.length,
             itemBuilder: (context, index) {
               ChattingListModel model = ChattingListModel.fromSnap(docss[index]);
               return Container(
-                height: 20,
-                color: Colors.red,
-                child: Text(model.id),
+                padding: const EdgeInsets.only(left: 0, right: 0, top: 5),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => Support(
+                          chatListModel: model,
+                        ),
+                      ),
+                    );
+                  },
+                  contentPadding: const EdgeInsets.all(0),
+                  title: ChatListRow(
+                    model: model,
+                  ),
+                ),
               );
             },
           );

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trukapp/helper/request_status.dart';
+import 'package:trukapp/screens/quote_summary_screen.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../helper/helper.dart';
 import '../models/material_model.dart';
@@ -138,7 +140,7 @@ class _QuotesScreenState extends State<QuotesScreen> {
                         );
                       }),
                   SizedBox(height: 5),
-                  getStatusWidget(docID, '${model.status}'),
+                  getStatusWidget(docID, '${model.status}', model),
                 ],
               ),
             ),
@@ -148,21 +150,21 @@ class _QuotesScreenState extends State<QuotesScreen> {
               children: [
                 Text(
                   "${model.pickupDate}",
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 13),
                 ),
                 SizedBox(
                   height: 5,
                 ),
                 Text(
                   "${model.truk}",
-                  style: TextStyle(fontSize: 12, color: Colors.orange),
+                  style: TextStyle(fontSize: 13, color: Colors.orange, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 5,
                 ),
                 Text(
-                  "\u20B9 ${model.price}",
-                  style: TextStyle(fontSize: 12),
+                  "Fare \u20B9 ${model.price}",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 5,
@@ -189,8 +191,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
     );
   }
 
-  Widget getStatusWidget(String id, String status) {
-    if (status == Status.ACCEPTED.toString()) {
+  Widget getStatusWidget(String id, String status, QuoteModel quoteModel) {
+    if (status == RequestStatus.accepted) {
       return Container(
         child: Center(
           child: Text(
@@ -201,12 +203,23 @@ class _QuotesScreenState extends State<QuotesScreen> {
         padding: const EdgeInsets.all(5),
       );
     }
-    if (status == Status.REJECTED.toString()) {
+    if (status == RequestStatus.rejected) {
       return Container(
         child: Center(
           child: Text(
             'Rejected'.toUpperCase(),
             style: TextStyle(color: Colors.red),
+          ),
+        ),
+        padding: const EdgeInsets.all(5),
+      );
+    }
+    if (status == 'assigned') {
+      return Container(
+        child: Center(
+          child: Text(
+            'Assinged'.toUpperCase(),
+            style: TextStyle(color: Colors.green),
           ),
         ),
         padding: const EdgeInsets.all(5),
@@ -221,13 +234,18 @@ class _QuotesScreenState extends State<QuotesScreen> {
             onPressed: isStatusUpdating
                 ? null
                 : () async {
-                    setState(() {
-                      isStatusUpdating = true;
-                    });
-                    await FirebaseHelper().updateQuoteStatus(id, Status.ACCEPTED.toString());
-                    setState(() {
-                      isStatusUpdating = false;
-                    });
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => QuoteSummaryScreen(quoteModel: quoteModel),
+                        ));
+                    // setState(() {
+                    //   isStatusUpdating = true;
+                    // });
+                    //await FirebaseHelper().updateQuoteStatus(id, RequestStatus.accepted);
+                    // setState(() {
+                    //   isStatusUpdating = false;
+                    // });
                   },
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Center(
@@ -247,13 +265,13 @@ class _QuotesScreenState extends State<QuotesScreen> {
             onPressed: isStatusUpdating
                 ? null
                 : () async {
-                    setState(() {
-                      isStatusUpdating = true;
-                    });
-                    await FirebaseHelper().updateQuoteStatus(id, Status.REJECTED.toString());
-                    setState(() {
-                      isStatusUpdating = false;
-                    });
+                    // setState(() {
+                    //   isStatusUpdating = true;
+                    // });
+                    await FirebaseHelper().updateQuoteStatus(id, RequestStatus.rejected);
+                    // setState(() {
+                    //   isStatusUpdating = false;
+                    // });
                   },
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Center(

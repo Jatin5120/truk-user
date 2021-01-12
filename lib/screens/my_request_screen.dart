@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:trukapp/helper/request_status.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../helper/helper.dart';
 import '../models/material_model.dart';
@@ -40,6 +41,7 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
           stream: FirebaseFirestore.instance
               .collection('Request')
               .where('uid', isEqualTo: user.uid)
+              //.where('status', isEqualTo: 'pending')
               .orderBy('bookingId', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
@@ -65,7 +67,7 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
               itemBuilder: (context, index) {
                 RequestModel model = RequestModel.fromSnapshot(snapshot.data.docs[index]);
                 String id = snapshot.data.docs[index].id;
-                return buildRequestCard(model, id);
+                return model.status == RequestStatus.pending ? buildRequestCard(model, id) : Container();
               },
             );
           },

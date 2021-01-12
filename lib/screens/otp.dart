@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:trukapp/sessionmanagement/session_manager.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../models/user_model.dart';
 import '../screens/home.dart';
@@ -315,6 +316,7 @@ class _OTPState extends State<OTP> {
                     );
                   } else {
                     //existing user
+                    await SharedPref().createSession(user.uid, userModel.name, userModel.email, user.phoneNumber);
                     Navigator.pushAndRemoveUntil(
                         context, MaterialPageRoute(builder: (_) => HomeScreen()), (b) => false);
                   }

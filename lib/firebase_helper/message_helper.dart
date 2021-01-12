@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:trukapp/firebase_helper/firebase_helper.dart';
-import 'package:trukapp/models/chatting_list_model.dart';
-import 'package:trukapp/models/chatting_model.dart';
+import '../firebase_helper/firebase_helper.dart';
+import '../models/chatting_list_model.dart';
+import '../models/chatting_model.dart';
 
 class MessageHelper {
   final User user = FirebaseAuth.instance.currentUser;
-  sendMessage(String message, String receiver, int bookingId, bool isVendor) async {
+  Future<void> sendMessage(String message, String receiver, int bookingId, bool isVendor) async {
     final int currentTime = DateTime.now().millisecondsSinceEpoch;
     ChattingModel model = ChattingModel(
       isVendor: isVendor,

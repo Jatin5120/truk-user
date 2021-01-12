@@ -3,17 +3,15 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:trukapp/helper/helper.dart';
+import 'package:trukapp/helper/payment_type.dart';
+import 'package:trukapp/helper/request_status.dart';
 
 import '../models/material_model.dart';
 
-enum Status {
-  ACCEPTED,
-  REJECTED,
-  PENDING,
-}
-
 class QuoteModel {
   String uid;
+  String id;
   String mobile;
   LatLng source;
   LatLng destination;
@@ -28,63 +26,77 @@ class QuoteModel {
   String load;
   String mandate;
   String trukName;
-  QuoteModel(
-      {this.uid,
-      this.mobile,
-      this.source,
-      this.destination,
-      this.materials,
-      this.truk,
-      this.pickupDate,
-      this.bookingId,
-      this.bookingDate,
-      this.insured,
-      this.load,
-      this.mandate,
-      this.price,
-      this.status = 'PENDING',
-      this.trukName = 'Eicher'});
+  String agent;
+  String paymentStatus;
+  QuoteModel({
+    this.uid,
+    this.mobile,
+    this.source,
+    this.destination,
+    this.materials,
+    this.truk,
+    this.pickupDate,
+    this.bookingId,
+    this.bookingDate,
+    this.insured,
+    this.load,
+    this.mandate,
+    this.price,
+    this.agent,
+    this.id,
+    this.paymentStatus,
+    this.status = RequestStatus.pending,
+    this.trukName = 'Eicher',
+  });
 
-  QuoteModel copyWith(
-      {String uid,
-      String mobile,
-      LatLng source,
-      LatLng destination,
-      List<MaterialModel> materials,
-      String truk,
-      String pickupDate,
-      int bookingId,
-      int bookingDate,
-      bool insured,
-      String load,
-      String mandate,
-      String status,
-      String trukName,
-      String price}) {
+  QuoteModel copyWith({
+    String uid,
+    String mobile,
+    String paymentStatus,
+    LatLng source,
+    LatLng destination,
+    List<MaterialModel> materials,
+    String truk,
+    String pickupDate,
+    int bookingId,
+    int bookingDate,
+    bool insured,
+    String load,
+    String mandate,
+    String status,
+    String trukName,
+    String price,
+    String agent,
+    String id,
+  }) {
     return QuoteModel(
-        uid: uid ?? this.uid,
-        mobile: mobile ?? this.mobile,
-        source: source ?? this.source,
-        destination: destination ?? this.destination,
-        materials: materials ?? this.materials,
-        truk: truk ?? this.truk,
-        pickupDate: pickupDate ?? this.pickupDate,
-        bookingId: bookingId ?? this.bookingId,
-        bookingDate: bookingDate ?? this.bookingDate,
-        insured: insured ?? this.insured,
-        load: load ?? this.load,
-        mandate: mandate ?? this.mandate,
-        status: status ?? this.source,
-        trukName: trukName ?? this.trukName,
-        price: price ?? this.price);
+      uid: uid ?? this.uid,
+      id: id ?? this.id,
+      mobile: mobile ?? this.mobile,
+      source: source ?? this.source,
+      destination: destination ?? this.destination,
+      materials: materials ?? this.materials,
+      truk: truk ?? this.truk,
+      pickupDate: pickupDate ?? this.pickupDate,
+      bookingId: bookingId ?? this.bookingId,
+      bookingDate: bookingDate ?? this.bookingDate,
+      insured: insured ?? this.insured,
+      load: load ?? this.load,
+      mandate: mandate ?? this.mandate,
+      status: status ?? this.source,
+      trukName: trukName ?? this.trukName,
+      price: price ?? this.price,
+      agent: agent ?? this.agent,
+      paymentStatus: paymentStatus ?? this.paymentStatus,
+    );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
       'mobile': mobile,
-      'source': stringToLatlng(source.toString()),
-      'destination': stringToLatlng(destination.toString()),
+      'source': "${source.latitude},${source.longitude}",
+      'destination': "${destination.latitude},${destination.longitude}",
       'materials': materials?.map((x) => x?.toMap())?.toList(),
       'truk': truk,
       'pickupDate': pickupDate,
@@ -94,8 +106,10 @@ class QuoteModel {
       'load': load,
       'mandate': mandate,
       'price': price,
-      'status': status,
-      'trukName': trukName
+      'status': status ?? RequestStatus.pending,
+      'trukName': trukName,
+      'agent': agent ?? 'na',
+      'paymentStatus': paymentStatus ?? PaymentType.pending,
     };
   }
 
@@ -105,8 +119,8 @@ class QuoteModel {
     return QuoteModel(
         uid: map['uid'],
         mobile: map['mobile'],
-        source: stringToLatlng(map['source']),
-        destination: stringToLatlng(map['destination']),
+        source: Helper.stringToLatlng(map['source']),
+        destination: Helper.stringToLatlng(map['destination']),
         materials: List<MaterialModel>.from(map['materials']?.map((x) => MaterialModel.fromMap(x))),
         truk: map['truk'],
         pickupDate: map['pickupDate'],
@@ -117,32 +131,33 @@ class QuoteModel {
         mandate: map['mandate'],
         price: map['price'],
         trukName: map['trukName'],
-        status: map['status']);
+        status: map['status'] ?? RequestStatus.pending,
+        agent: map['agent'] ?? 'na',
+        paymentStatus: map['paymentStatus'] ?? PaymentType.pending);
   }
 
   factory QuoteModel.fromSnapshot(QueryDocumentSnapshot map) {
     if (map == null) return null;
 
     return QuoteModel(
-        uid: map.get('uid'),
-        mobile: map.get('mobile'),
-        source: stringToLatlng(map.get('source')),
-        destination: stringToLatlng(map.get('destination')),
-        materials: List<MaterialModel>.from(map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
-        truk: map.get('truk'),
-        pickupDate: map.get('pickupDate'),
-        bookingId: map.get('bookingId'),
-        bookingDate: map.get('bookingDate'),
-        insured: map.get('insured'),
-        load: map.get('load'),
-        mandate: map.get('mandate'),
-        price: map.get('price'),
-        trukName: map.get('trukName'),
-        status: map.get('status'));
-  }
-
-  static LatLng stringToLatlng(String coordindates) {
-    List<String> splitted = coordindates.split(',');
-    return LatLng(double.parse(splitted[0]), double.parse(splitted[1]));
+      id: map.id,
+      uid: map.get('uid'),
+      mobile: map.get('mobile'),
+      source: Helper.stringToLatlng(map.get('source')),
+      destination: Helper.stringToLatlng(map.get('destination')),
+      materials: List<MaterialModel>.from(map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
+      truk: map.get('truk'),
+      pickupDate: map.get('pickupDate'),
+      bookingId: map.get('bookingId'),
+      bookingDate: map.get('bookingDate'),
+      insured: map.get('insured'),
+      load: map.get('load'),
+      mandate: map.get('mandate'),
+      price: map.get('price'),
+      trukName: map.get('trukName'),
+      status: map.get('status'),
+      agent: map.get('agent') ?? 'na',
+      paymentStatus: map.data().containsKey('paymentStatus') ? map.get('paymentStatus') : PaymentType.pending,
+    );
   }
 }

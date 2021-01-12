@@ -107,6 +107,7 @@ class _TrukMoneyState extends State<TrukMoney> with SingleTickerProviderStateMix
     return LoadingOverlay(
       isLoading: isPaymentLoading,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('TrukMoney'),

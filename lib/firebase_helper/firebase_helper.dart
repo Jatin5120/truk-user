@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:trukapp/helper/payment_type.dart';
 import '../models/material_model.dart';
 import '../models/user_model.dart';
 import '../sessionmanagement/session_manager.dart';
@@ -100,12 +101,18 @@ class FirebaseHelper {
     return bookingDate.toString();
   }
 
-  Future updateQuoteStatus(String id, String status) async {
+  Future updateQuoteStatus(String id, String status, {String paymentStatus = PaymentType.cod}) async {
     CollectionReference reference = FirebaseFirestore.instance.collection(quoteCollection);
     await reference.doc(id).update({
       'status': status,
+      'paymentStatus': paymentStatus,
     });
   }
+  //    CollectionReference referenceReq = FirebaseFirestore.instance.collection(quoteCollection);
+  //   await referenceReq.doc(requestId).update({
+  //     'status': status,
+  //   });
+  // }
 
   Future deleteRequest(String id) async {
     CollectionReference reference = FirebaseFirestore.instance.collection(requestCollection);
@@ -134,7 +141,9 @@ class FirebaseHelper {
     }
   }
 
-  Future transaction(String transactionId, double amount, int type, int time, String collection) async {
+  //final String  uid = FirebaseHelper().user.uid;
+  Future transaction(String transactionId, double amount, int type, int time, String collection,
+      {String note = 'truk money'}) async {
     //type is  0 = debit and 1 = credit
 
     CollectionReference reference = FirebaseFirestore.instance.collection(collection);

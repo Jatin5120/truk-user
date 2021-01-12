@@ -9,9 +9,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="trukapp"
         android:icon="@mipmap/ic_launcher">
-
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBi3obr_JcrgFZAZYdHpZ4j3X_YgDtzlJc"/>
-
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyD2i2ei-OODxzCSPvki5CaqxAtbKCJXlsM"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

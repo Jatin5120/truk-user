@@ -101,8 +101,8 @@ class MyUser with ChangeNotifier {
       if (element.exists) {
         userModel = UserModel.fromSnapshot(element);
       }
+      isUserLoading = false;
+      notifyListeners();
     });
-    isUserLoading = false;
-    notifyListeners();
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/models/chatting_list_model.dart';
 import '../firebase_helper/notification_helper.dart';
 import '../fragments/home_map_fragment.dart';
 import '../fragments/my_shipment_fragment.dart';
