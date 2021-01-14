@@ -10,16 +10,20 @@ import 'package:trukapp/models/shipment_model.dart';
 import 'package:trukapp/screens/payment_quote.dart';
 import 'package:trukapp/screens/quote_summary_screen.dart';
 import 'package:trukapp/screens/shipmentSummary.dart';
+import 'package:trukapp/screens/trackShipment.dart';
 
 class ExpandableCardContainer extends StatefulWidget {
   final ShipmentModel model;
   final String docID;
   final bool isCollapsed;
 
-  const ExpandableCardContainer({Key key, this.model, this.docID, this.isCollapsed = false}) : super(key: key);
+  const ExpandableCardContainer(
+      {Key key, this.model, this.docID, this.isCollapsed = false})
+      : super(key: key);
 
   @override
-  _ExpandableCardContainerState createState() => _ExpandableCardContainerState();
+  _ExpandableCardContainerState createState() =>
+      _ExpandableCardContainerState();
 }
 
 class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
@@ -78,7 +82,10 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                         ),
                         Text(
                           "Order: ${widget.model.bookingId}",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: Colors.black),
                         ),
                       ],
                     ),
@@ -89,13 +96,15 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                     children: [
                       Text(
                         "Quantity: $weight KG",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       FutureBuilder<String>(
-                          future: Helper().setLocationText(widget.model.destination),
+                          future: Helper()
+                              .setLocationText(widget.model.destination),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return Text('Address...');
@@ -105,7 +114,8 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                               textAlign: TextAlign.start,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
                             );
                           }),
                       SizedBox(
@@ -113,14 +123,16 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                       ),
                       Text(
                         "Date: ${widget.model.pickupDate}",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
                         "Fare \u20B9 ${widget.model.price}",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
@@ -184,7 +196,8 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                         height: 40.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(width: 1.0, color: const Color(0xffbfbfbf)),
+                          border: Border.all(
+                              width: 1.0, color: const Color(0xffbfbfbf)),
                         ),
                         child: Center(
                           child: Text(
@@ -210,15 +223,29 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
-                      child: Container(
-                        height: 40.0,
-                        decoration:
-                            widget.model.status == RequestStatus.started ? enabledDecoration : disabledBoxDecoration,
-                        child: Center(
-                          child: Text(
-                            'Track',
-                            style: widget.model.status == RequestStatus.started ? enabledTextStyle : disabledTextStyle,
-                            textAlign: TextAlign.left,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (context) => TrackShipment(
+                                    shipmentModel: widget.model,
+                                    weight: weight.toString(),
+                                  )));
+                        },
+                        child: Container(
+                          height: 40.0,
+                          decoration:
+                              widget.model.status == RequestStatus.started
+                                  ? enabledDecoration
+                                  : disabledBoxDecoration,
+                          child: Center(
+                            child: Text(
+                              'Track',
+                              style:
+                                  widget.model.status == RequestStatus.started
+                                      ? enabledTextStyle
+                                      : disabledTextStyle,
+                              textAlign: TextAlign.left,
+                            ),
                           ),
                         ),
                       ),
@@ -231,7 +258,8 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                         height: 40.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(width: 1.0, color: const Color(0xffbfbfbf)),
+                          border: Border.all(
+                              width: 1.0, color: const Color(0xffbfbfbf)),
                         ),
                         child: Center(
                           child: Text(
