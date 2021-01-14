@@ -84,7 +84,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
             return ListView.builder(
               itemCount: snapshot.data.size,
               itemBuilder: (context, index) {
-                QuoteModel model = QuoteModel.fromSnapshot(snapshot.data.docs[index]);
+                QuoteModel model =
+                    QuoteModel.fromSnapshot(snapshot.data.docs[index]);
                 String docID = snapshot.data.docs[index].id;
                 return buildQuoteBlock(model, docID);
               },
@@ -157,7 +158,10 @@ class _QuotesScreenState extends State<QuotesScreen> {
                 ),
                 Text(
                   "${model.truk}",
-                  style: TextStyle(fontSize: 13, color: Colors.orange, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.orange,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 5,
@@ -174,7 +178,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
                   child: RaisedButton(
                     color: Colors.blue,
                     onPressed: () {},
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
                     child: Center(
                       child: Text(
                         "Chat",
@@ -218,7 +223,7 @@ class _QuotesScreenState extends State<QuotesScreen> {
       return Container(
         child: Center(
           child: Text(
-            'Assinged'.toUpperCase(),
+            'Assigned'.toUpperCase(),
             style: TextStyle(color: Colors.green),
           ),
         ),
@@ -237,7 +242,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) => QuoteSummaryScreen(quoteModel: quoteModel),
+                          builder: (context) =>
+                              QuoteSummaryScreen(quoteModel: quoteModel),
                         ));
                     // setState(() {
                     //   isStatusUpdating = true;
@@ -247,7 +253,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
                     //   isStatusUpdating = false;
                     // });
                   },
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Center(
               child: Text(
                 "Accept",
@@ -268,12 +275,14 @@ class _QuotesScreenState extends State<QuotesScreen> {
                     // setState(() {
                     //   isStatusUpdating = true;
                     // });
-                    await FirebaseHelper().updateQuoteStatus(id, RequestStatus.rejected);
+                    await FirebaseHelper()
+                        .updateQuoteStatus(id, RequestStatus.rejected);
                     // setState(() {
                     //   isStatusUpdating = false;
                     // });
                   },
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Center(
               child: Text(
                 "Reject",
