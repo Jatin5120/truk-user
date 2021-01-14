@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/helper/request_status.dart';
+import 'package:trukapp/models/chatting_list_model.dart';
+import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/screens/quote_summary_screen.dart';
+import 'package:trukapp/screens/support.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../helper/helper.dart';
 import '../models/material_model.dart';
@@ -20,6 +23,8 @@ class QuotesScreen extends StatefulWidget {
 class _QuotesScreenState extends State<QuotesScreen> {
   final User user = FirebaseAuth.instance.currentUser;
   bool isStatusUpdating = false;
+  List<QuoteModel> filteredList = [];
+  bool isFilter = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -81,13 +86,56 @@ class _QuotesScreenState extends State<QuotesScreen> {
                 text: 'No Quotes',
               );
             }
-            return ListView.builder(
-              itemCount: snapshot.data.size,
-              itemBuilder: (context, index) {
-                QuoteModel model = QuoteModel.fromSnapshot(snapshot.data.docs[index]);
-                String docID = snapshot.data.docs[index].id;
-                return buildQuoteBlock(model, docID);
-              },
+            List<QuoteModel> list = [];
+            for (QueryDocumentSnapshot m in snapshot.data.docs) {
+              list.add(QuoteModel.fromSnapshot(m));
+            }
+            return Container(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    onChanged: (string) {
+                      if (string.trim().length <= 0 || string.isEmpty) {
+                        setState(() {
+                          isFilter = false;
+                          filteredList = [];
+                        });
+                      } else {
+                        setState(() {
+                          filteredList = list
+                              .where((element) =>
+                                  element.bookingId.toString().contains(string.trim().toLowerCase()) ||
+                                  element.price.contains(string.toLowerCase()) ||
+                                  element.pickupDate.contains(string.toLowerCase()))
+                              .toList();
+                          isFilter = true;
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Type Order Id, pickup date, fare...',
+                      border: OutlineInputBorder(),
+                      labelText: 'Search',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: isFilter ? filteredList.length : snapshot.data.size,
+                    itemBuilder: (context, index) {
+                      QuoteModel model =
+                          isFilter ? filteredList[index] : QuoteModel.fromSnapshot(snapshot.data.docs[index]);
+                      String docID = isFilter ? filteredList[index] : snapshot.data.docs[index].id;
+                      return buildQuoteBlock(model, docID);
+                    },
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -173,7 +221,24 @@ class _QuotesScreenState extends State<QuotesScreen> {
                   height: 30,
                   child: RaisedButton(
                     color: Colors.blue,
-                    onPressed: () {},
+                    onPressed: () async {
+                      CollectionReference reference =
+                          FirebaseFirestore.instance.collection(FirebaseHelper.fleetOwnerCollection);
+
+                      final d = await reference.doc(model.agent).get();
+                      UserModel agent = UserModel.fromSnapshot(d);
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Support(
+                              chatListModel: ChattingListModel(
+                                  id: '',
+                                  quoteModel: model,
+                                  userModel: agent,
+                                  time: DateTime.now().millisecondsSinceEpoch),
+                            ),
+                          ));
+                    },
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                     child: Center(
                       child: Text(
@@ -194,33 +259,27 @@ class _QuotesScreenState extends State<QuotesScreen> {
   Widget getStatusWidget(String id, String status, QuoteModel quoteModel) {
     if (status == RequestStatus.accepted) {
       return Container(
-        child: Center(
-          child: Text(
-            'Accepted'.toUpperCase(),
-            style: TextStyle(color: Colors.green),
-          ),
+        child: Text(
+          'Accepted'.toUpperCase(),
+          style: TextStyle(color: Colors.green),
         ),
         padding: const EdgeInsets.all(5),
       );
     }
     if (status == RequestStatus.rejected) {
       return Container(
-        child: Center(
-          child: Text(
-            'Rejected'.toUpperCase(),
-            style: TextStyle(color: Colors.red),
-          ),
+        child: Text(
+          'Rejected'.toUpperCase(),
+          style: TextStyle(color: Colors.red),
         ),
         padding: const EdgeInsets.all(5),
       );
     }
     if (status == 'assigned') {
       return Container(
-        child: Center(
-          child: Text(
-            'Assinged'.toUpperCase(),
-            style: TextStyle(color: Colors.green),
-          ),
+        child: Text(
+          'Assinged'.toUpperCase(),
+          style: TextStyle(color: Colors.green),
         ),
         padding: const EdgeInsets.all(5),
       );
@@ -239,13 +298,6 @@ class _QuotesScreenState extends State<QuotesScreen> {
                         CupertinoPageRoute(
                           builder: (context) => QuoteSummaryScreen(quoteModel: quoteModel),
                         ));
-                    // setState(() {
-                    //   isStatusUpdating = true;
-                    // });
-                    //await FirebaseHelper().updateQuoteStatus(id, RequestStatus.accepted);
-                    // setState(() {
-                    //   isStatusUpdating = false;
-                    // });
                   },
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Center(

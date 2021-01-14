@@ -295,7 +295,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: InkWell(
                     onTap: () {
-                      DatePicker.showDatePicker(
+                      DatePicker.showDateTimePicker(
                         context,
                         showTitleActions: true,
                         minTime: DateTime.now(),
@@ -303,10 +303,19 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           print('change $date');
                         },
                         onConfirm: (date) {
-                          DateFormat formatter = DateFormat("dd/MM/yyyy");
+                          DateFormat formatter = DateFormat("dd/MM/yyyy hh:mm aa");
                           pickupDate = formatter.format(date);
                           _pickupDateController.text = pickupDate;
-                          setState(() {});
+                          print(date);
+                          // DatePicker.showTime12hPicker(
+                          //   context,
+                          //   currentTime: DateTime.now(),
+                          //   onConfirm: (time) {
+                          //     //formatter = DateFormat()
+                          //     _pickupDateController.text = "$pickupDate ${time.hour}:${time.minute}";
+                          //     setState(() {});
+                          //   },
+                          // );
                         },
                         currentTime: DateTime.now(),
                       );

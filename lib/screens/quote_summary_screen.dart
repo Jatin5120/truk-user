@@ -120,7 +120,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Quotation Summary'),
+          title: Text('${widget.onlyView ? "Order" : "Quotation"} Summary'),
         ),
         bottomNavigationBar: widget.onlyView
             ? Container(
@@ -152,20 +152,15 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                       setState(() {
                         isLoading = false;
                       });
-                      // paymentSuccessful(
-                      //   context: context,
-                      //   shipmentId: "$id",
-                      //   isPayment: false,
-                      //   onTap: () {
-                      //     Navigator.pushAndRemoveUntil(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => HomeScreen(),
-                      //       ),
-                      //       (route) => false,
-                      //     );
-                      //   },
-                      // );
+                      paymentSuccessful(
+                        context: context,
+                        shipmentId: "${widget.quoteModel.bookingId}",
+                        isPayment: true,
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      );
                     },
                     child: Text(
                       'Accept Quotation',

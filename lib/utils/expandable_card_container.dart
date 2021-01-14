@@ -1,5 +1,4 @@
 import 'package:expandable/expandable.dart';
-import 'package:expansion_card/expansion_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/helper/helper.dart';
@@ -7,9 +6,7 @@ import 'package:trukapp/helper/request_status.dart';
 import 'package:trukapp/models/material_model.dart';
 import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
-import 'package:trukapp/screens/payment_quote.dart';
 import 'package:trukapp/screens/quote_summary_screen.dart';
-import 'package:trukapp/screens/shipmentSummary.dart';
 
 class ExpandableCardContainer extends StatefulWidget {
   final ShipmentModel model;
@@ -182,36 +179,6 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                     Expanded(
                       child: Container(
                         height: 40.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(width: 1.0, color: const Color(0xffbfbfbf)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Quotes',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 16,
-                              color: const Color(0xffbfbfbf),
-                              fontWeight: FontWeight.w500,
-                              height: 1.5625,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 40.0,
                         decoration:
                             widget.model.status == RequestStatus.started ? enabledDecoration : disabledBoxDecoration,
                         child: Center(
@@ -223,33 +190,8 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 40.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(width: 1.0, color: const Color(0xffbfbfbf)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Payment',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 16,
-                              color: const Color(0xffbfbfbf),
-                              fontWeight: FontWeight.w500,
-                              height: 1.5625,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                      ),
-                    )
                   ],
-                )
+                ),
               ],
             ),
           ),

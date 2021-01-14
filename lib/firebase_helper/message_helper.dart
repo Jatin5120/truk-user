@@ -19,7 +19,7 @@ class MessageHelper {
     );
 
     updateChatList(user.uid, false, currentTime, bookingId, receiver);
-    updateChatList(receiver, true, currentTime, bookingId, receiver);
+    updateChatList(receiver, true, currentTime, bookingId, user.uid);
 
     CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.chatCollection);
     await reference.add(model.toMap());
@@ -31,13 +31,10 @@ class MessageHelper {
         .doc(id)
         .collection(FirebaseHelper.chatListCollection);
 
-    ChattingListModel listModel = ChattingListModel(
-      bookingId: bookingId,
-      id: "$receiver$bookingId",
-      time: time,
-      vendorId: receiver,
-    );
-
-    await referenceChatList.doc("$receiver$bookingId").set(listModel.toMap());
+    await referenceChatList.doc("$receiver$bookingId").set({
+      'bookingId': bookingId,
+      'clientId': receiver,
+      'time': time,
+    });
   }
 }

@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/helper/helper.dart';
+import 'package:trukapp/models/chat_controller.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../models/chatting_list_model.dart';
 import '../utils/chat_list_row.dart';
@@ -25,70 +27,132 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final pChatList = Provider.of<ChatController>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Support Tickets'),
         centerTitle: true,
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection(FirebaseHelper.userCollection)
-              .doc(user.uid)
-              .collection(FirebaseHelper.chatListCollection)
-              .orderBy('time', descending: true)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+      body: Container(
+        height: size.height,
+        width: size.width,
+        padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+        child: pChatList.isChatLoading
+            ? Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
                 ),
-              );
-            }
-            if (snapshot.hasError) {
-              return NoDataPage(
-                text: 'Error',
-              );
-            }
-            return buildChatList(snapshot.data.docs);
-          }),
+              )
+            : (pChatList.chattings.length <= 0
+                ? NoDataPage(
+                    text: 'No Support Chat',
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: pChatList.chattings.length,
+                    itemBuilder: (context, index) {
+                      final ChattingListModel chattingListModel = pChatList.chattings[index];
+                      return messageTile(chattingListModel);
+                    },
+                  )),
+      ),
     );
   }
 
-  Widget buildChatList(List<QueryDocumentSnapshot> docss) {
-    return docss.length <= 0
-        ? NoDataPage(
-            text: 'No Support Tickets',
-          )
-        : ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-              height: 1,
-              thickness: 0.5,
+  Widget messageTile(ChattingListModel chattingListModel) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          CupertinoPageRoute(
+            builder: (context) => Support(
+              chatListModel: chattingListModel,
             ),
-            itemCount: docss.length,
-            itemBuilder: (context, index) {
-              ChattingListModel model = ChattingListModel.fromSnap(docss[index]);
-              return Container(
-                padding: const EdgeInsets.only(left: 0, right: 0, top: 5),
-                child: ListTile(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => Support(
-                          chatListModel: model,
+          ),
+        );
+      },
+      child: Card(
+        elevation: 3.5,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                  backgroundColor: Colors.grey, foregroundColor: Colors.white, child: Icon(Icons.account_circle)),
+              SizedBox(
+                width: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      chattingListModel.userModel.name.toUpperCase(),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        FutureBuilder<String>(
+                          future: Helper().setLocationText(chattingListModel.quoteModel.source),
+                          builder: (context, snapshot) {
+                            return Text(
+                              snapshot.data.split(",")[1],
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            );
+                          },
+                        ),
+                        Text("-"),
+                        FutureBuilder<String>(
+                          future: Helper().setLocationText(chattingListModel.quoteModel.destination),
+                          builder: (context, snapshot) {
+                            return Text(
+                              snapshot.data.split(",")[1],
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            );
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Flexible(
+                fit: FlexFit.tight,
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      FittedBox(
+                        child: Text(
+                          chattingListModel.quoteModel.pickupDate,
+                          style: TextStyle(fontSize: 12),
                         ),
                       ),
-                    );
-                  },
-                  contentPadding: const EdgeInsets.all(0),
-                  title: ChatListRow(
-                    model: model,
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        chattingListModel.quoteModel.trukName,
+                        style: TextStyle(color: primaryColor, fontSize: 12),
+                      )
+                    ],
                   ),
                 ),
-              );
-            },
-          );
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

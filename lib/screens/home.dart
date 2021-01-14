@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/models/chat_controller.dart';
+import 'package:trukapp/models/shipment_model.dart';
 import '../firebase_helper/notification_helper.dart';
 import '../fragments/home_map_fragment.dart';
 import '../fragments/my_shipment_fragment.dart';
@@ -24,8 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double get height => MediaQuery.of(context).size.height;
   int currentIndex, backTaps = 0;
   bool back = false;
-  static final PageController _pageController =
-      PageController(initialPage: 0, keepPage: true);
+  static final PageController _pageController = PageController(initialPage: 0, keepPage: true);
 
   @override
   void initState() {
@@ -33,7 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     currentIndex = 0;
     Provider.of<MyUser>(context, listen: false).getUserFromDatabase();
     Provider.of<MyWallet>(context, listen: false).getWalletBalance();
-
+    Provider.of<MyShipments>(context, listen: false).getAllShipments();
+    Provider.of<ChatController>(context, listen: false).getAllMessages();
     NotificationHelper().registerNotification();
   }
 

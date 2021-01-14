@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:trukapp/firebase_helper/firebase_helper.dart';
 import 'package:trukapp/helper/helper.dart';
 
 import 'material_model.dart';
@@ -148,7 +150,7 @@ class ShipmentModel {
 
     return ShipmentModel(
       uid: map.get('uid'),
-      id: map.get('id'),
+      id: map.id,
       mobile: map.get('mobile'),
       source: Helper.stringToLatlng(map.get('source')),
       destination: Helper.stringToLatlng(map.get('destination')),
@@ -167,5 +169,32 @@ class ShipmentModel {
       driver: map.get('driver'),
       paymentStatus: map.get('paymentStatus'),
     );
+  }
+}
+
+class MyShipments with ChangeNotifier {
+  final User user = FirebaseAuth.instance.currentUser;
+  List<ShipmentModel> shipList = [];
+  bool isShipLoading = true;
+  List<ShipmentModel> get shipments => shipList;
+
+  getAllShipments() async {
+    isShipLoading = true;
+
+    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.shipmentCollection);
+    final snap = reference.where('uid', isEqualTo: user.uid).orderBy('bookingId', descending: true).snapshots();
+    snap.listen((event) {
+      shipList = [];
+      for (QueryDocumentSnapshot data in event.docs) {
+        shipList.add(ShipmentModel.fromSnapshot(data));
+      }
+      isShipLoading = false;
+      notifyListeners();
+    });
+  }
+
+  removeShipment(ShipmentModel shipmentModel) {
+    shipList.remove(shipmentModel);
+    notifyListeners();
   }
 }
