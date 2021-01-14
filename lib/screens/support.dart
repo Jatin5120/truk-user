@@ -141,9 +141,9 @@ class _SupportState extends State<Support> {
                       List<ChattingModel> chats = [];
                       for (QueryDocumentSnapshot d in documents) {
                         ChattingModel model = ChattingModel.fromSnap(d);
-                        if (model.receiver == widget.chatListModel.vendorId || model.receiver == user.uid) {
-                          if (model.sender == widget.chatListModel.vendorId || model.sender == user.uid) {
-                            if (model.bookingId == widget.chatListModel.bookingId) {
+                        if (model.receiver == widget.chatListModel.userModel.uid || model.receiver == user.uid) {
+                          if (model.sender == widget.chatListModel.userModel.uid || model.sender == user.uid) {
+                            if (model.bookingId == widget.chatListModel.quoteModel.bookingId) {
                               chats.add(model);
                             }
                           }
@@ -185,8 +185,8 @@ class _SupportState extends State<Support> {
                           String message = _messageController.text.trim();
                           await MessageHelper().sendMessage(
                             message,
-                            widget.chatListModel.vendorId,
-                            widget.chatListModel.bookingId,
+                            widget.chatListModel.userModel.uid,
+                            widget.chatListModel.quoteModel.bookingId,
                             false,
                           );
                         },

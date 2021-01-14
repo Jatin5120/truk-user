@@ -1,5 +1,4 @@
 import 'package:android_intent/android_intent.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart' as places;
@@ -8,12 +7,11 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:uuid/uuid.dart';
+
 import '../screens/matDetails.dart';
 import '../sessionmanagement/session_manager.dart';
 import '../utils/constants.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:google_maps_webservice/src/core.dart';
 
 class HomeMapFragment extends StatefulWidget {
   @override
@@ -240,6 +238,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
                             infoWindow: InfoWindow(title: 'Source'),
                           );
+                          CameraUpdate c = CameraUpdate.newLatLngZoom(LatLng(lat, lng), 16);
+                          mapController.animateCamera(c);
                           setState(() {});
                         }
                       },
@@ -290,7 +290,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                             infoWindow: InfoWindow(title: 'Destination'),
                           );
-                          print(lat);
+                          CameraUpdate c = CameraUpdate.newLatLngZoom(LatLng(lat, lng), 16);
+                          mapController.animateCamera(c);
                           setState(() {});
                         }
                       },

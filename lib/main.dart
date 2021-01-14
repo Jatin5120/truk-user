@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/models/chatting_list_model.dart';
+import 'package:trukapp/models/chat_controller.dart';
+import 'package:trukapp/models/wallet_model.dart';
+import 'models/shipment_model.dart';
 import 'models/user_model.dart';
-import 'models/wallet_model.dart';
 import 'screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'utils/constants.dart';
@@ -30,6 +31,12 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => MyWallet(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MyShipments(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChatController(),
         ),
       ],
       child: MaterialApp(
