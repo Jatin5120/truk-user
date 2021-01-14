@@ -8,6 +8,7 @@ import 'package:trukapp/helper/request_status.dart';
 import 'package:trukapp/models/material_model.dart';
 import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
+import 'package:trukapp/screens/trackShipment.dart';
 import 'package:trukapp/utils/constants.dart';
 import 'package:trukapp/utils/expandable_card_container.dart';
 import '../utils/no_data_page.dart';
@@ -72,7 +73,8 @@ class _MyShipmentState extends State<MyShipment> {
             return ListView.builder(
               itemCount: snapshot.data.size,
               itemBuilder: (context, index) {
-                ShipmentModel model = ShipmentModel.fromSnapshot(snapshot.data.docs[index]);
+                ShipmentModel model =
+                    ShipmentModel.fromSnapshot(snapshot.data.docs[index]);
                 String docID = snapshot.data.docs[index].id;
 
                 bool isCollapsed = true;
@@ -89,7 +91,8 @@ class _MyShipmentState extends State<MyShipment> {
     );
   }
 
-  Widget buildShipmentBlock(ShipmentModel model, String docID, bool isCollapsed) {
+  Widget buildShipmentBlock(
+      ShipmentModel model, String docID, bool isCollapsed) {
     double weight = 0;
     for (MaterialModel val in model.materials) {
       weight += val.quantity;
@@ -119,7 +122,8 @@ class _MyShipmentState extends State<MyShipment> {
                           ),
                           Text(
                             "Order: ${model.bookingId}",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12),
                           ),
                         ],
                       ),
@@ -130,7 +134,8 @@ class _MyShipmentState extends State<MyShipment> {
                       children: [
                         Text(
                           "Quantity: $weight KG",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
                           height: 5,
@@ -146,7 +151,8 @@ class _MyShipmentState extends State<MyShipment> {
                                 textAlign: TextAlign.start,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
                               );
                             }),
                         SizedBox(
@@ -154,14 +160,16 @@ class _MyShipmentState extends State<MyShipment> {
                         ),
                         Text(
                           "Date: ${model.pickupDate}",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
                           "Fare \u20B9 ${model.price}",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
                           height: 5,
@@ -205,7 +213,7 @@ class _MyShipmentState extends State<MyShipment> {
       return Container(
         child: Center(
           child: Text(
-            'Assinged'.toUpperCase(),
+            'Assigned'.toUpperCase(),
             style: TextStyle(color: Colors.green),
           ),
         ),
@@ -217,8 +225,13 @@ class _MyShipmentState extends State<MyShipment> {
       child: RaisedButton(
         color: Colors.green,
         onPressed: isStatusUpdating
-            ? null
+            ? () {
+                Navigator.of(context).push(
+                    CupertinoPageRoute(builder: (context) => TrackShipment()));
+              }
             : () async {
+                Navigator.of(context).push(
+                    CupertinoPageRoute(builder: (context) => TrackShipment()));
                 // Navigator.push(
                 //     context,
                 //     CupertinoPageRoute(
