@@ -65,8 +65,73 @@ class _MyShipmentState extends State<MyShipment> {
                 ? NoDataPage(
                     text: 'No Shipments',
                   )
-                : myList(pShips.shipments)),
+                : myShipments(pShips.shipments)),
       ),
     );
   }
 
+  Widget myShipments(List<ShipmentModel> shipments) {
+    List<int> ids = [];
+    for (ShipmentModel d in shipments) {
+      ids.add(d.bookingId);
+    }
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'My Shipments',
+            style: TextStyle(color: Colors.black, fontSize: 20),
+          ),
+        ),
+        TextFormField(
+          keyboardType: TextInputType.number,
+          onChanged: (string) {
+            if (string.trim().length <= 0 || string.isEmpty) {
+              setState(() {
+                isFilter = false;
+                filteredList = [];
+              });
+            } else {
+              setState(() {
+                filteredList = shipments
+                    .where((element) =>
+                        element.bookingId.toString().contains(string.trim().toLowerCase()) ||
+                        element.price.contains(string.toLowerCase()) ||
+                        element.pickupDate.contains(string.toLowerCase()))
+                    .toList();
+                isFilter = true;
+              });
+            }
+          },
+          decoration: InputDecoration(
+            hintText: 'Type Order Id, pickup date, fare...',
+            border: OutlineInputBorder(),
+            labelText: 'Search',
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: isFilter ? filteredList.length : shipments.length,
+            physics: BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              ShipmentModel model = isFilter ? filteredList[index] : shipments[index];
+              String docID = isFilter ? filteredList[index].id : shipments[index].id;
+
+              bool isCollapsed = true;
+              return ExpandableCardContainer(
+                docID: docID,
+                model: model,
+                isCollapsed: isCollapsed,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
