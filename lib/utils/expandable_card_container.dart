@@ -13,10 +13,13 @@ class ExpandableCardContainer extends StatefulWidget {
   final String docID;
   final bool isCollapsed;
 
-  const ExpandableCardContainer({Key key, this.model, this.docID, this.isCollapsed = false}) : super(key: key);
+  const ExpandableCardContainer(
+      {Key key, this.model, this.docID, this.isCollapsed = false})
+      : super(key: key);
 
   @override
-  _ExpandableCardContainerState createState() => _ExpandableCardContainerState();
+  _ExpandableCardContainerState createState() =>
+      _ExpandableCardContainerState();
 }
 
 class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
@@ -75,7 +78,10 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                         ),
                         Text(
                           "Order: ${widget.model.bookingId}",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: Colors.black),
                         ),
                       ],
                     ),
@@ -86,13 +92,15 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                     children: [
                       Text(
                         "Quantity: $weight KG",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       FutureBuilder<String>(
-                          future: Helper().setLocationText(widget.model.destination),
+                          future: Helper()
+                              .setLocationText(widget.model.destination),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return Text('Address...');
@@ -102,7 +110,8 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                               textAlign: TextAlign.start,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
                             );
                           }),
                       SizedBox(
@@ -110,14 +119,16 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                       ),
                       Text(
                         "Date: ${widget.model.pickupDate}",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
                         "Fare \u20B9 ${widget.model.price}",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
@@ -179,12 +190,15 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                     Expanded(
                       child: Container(
                         height: 40.0,
-                        decoration:
-                            widget.model.status == RequestStatus.started ? enabledDecoration : disabledBoxDecoration,
+                        decoration: widget.model.status == RequestStatus.started
+                            ? enabledDecoration
+                            : disabledBoxDecoration,
                         child: Center(
                           child: Text(
                             'Track',
-                            style: widget.model.status == RequestStatus.started ? enabledTextStyle : disabledTextStyle,
+                            style: widget.model.status == RequestStatus.started
+                                ? enabledTextStyle
+                                : disabledTextStyle,
                             textAlign: TextAlign.left,
                           ),
                         ),

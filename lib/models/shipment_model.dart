@@ -129,7 +129,8 @@ class ShipmentModel {
       source: Helper.stringToLatlng(map['source']),
       destination: Helper.stringToLatlng(map['destination']),
       price: map['price'],
-      materials: List<MaterialModel>.from(map['materials']?.map((x) => MaterialModel.fromMap(x))),
+      materials: List<MaterialModel>.from(
+          map['materials']?.map((x) => MaterialModel.fromMap(x))),
       truk: map['truk'],
       pickupDate: map['pickupDate'],
       bookingId: map['bookingId'],
@@ -155,7 +156,8 @@ class ShipmentModel {
       source: Helper.stringToLatlng(map.get('source')),
       destination: Helper.stringToLatlng(map.get('destination')),
       price: map.get('price'),
-      materials: List<MaterialModel>.from(map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
+      materials: List<MaterialModel>.from(
+          map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
       truk: map.get('truk'),
       pickupDate: map.get('pickupDate'),
       bookingId: map.get('bookingId'),
