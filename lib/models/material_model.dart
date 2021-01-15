@@ -2,12 +2,14 @@ import 'dart:convert';
 
 class MaterialModel {
   final String materialName;
+  final String materialType;
   final double quantity;
   final double length;
   final double width;
   final double height;
   MaterialModel({
     this.materialName,
+    this.materialType,
     this.quantity,
     this.length,
     this.width,
@@ -16,6 +18,7 @@ class MaterialModel {
 
   MaterialModel copyWith({
     String materialName,
+    String materialType,
     double quantity,
     double length,
     double width,
@@ -23,6 +26,7 @@ class MaterialModel {
   }) {
     return MaterialModel(
       materialName: materialName ?? this.materialName,
+      materialType: materialType ?? this.materialType,
       quantity: quantity ?? this.quantity,
       length: length ?? this.length,
       width: width ?? this.width,
@@ -33,6 +37,7 @@ class MaterialModel {
   Map<String, dynamic> toMap() {
     return {
       'materialName': materialName,
+      'materialType': materialType,
       'quantity': quantity,
       'length': length,
       'width': width,
@@ -41,10 +46,9 @@ class MaterialModel {
   }
 
   factory MaterialModel.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return MaterialModel(
       materialName: map['materialName'],
+      materialType: map['materialType'],
       quantity: map['quantity'],
       length: map['length'],
       width: map['width'],

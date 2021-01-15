@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   android_intent: ^0.3.7+7
+  cached_network_image: ^2.5.0
   carousel_pro: ^1.0.0
   cloud_firestore: ^0.14.4
   cupertino_icons: ^1.0.0

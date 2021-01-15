@@ -104,7 +104,7 @@ class _SupportState extends State<Support> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Support'),
+        title: Text('${widget.chatListModel.userModel.name}'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -183,6 +183,7 @@ class _SupportState extends State<Support> {
                         ),
                         onPressed: () async {
                           String message = _messageController.text.trim();
+                          _messageController.clear();
                           await MessageHelper().sendMessage(
                             message,
                             widget.chatListModel.userModel.uid,

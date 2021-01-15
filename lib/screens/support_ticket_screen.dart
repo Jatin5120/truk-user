@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -80,7 +81,26 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
           child: Row(
             children: [
               CircleAvatar(
-                  backgroundColor: Colors.grey, foregroundColor: Colors.white, child: Icon(Icons.account_circle)),
+                backgroundColor: Colors.grey,
+                foregroundColor: Colors.white,
+                radius: 30,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: chattingListModel.userModel.image == 'na'
+                      ? Image.asset(
+                          'assets/images/no_data.png',
+                          height: 60,
+                          width: 60,
+                          fit: BoxFit.contain,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: chattingListModel.userModel.image,
+                          fit: BoxFit.cover,
+                          height: 60,
+                          width: 60,
+                        ),
+                ),
+              ),
               SizedBox(
                 width: 5,
               ),
@@ -101,8 +121,11 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                         FutureBuilder<String>(
                           future: Helper().setLocationText(chattingListModel.quoteModel.source),
                           builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Text('Address...');
+                            }
                             return Text(
-                              snapshot.data.split(",")[1],
+                              snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3],
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             );
@@ -112,8 +135,11 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                         FutureBuilder<String>(
                           future: Helper().setLocationText(chattingListModel.quoteModel.destination),
                           builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Text('Address...');
+                            }
                             return Text(
-                              snapshot.data.split(",")[1],
+                              snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3],
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             );

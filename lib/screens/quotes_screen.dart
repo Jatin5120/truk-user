@@ -131,6 +131,9 @@ class _QuotesScreenState extends State<QuotesScreen> {
                       QuoteModel model =
                           isFilter ? filteredList[index] : QuoteModel.fromSnapshot(snapshot.data.docs[index]);
                       String docID = isFilter ? filteredList[index] : snapshot.data.docs[index].id;
+                      if (model.status == RequestStatus.assigned) {
+                        return Container();
+                      }
                       return buildQuoteBlock(model, docID);
                     },
                   ),
@@ -228,16 +231,18 @@ class _QuotesScreenState extends State<QuotesScreen> {
                       final d = await reference.doc(model.agent).get();
                       UserModel agent = UserModel.fromSnapshot(d);
                       Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => Support(
-                              chatListModel: ChattingListModel(
-                                  id: '',
-                                  quoteModel: model,
-                                  userModel: agent,
-                                  time: DateTime.now().millisecondsSinceEpoch),
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => Support(
+                            chatListModel: ChattingListModel(
+                              id: '',
+                              quoteModel: model,
+                              userModel: agent,
+                              time: DateTime.now().millisecondsSinceEpoch,
                             ),
-                          ));
+                          ),
+                        ),
+                      );
                     },
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                     child: Center(

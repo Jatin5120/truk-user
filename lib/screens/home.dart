@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Provider.of<MyWallet>(context, listen: false).getWalletBalance();
     Provider.of<MyShipments>(context, listen: false).getAllShipments();
     Provider.of<ChatController>(context, listen: false).getAllMessages();
+    NotificationHelper().configLocalNotification();
     NotificationHelper().registerNotification();
   }
 
@@ -128,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           currentIndex: currentIndex,
           onTap: onTabTap,
           selectedItemColor: primaryColor,
-          selectedFontSize: 14,
+          selectedFontSize: 17,
           unselectedFontSize: 14,
           elevation: 12,
           unselectedItemColor: Colors.grey,
@@ -136,20 +137,27 @@ class _HomeScreenState extends State<HomeScreen> {
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home'),
+              icon: Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Icon(
+                  Icons.dashboard,
+                  color: currentIndex == 0 ? primaryColor : Colors.grey,
+                  size: 22,
+                ),
+              ),
+              label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: SvgPicture.asset(
                   'assets/svg/truck_svg.svg',
-                  height: 15,
-                  width: 20,
+                  height: 17,
+                  width: 22,
                   color: currentIndex == 1 ? primaryColor : Colors.grey,
                 ),
               ),
-              title: Text('My Shipments'),
+              label: 'My Shipments',
             )
           ],
         ),

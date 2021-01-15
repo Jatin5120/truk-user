@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/screens/quote_summary_screen.dart';
+import 'package:trukapp/utils/constants.dart';
 import '../models/chatting_list_model.dart';
 
 class ChatListRow extends StatelessWidget {
@@ -32,15 +35,22 @@ class ChatListRow extends StatelessWidget {
                 width: 60,
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: primaryColor,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(
-                    'assets/images/no_data.png',
-                    fit: BoxFit.scaleDown,
-                  ),
+                  child: model.userModel.image == 'na'
+                      ? Image.asset(
+                          'assets/images/no_data.png',
+                          fit: BoxFit.cover,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: model.userModel.image,
+                          fit: BoxFit.cover,
+                          height: 58,
+                          width: 58,
+                        ),
                 ),
               ),
               SizedBox(

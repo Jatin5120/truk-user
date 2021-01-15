@@ -14,8 +14,18 @@ class UserModel {
   String company;
   int joining;
   String token;
+  String image;
   UserModel(
-      {this.uid, this.name, this.mobile, this.email, this.city, this.state, this.company, this.joining, this.token});
+      {this.uid,
+      this.name,
+      this.mobile,
+      this.email,
+      this.city,
+      this.state,
+      this.company,
+      this.joining,
+      this.token,
+      this.image});
 
   UserModel copyWith({
     String uid,
@@ -27,17 +37,20 @@ class UserModel {
     String company,
     int joining,
     String token,
+    String image,
   }) {
     return UserModel(
-        uid: uid ?? this.uid,
-        name: name ?? this.name,
-        mobile: mobile ?? this.mobile,
-        email: email ?? this.email,
-        city: city ?? this.city,
-        state: state ?? this.state,
-        company: company ?? this.company,
-        joining: joining ?? this.joining,
-        token: token ?? this.token);
+      uid: uid ?? this.uid,
+      name: name ?? this.name,
+      mobile: mobile ?? this.mobile,
+      email: email ?? this.email,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      company: company ?? this.company,
+      joining: joining ?? this.joining,
+      token: token ?? this.token,
+      image: image ?? this.image,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -50,7 +63,8 @@ class UserModel {
       'state': state,
       'company': company,
       'joining': joining,
-      'token': token
+      'token': token,
+      'image': image ?? 'na'
     };
   }
 
@@ -66,7 +80,8 @@ class UserModel {
         state: map['state'],
         company: map['company'],
         token: map['token'],
-        joining: map['joining']);
+        joining: map['joining'],
+        image: map['image'] ?? 'na');
   }
 
   factory UserModel.fromSnapshot(DocumentSnapshot map) {
@@ -82,6 +97,7 @@ class UserModel {
       company: map.get('company'),
       joining: map.get('joining'),
       token: map.data().containsKey('token') ? map.get('token') : 'token',
+      image: map.data().containsKey('image') ? map.get('image') : 'na',
     );
   }
 }

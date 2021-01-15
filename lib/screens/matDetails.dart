@@ -32,6 +32,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   String trukTypeValue, mandateTypeValue, loadTypeValue;
+  String materialType;
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +105,35 @@ class _MaterialDetailsState extends State<MaterialDetails> {
               children: [
                 SizedBox(
                   height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black,
+                      ),
+                    ),
+                    child: DropdownButton<String>(
+                      underline: Container(),
+                      isExpanded: true,
+                      hint: Text('Select Material Type'),
+                      value: materialType,
+                      items: materialTypes.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (_) {
+                        materialType = _;
+                        setState(() {});
+                      },
+                    ),
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20),
@@ -244,6 +274,10 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                   child: InkWell(
                     onTap: () {
                       if (_formKey.currentState.validate()) {
+                        if (materialType == null) {
+                          Fluttertoast.showToast(msg: 'Select material Type');
+                          return;
+                        }
                         String materialName = _materialController.text.trim();
                         double quantity = double.parse(_quantityController.text.trim());
                         double length = double.parse(_lengthController.text.trim());
@@ -255,8 +289,10 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           materialName: materialName,
                           quantity: quantity,
                           width: width,
+                          materialType: materialType,
                         );
                         materials.add(model);
+                        materialType = null;
                         setState(() {});
                       }
                     },

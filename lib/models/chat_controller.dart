@@ -23,22 +23,22 @@ class ChatController with ChangeNotifier {
 
     snap.listen((event) async {
       chatList = [];
-      if (event.size > 0) {
-        for (QueryDocumentSnapshot snapshot in event.docs) {
-          String otherUser = snapshot.get('clientId');
-          int bookingId = snapshot.get('bookingId');
-          final doc = await userRef.doc(otherUser).get();
-          UserModel userModel = UserModel.fromSnapshot(doc);
-          final bookingSnap = await FirebaseFirestore.instance
-              .collection(FirebaseHelper.quoteCollection)
-              .where('bookingId', isEqualTo: bookingId)
-              .snapshots()
-              .first;
+      //if (event.size > 0) {
+      for (QueryDocumentSnapshot snapshot in event.docs) {
+        String otherUser = snapshot.get('clientId');
+        int bookingId = snapshot.get('bookingId');
+        final doc = await userRef.doc(otherUser).get();
+        UserModel userModel = UserModel.fromSnapshot(doc);
+        final bookingSnap = await FirebaseFirestore.instance
+            .collection(FirebaseHelper.quoteCollection)
+            .where('bookingId', isEqualTo: bookingId)
+            .snapshots()
+            .first;
 
-          final bookingDoc = QuoteModel.fromSnapshot(bookingSnap.docs[0]);
-          chatList.add(ChattingListModel(id: snapshot.id, quoteModel: bookingDoc, userModel: userModel));
-        }
+        final bookingDoc = QuoteModel.fromSnapshot(bookingSnap.docs[0]);
+        chatList.add(ChattingListModel(id: snapshot.id, quoteModel: bookingDoc, userModel: userModel));
       }
+      //}
       isChatLoading = false;
       notifyListeners();
     });
