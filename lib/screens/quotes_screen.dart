@@ -107,13 +107,9 @@ class _QuotesScreenState extends State<QuotesScreen> {
                         setState(() {
                           filteredList = list
                               .where((element) =>
-                                  element.bookingId
-                                      .toString()
-                                      .contains(string.trim().toLowerCase()) ||
-                                  element.price
-                                      .contains(string.toLowerCase()) ||
-                                  element.pickupDate
-                                      .contains(string.toLowerCase()))
+                                  element.bookingId.toString().contains(string.trim().toLowerCase()) ||
+                                  element.price.contains(string.toLowerCase()) ||
+                                  element.pickupDate.contains(string.toLowerCase()))
                               .toList();
                           isFilter = true;
                         });
@@ -130,24 +126,14 @@ class _QuotesScreenState extends State<QuotesScreen> {
                   ),
                   ListView.builder(
                     shrinkWrap: true,
-                    itemCount:
-                        isFilter ? filteredList.length : snapshot.data.size,
+                    itemCount: isFilter ? filteredList.length : snapshot.data.size,
                     itemBuilder: (context, index) {
-<<<<<<< HEAD
                       QuoteModel model =
                           isFilter ? filteredList[index] : QuoteModel.fromSnapshot(snapshot.data.docs[index]);
                       String docID = isFilter ? filteredList[index] : snapshot.data.docs[index].id;
                       if (model.status == RequestStatus.assigned) {
                         return Container();
                       }
-=======
-                      QuoteModel model = isFilter
-                          ? filteredList[index]
-                          : QuoteModel.fromSnapshot(snapshot.data.docs[index]);
-                      String docID = isFilter
-                          ? filteredList[index]
-                          : snapshot.data.docs[index].id;
->>>>>>> 659a6c77fa479ad52817aeb5a9df409c4aaba8d2
                       return buildQuoteBlock(model, docID);
                     },
                   ),
@@ -222,10 +208,7 @@ class _QuotesScreenState extends State<QuotesScreen> {
                 ),
                 Text(
                   "${model.truk}",
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 13, color: Colors.orange, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 5,
@@ -242,8 +225,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
                   child: RaisedButton(
                     color: Colors.blue,
                     onPressed: () async {
-                      CollectionReference reference = FirebaseFirestore.instance
-                          .collection(FirebaseHelper.fleetOwnerCollection);
+                      CollectionReference reference =
+                          FirebaseFirestore.instance.collection(FirebaseHelper.fleetOwnerCollection);
 
                       final d = await reference.doc(model.agent).get();
                       UserModel agent = UserModel.fromSnapshot(d);
@@ -261,8 +244,7 @@ class _QuotesScreenState extends State<QuotesScreen> {
                         ),
                       );
                     },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                     child: Center(
                       child: Text(
                         "Chat",
@@ -319,12 +301,10 @@ class _QuotesScreenState extends State<QuotesScreen> {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) =>
-                              QuoteSummaryScreen(quoteModel: quoteModel),
+                          builder: (context) => QuoteSummaryScreen(quoteModel: quoteModel),
                         ));
                   },
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Center(
               child: Text(
                 "Accept",
@@ -345,14 +325,12 @@ class _QuotesScreenState extends State<QuotesScreen> {
                     // setState(() {
                     //   isStatusUpdating = true;
                     // });
-                    await FirebaseHelper()
-                        .updateQuoteStatus(id, RequestStatus.rejected);
+                    await FirebaseHelper().updateQuoteStatus(id, RequestStatus.rejected);
                     // setState(() {
                     //   isStatusUpdating = false;
                     // });
                   },
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Center(
               child: Text(
                 "Reject",
