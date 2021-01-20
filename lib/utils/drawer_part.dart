@@ -35,11 +35,13 @@ class DrawerMenu extends StatelessWidget {
                   radius: 40,
                   backgroundColor: primaryColor,
                   child: Text(
-                      pUser.isUserLoading ? '...' : '${pUser.user.name[0]}',
-                      style: TextStyle(
-                          fontSize: 26,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold)),
+                    pUser.isUserLoading ? '...' : '${pUser.user.name[0]}',
+                    style: TextStyle(
+                      fontSize: 26,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
               Container(
@@ -69,11 +71,9 @@ class DrawerMenu extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) => EditProfile()));
+                    Navigator.of(context).push(CupertinoPageRoute(builder: (context) => EditProfile()));
                   },
-                  child: Text('Edit',
-                      style: TextStyle(color: Colors.blue, fontSize: 18)),
+                  child: Text('Edit', style: TextStyle(color: Colors.blue, fontSize: 18)),
                 ),
               ),
               SizedBox(height: 5),
@@ -160,8 +160,7 @@ class DrawerMenu extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.exit_to_app,
-                    color: Color.fromRGBO(255, 113, 1, 100)),
+                Icon(Icons.exit_to_app, color: Color.fromRGBO(255, 113, 1, 100)),
                 SizedBox(width: 10),
                 Text(
                   'Logout',
@@ -195,8 +194,7 @@ class DrawerMenu extends StatelessWidget {
   Widget myListTile({String title, void Function() onTap, Widget leading}) {
     return ListTile(
       leading: leading,
-      title: Text(title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+      title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
       onTap: onTap,
     );
   }

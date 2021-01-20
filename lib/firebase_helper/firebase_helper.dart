@@ -19,6 +19,7 @@ class FirebaseHelper {
   static final String chatListCollection = 'ChatList';
   static final String chatCollection = 'Chats';
   static final String shipmentCollection = 'Shipment';
+  static final String notificationCollection = "Notifications";
 
   static FirebaseAuth _auth = FirebaseAuth.instance;
   User user = _auth.currentUser;

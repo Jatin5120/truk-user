@@ -25,15 +25,6 @@ class _MyShipmentState extends State<MyShipment> {
   List<ShipmentModel> filteredList = [];
   bool isFilter = false;
   final _debouncer = Debouncer(milliseconds: 500);
-  // var pShips;
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   pShips = Provider.of<MyShipments>(context, listen: false);
-
-  //   setState(() {});
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../firebase_helper/message_helper.dart';
 import '../helper/helper.dart';
@@ -183,6 +184,10 @@ class _SupportState extends State<Support> {
                         ),
                         onPressed: () async {
                           String message = _messageController.text.trim();
+                          if (message.isEmpty) {
+                            Fluttertoast.showToast(msg: "Cannot send empty message");
+                            return;
+                          }
                           _messageController.clear();
                           await MessageHelper().sendMessage(
                             message,

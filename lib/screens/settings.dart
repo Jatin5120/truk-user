@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trukapp/utils/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -23,7 +25,7 @@ class _SettingsState extends State<Settings> {
       ),
       body: Container(
         height: height,
-        child: ListView(
+        child: Column(
           children: [
             Container(
               width: width,
@@ -65,7 +67,24 @@ class _SettingsState extends State<Settings> {
                 icon: Icon(Icons.arrow_right),
                 onPressed: () {},
               ),
-            )
+            ),
+            Spacer(),
+            ListTile(
+              onTap: () async {
+                String url = "https://www.agumentik.com/";
+                bool canL = await canLaunch(url);
+                if (canL) {
+                  launch(url);
+                }
+              },
+              title: Center(
+                child: Text(
+                  'Developed by Agumentik\nSoftware Pvt. Ltd.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: primaryColor),
+                ),
+              ),
+            ),
           ],
         ),
       ),

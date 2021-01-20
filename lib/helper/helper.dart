@@ -28,7 +28,7 @@ class Helper {
   String getFormattedDate(int milliseconds) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     bool isToday = date.isSameDate(DateTime.now());
-    DateFormat formatter = DateFormat(isToday ? "hh:mm a" : "dd MMM, yyyy");
+    DateFormat formatter = DateFormat(isToday ? "hh:mm a" : "dd MMM, yyyy hh:mm a");
     return formatter.format(date);
   }
 }
