@@ -123,4 +123,6 @@ class LocaleKey {
   static const String destination = "destination";
   static const String fare = "fare";
   static const String date = "date";
+  static const String apply = "apply";
+  static const String coupon = "coupon";
 }

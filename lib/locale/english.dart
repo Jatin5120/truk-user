@@ -123,6 +123,8 @@ Map<String, String> english() {
     "supportTicket": "Support Ticket",
     "destination": "Destination",
     "fare": "Fare",
-    "date": "Date"
+    "date": "Date",
+    "apply": "Apply",
+    "coupon": "Coupon"
   };
 }

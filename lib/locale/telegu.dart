@@ -127,5 +127,7 @@ Map<String, String> telugu() {
     "destination": "గమ్యం",
     "fare": "ఛార్జీల",
     "date": "తేదీ",
+    "apply": "వర్తించు",
+    "coupon": "కూపన్",
   };
 }

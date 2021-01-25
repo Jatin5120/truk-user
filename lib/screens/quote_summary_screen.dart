@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -406,7 +405,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
           children: [
             Expanded(
               child: TextFormField(
-                decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Coupon'),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.coupon),
+                ),
               ),
             ),
             Padding(
@@ -418,7 +420,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   height: 50,
                   child: Center(
                     child: Text(
-                      "Apply",
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.apply),
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

@@ -123,6 +123,8 @@ Map<String, String> hindi() {
     "language": "भाषा",
     "destination": "गंतव्य",
     "fare": "किराया",
-    "date": "दिनांक"
+    "date": "दिनांक",
+    "apply": "लागू करें",
+    "coupon": "कूपन"
   };
 }
