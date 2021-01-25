@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/firebase_helper/firebase_helper.dart';
 import 'package:trukapp/helper/helper.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/models/notification_model.dart';
 import 'package:trukapp/utils/constants.dart';
 import 'package:trukapp/utils/no_data_page.dart';
@@ -27,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         children: [
           Text(
             '$time',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
+            style: TextStyle(color: Colors.grey, fontSize: 13),
           ),
           SizedBox(
             height: 5,
@@ -59,9 +61,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notification'),
+        centerTitle: true,
+        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.notification)),
       ),
       body: Container(
         height: size.height,
@@ -83,14 +87,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text('No Data'),
+                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
               );
             }
-            if (snapshot.data.size <= 0) {
-              return NoDataPage(
-                text: 'No notification',
-              );
-            }
+
             List<NotificationModel> n = [];
             for (QueryDocumentSnapshot s in snapshot.data.docs) {
               NotificationModel notificationModel = NotificationModel.fromSnap(s);
@@ -98,7 +98,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             }
             if (n.length <= 0) {
               return NoDataPage(
-                text: 'No notification',
+                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.notification),
               );
             }
             int count = snapshot.data.docs.length;

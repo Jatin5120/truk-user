@@ -1,29 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 
 final Color primaryColor = Color(0xffFF7101);
 final String testApiKey = 'rzp_test_mJh9QWD7lZ8ToY';
 const kGoogleApiKey = "AIzaSyD2i2ei-OODxzCSPvki5CaqxAtbKCJXlsM";
 
-List<Map<String, dynamic>> walkthroughList = [
-  {
-    'title': 'Live Transport Market',
-    'subtitle': 'Book Trucks, Trailers & Tankers from live market and find best deals',
-    'image': AssetImage('assets/images/walk_1.png')
-  },
-  {
-    'title': 'One Tap Online Tracking',
-    'subtitle': 'Find your Truck on Finger tip and Track online from Start to End.',
-    'image': AssetImage('assets/images/walk_2.png')
-  },
-  {
-    'title': 'Partial Load Services',
-    'subtitle': 'Get your load reach the destination in time without paying for the entire Truk.',
-    'image': AssetImage('assets/images/walk_3.png')
-  },
-];
-List<String> mandateType = ['On-Demand', 'Lease'];
-List<String> loadType = ['Partial TruK', 'Full TruK'];
-List<String> trukType = ['Open TruK', 'Closed TruK'];
 List<String> materialTypes = [
   "Auto parts",
   "Bardana jute or plastic",
@@ -59,3 +41,41 @@ List<String> materialTypes = [
   "Vehicles or car",
   "Others",
 ];
+
+class Constants {
+  final Locale locale;
+  Constants(this.locale);
+
+  List<Map<String, dynamic>> get walkthroughList => [
+        {
+          'title': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.walkThroughTitle1),
+          'subtitle': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.walkThroughSubTitle1),
+          'image': AssetImage('assets/images/walk_1.png')
+        },
+        {
+          'title': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.walkThroughTitle2),
+          'subtitle': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.walkThroughSubTitle2),
+          'image': AssetImage('assets/images/walk_2.png')
+        },
+        {
+          'title': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.walkThroughTitle3),
+          'subtitle': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.walkThroughSubTitle3),
+          'image': AssetImage('assets/images/walk_3.png')
+        },
+      ];
+  List<Map<String, String>> get mandateType => [
+        {'key': LocaleKey.onDemand, 'value': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.onDemand)},
+        {'key': LocaleKey.lease, 'value': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.lease)},
+      ];
+  List<Map<String, String>> get loadType => [
+        {
+          'key': LocaleKey.partialTruk,
+          'value': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.partialTruk)
+        },
+        {'key': LocaleKey.fullTruk, 'value': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.fullTruk)}
+      ];
+  List<Map<String, String>> get trukType => [
+        {'key': LocaleKey.openTruk, 'value': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.openTruk)},
+        {'key': LocaleKey.closedTruk, 'value': AppLocalizations.getLocalizationValue(this.locale, LocaleKey.closedTruk)}
+      ];
+}

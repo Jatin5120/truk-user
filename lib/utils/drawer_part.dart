@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/widgets/widgets.dart';
 import '../models/user_model.dart';
 import '../screens/edit.dart';
@@ -20,6 +22,7 @@ class DrawerMenu extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final pUser = Provider.of<MyUser>(context);
+    final locale = AppLocalizations.of(context).locale;
     return ListView(
       children: [
         Container(
@@ -73,7 +76,13 @@ class DrawerMenu extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.of(context).push(CupertinoPageRoute(builder: (context) => EditProfile()));
                   },
-                  child: Text('Edit', style: TextStyle(color: Colors.blue, fontSize: 18)),
+                  child: Text(
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.edit),
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 5),
@@ -85,8 +94,11 @@ class DrawerMenu extends StatelessWidget {
           ),
         ),
         myListTile(
-            title: 'Quotes',
-            leading: Icon(Icons.format_quote),
+            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.quotes),
+            leading: Icon(
+              Icons.request_quote,
+              color: Colors.black,
+            ),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(CupertinoPageRoute(
@@ -94,8 +106,11 @@ class DrawerMenu extends StatelessWidget {
               ));
             }),
         myListTile(
-          title: 'Payments',
-          leading: Icon(Icons.payment),
+          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.payments),
+          leading: Icon(
+            Icons.payments,
+            color: Colors.black,
+          ),
           onTap: () {
             Navigator.pop(context);
             Navigator.of(context).push(
@@ -106,8 +121,11 @@ class DrawerMenu extends StatelessWidget {
           },
         ),
         myListTile(
-          title: 'TruckMoney',
-          leading: Icon(Icons.attach_money),
+          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.trukMoney),
+          leading: Icon(
+            Icons.home_repair_service,
+            color: Colors.black,
+          ),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(
@@ -119,8 +137,11 @@ class DrawerMenu extends StatelessWidget {
           },
         ),
         myListTile(
-          title: 'Support',
-          leading: Icon(Icons.account_balance_wallet),
+          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
+          leading: Icon(
+            Icons.forum,
+            color: Colors.black,
+          ),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(
@@ -132,8 +153,11 @@ class DrawerMenu extends StatelessWidget {
           },
         ),
         myListTile(
-            title: 'Promotions',
-            leading: Icon(Icons.card_giftcard),
+            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.promotions),
+            leading: Icon(
+              Icons.local_activity,
+              color: Colors.black,
+            ),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(CupertinoPageRoute(
@@ -141,8 +165,11 @@ class DrawerMenu extends StatelessWidget {
               ));
             }),
         myListTile(
-            title: 'Settings',
-            leading: Icon(Icons.settings),
+            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.settings),
+            leading: Icon(
+              Icons.settings,
+              color: Colors.black,
+            ),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(CupertinoPageRoute(
@@ -163,15 +190,15 @@ class DrawerMenu extends StatelessWidget {
                 Icon(Icons.exit_to_app, color: Color.fromRGBO(255, 113, 1, 100)),
                 SizedBox(width: 10),
                 Text(
-                  'Logout',
+                  AppLocalizations.getLocalizationValue(locale, LocaleKey.logout),
                   style: TextStyle(fontSize: 20, color: primaryColor),
                 )
               ],
             ),
             onTap: () {
               showConfirmationDialog(
-                title: 'Logout',
-                subTitle: 'Do you want to logout?',
+                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.logout),
+                subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.logoutConfirm),
                 context: context,
                 onTap: () {
                   SharedPref().logoutUser();

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../firebase_helper/message_helper.dart';
 import '../helper/helper.dart';
@@ -25,6 +27,7 @@ class _SupportState extends State<Support> {
   TextStyle senderStyle = TextStyle(color: Colors.black, fontSize: 16);
   TextStyle receiverStyle = TextStyle(color: Colors.white, fontSize: 16);
   Size get size => MediaQuery.of(context).size;
+  Locale locale;
 
   Widget messageBubble({String message, String time, bool sender}) {
     return Container(
@@ -103,11 +106,12 @@ class _SupportState extends State<Support> {
 
   @override
   Widget build(BuildContext context) {
+    locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.chatListModel.userModel.name}'),
         centerTitle: true,
-        elevation: 0,
+        elevation: 6,
       ),
       body: LayoutBuilder(
         builder: (context, constraint) => Container(
@@ -116,8 +120,11 @@ class _SupportState extends State<Support> {
             height: size.height,
             child: Column(
               children: [
-                ChatListRow(
-                  model: widget.chatListModel,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ChatListRow(
+                    model: widget.chatListModel,
+                  ),
                 ),
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
@@ -152,7 +159,7 @@ class _SupportState extends State<Support> {
                       }
                       return documents.length <= 0
                           ? NoDataPage(
-                              text: 'No Messages',
+                              text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noData),
                             )
                           : ListView.builder(
                               shrinkWrap: true,

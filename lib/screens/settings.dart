@@ -1,4 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/models/user_model.dart';
+import 'package:trukapp/screens/change_language_screen.dart';
 import 'package:trukapp/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,17 +17,18 @@ class _SettingsState extends State<Settings> {
   double get height => MediaQuery.of(context).size.height;
   double get width => MediaQuery.of(context).size.width;
   bool notificationOn = true;
-  void onChanged(bool value) {
-    setState(() {
-      notificationOn = value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    final pUser = Provider.of<MyUser>(context);
+    notificationOn = pUser.user.notification;
+    final locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        centerTitle: true,
+        title: Text(
+          AppLocalizations.getLocalizationValue(locale, LocaleKey.settings),
+        ),
       ),
       body: Container(
         height: height,
@@ -36,7 +43,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   Icon(
                     Icons.notifications,
-                    color: Colors.grey,
+                    color: Colors.black,
                   ),
                   SizedBox(
                     width: 16,
@@ -44,28 +51,77 @@ class _SettingsState extends State<Settings> {
                   Expanded(
                     child: SwitchListTile(
                       activeColor: Color.fromRGBO(255, 113, 1, 100),
-                      title: Text('Notification'),
+                      title: Text(
+                        AppLocalizations.getLocalizationValue(locale, LocaleKey.notification),
+                      ),
                       value: notificationOn,
-                      onChanged: onChanged,
+                      onChanged: (bool value) async {
+                        setState(() {
+                          notificationOn = value;
+                        });
+                        await pUser.updateNotification(value);
+                      },
                     ),
                   ),
                 ],
               ),
             ),
             ListTile(
-              leading: Icon(Icons.info_outline),
-              title: Text('About Truk App'),
-              trailing: IconButton(
-                icon: Icon(Icons.arrow_right),
-                onPressed: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => ChangeLanguageScreen(),
+                  ),
+                );
+              },
+              leading: Icon(
+                Icons.g_translate,
+                color: Colors.black,
+              ),
+              title: Text(
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.language),
+              ),
+              trailing: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Icon(
+                  Icons.arrow_right,
+                  color: Colors.black,
+                ),
               ),
             ),
             ListTile(
-              leading: Icon(Icons.library_books),
-              title: Text('Terms and conditions'),
-              trailing: IconButton(
-                icon: Icon(Icons.arrow_right),
-                onPressed: () {},
+              onTap: () {},
+              leading: Icon(
+                Icons.info,
+                color: Colors.black,
+              ),
+              title: Text(
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.about),
+              ),
+              trailing: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Icon(
+                  Icons.arrow_right,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(
+                Icons.library_books,
+                color: Colors.black,
+              ),
+              title: Text(
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.terms),
+              ),
+              trailing: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Icon(
+                  Icons.arrow_right,
+                  color: Colors.black,
+                ),
               ),
             ),
             Spacer(),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -15,17 +17,20 @@ class UserModel {
   int joining;
   String token;
   String image;
-  UserModel(
-      {this.uid,
-      this.name,
-      this.mobile,
-      this.email,
-      this.city,
-      this.state,
-      this.company,
-      this.joining,
-      this.token,
-      this.image});
+  bool notification;
+  UserModel({
+    this.uid,
+    this.name,
+    this.mobile,
+    this.email,
+    this.city,
+    this.state,
+    this.company,
+    this.joining,
+    this.token,
+    this.image,
+    this.notification,
+  });
 
   UserModel copyWith({
     String uid,
@@ -38,6 +43,7 @@ class UserModel {
     int joining,
     String token,
     String image,
+    bool notification,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -50,6 +56,7 @@ class UserModel {
       joining: joining ?? this.joining,
       token: token ?? this.token,
       image: image ?? this.image,
+      notification: notification ?? this.notification,
     );
   }
 
@@ -64,7 +71,8 @@ class UserModel {
       'company': company,
       'joining': joining,
       'token': token,
-      'image': image ?? 'na'
+      'image': image ?? 'na',
+      'notification': notification ?? true,
     };
   }
 
@@ -72,16 +80,18 @@ class UserModel {
     if (map == null) return null;
 
     return UserModel(
-        uid: map['uid'],
-        name: map['name'],
-        mobile: map['mobile'],
-        email: map['email'],
-        city: map['city'],
-        state: map['state'],
-        company: map['company'],
-        token: map['token'],
-        joining: map['joining'],
-        image: map['image'] ?? 'na');
+      uid: map['uid'],
+      name: map['name'],
+      mobile: map['mobile'],
+      email: map['email'],
+      city: map['city'],
+      state: map['state'],
+      company: map['company'],
+      token: map['token'],
+      joining: map['joining'],
+      image: map['image'] ?? 'na',
+      notification: map['notification'] ?? true,
+    );
   }
 
   factory UserModel.fromSnapshot(DocumentSnapshot map) {
@@ -98,6 +108,7 @@ class UserModel {
       joining: map.get('joining'),
       token: map.data().containsKey('token') ? map.get('token') : 'token',
       image: map.data().containsKey('image') ? map.get('image') : 'na',
+      notification: map.data().containsKey('notification') ? map.get('notification') : true,
     );
   }
 }
@@ -105,20 +116,34 @@ class UserModel {
 class MyUser with ChangeNotifier {
   UserModel userModel;
   bool isUserLoading = true;
-
+  final User currentUser = FirebaseAuth.instance.currentUser;
   UserModel get user => userModel;
-
+  StreamSubscription<DocumentSnapshot> streamSubscription;
   getUserFromDatabase() async {
     isUserLoading = true;
-    final User user = FirebaseAuth.instance.currentUser;
+
     CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.userCollection);
-    final d = reference.doc(user.uid).snapshots();
-    d.forEach((element) {
+    final d = reference.doc(currentUser.uid).snapshots();
+    streamSubscription = d.listen((element) {
       if (element.exists) {
         userModel = UserModel.fromSnapshot(element);
       }
       isUserLoading = false;
       notifyListeners();
     });
+  }
+
+  updateNotification(bool status) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.userCollection);
+    await reference.doc(currentUser.uid).update({
+      "notification": status,
+    });
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (streamSubscription != null) streamSubscription.cancel();
   }
 }

@@ -7,6 +7,8 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 
 import '../screens/matDetails.dart';
 import '../sessionmanagement/session_manager.dart';
@@ -32,10 +34,12 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
   LatLng myLatLng;
   Map<String, Marker> myMarker = {};
   GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
+  var locale;
 
   @override
   void initState() {
     super.initState();
+
     _checkGps().then((value) async {
       if (value) {
         _listenForPermissionStatus();
@@ -45,6 +49,16 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
         if (_permissionStatus == PermissionStatus.granted) _getLocation(context);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    mapController.dispose();
+    _sourceTextController.dispose();
+    _destinationTextController.dispose();
+    _places.dispose();
+
+    super.dispose();
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -57,22 +71,28 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
   }
 
   Future _checkGps() async {
+    // SchedulerBinding.instance.addPostFrameCallback((_) async {
+    //   await Future.delayed(_);
+    //   locale = AppLocalizations.of(context).locale;
+    // });
+
     if (!(await Geolocator.isLocationServiceEnabled())) {
       if (Theme.of(context).platform == TargetPlatform.android) {
         showDialog(
           context: context,
-          builder: (BuildContext context) {
+          builder: (BuildContext _) {
+            locale = AppLocalizations.of(_).locale;
             return AlertDialog(
-              title: Text("GPS disabled"),
-              content: const Text('Please make sure you enable GPS and try again'),
+              title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.gpsDisabled)),
+              content: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.gpsDisableMsg)),
               actions: <Widget>[
                 FlatButton(
-                  child: Text('Ok'),
+                  child: Text('OK'),
                   onPressed: () {
                     final intent = AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS');
 
                     intent.launch();
-                    Navigator.of(context, rootNavigator: true).pop();
+                    Navigator.of(_, rootNavigator: true).pop();
                   },
                 ),
               ],
@@ -93,7 +113,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
   _getLocation(context) async {
     bool s = await _checkGps() ?? false;
     if (!s) {
-      Fluttertoast.showToast(msg: "Please enable GPS to proceed");
+      Fluttertoast.showToast(msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.gpsDisableError));
       return;
     }
     setState(() {
@@ -141,6 +161,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
+    locale = AppLocalizations.of(context).locale;
     return Container(
       height: height,
       width: width,
@@ -151,7 +172,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Getting your location"),
+                      Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.gettingLocation)),
                       SizedBox(height: 10),
                       CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
@@ -165,6 +186,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                   myLocationButtonEnabled: true,
                   myLocationEnabled: true,
                   onMapCreated: _onMapCreated,
+                  zoomControlsEnabled: false,
                   initialCameraPosition: CameraPosition(
                     target: myLatLng,
                     zoom: 11.0,
@@ -219,7 +241,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                           context: context,
                           apiKey: kGoogleApiKey,
                           mode: _mode, // Mode.fullscreen
-                          language: "en",
+                          language: locale.languageCode,
                           components: [
                             Component(Component.country, 'in'),
                           ],
@@ -250,7 +272,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                           Icons.map,
                         ),
                         alignLabelWithHint: false,
-                        hintText: 'Enter Pick Up Location',
+                        hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.enterPickup),
                         border: InputBorder.none,
                       ),
                     ),
@@ -271,7 +293,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                           context: context,
                           apiKey: kGoogleApiKey,
                           mode: _mode, // Mode.fullscreen
-                          language: "en",
+                          language: locale.languageCode,
                           components: [
                             Component(Component.country, 'in'),
                           ],
@@ -301,7 +323,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                           Icons.pin_drop,
                         ),
                         alignLabelWithHint: false,
-                        hintText: 'Enter Drop Location',
+                        hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.enterDrop),
                         border: InputBorder.none,
                       ),
                     ),
@@ -321,6 +343,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                 visualDensity: VisualDensity.comfortable,
                 color: primaryColor,
                 onPressed: () {
+                  //BlocProvider.of<LanguageBloc>(context)..add(LanguageSelected(Language(SharedPref.en)));
                   bool isSourceEmpty = myMarker['source'] == null;
                   bool isDestinationEmpty = myMarker['destination'] == null;
                   if (isSourceEmpty || isDestinationEmpty) {
@@ -338,7 +361,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                   );
                 },
                 child: Text(
-                  'Continue Booking',
+                  AppLocalizations.getLocalizationValue(locale, LocaleKey.continueBooking),
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),

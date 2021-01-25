@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trukapp/helper/helper.dart';
 import 'package:trukapp/helper/request_status.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/models/material_model.dart';
 import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
@@ -21,6 +23,8 @@ class ExpandableCardContainer extends StatefulWidget {
 }
 
 class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
+  Locale locale;
+
   final BoxDecoration enabledDecoration = BoxDecoration(
     borderRadius: BorderRadius.circular(5.0),
     color: const Color(0xffff7101),
@@ -58,6 +62,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
 
   @override
   Widget build(BuildContext context) {
+    locale = AppLocalizations.of(context).locale;
     QuoteModel quoteModel = QuoteModel.fromMap(widget.model.toMap());
     double weight = 0;
     for (MaterialModel val in widget.model.materials) {
@@ -86,7 +91,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                           ),
                         ),
                         Text(
-                          "Order: ${widget.model.bookingId}",
+                          "${AppLocalizations.getLocalizationValue(locale, LocaleKey.order)}: ${widget.model.bookingId}",
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
                         ),
                       ],
@@ -97,7 +102,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Quantity: $weight KG",
+                        "${AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity)}: $weight KG",
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
@@ -113,7 +118,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                               ? snapshot.data.split(',')[3]
                               : snapshot.data.split(',')[2];
                           return Text(
-                            "Destination: $dest",
+                            "${AppLocalizations.getLocalizationValue(locale, LocaleKey.destination)}: $dest",
                             textAlign: TextAlign.start,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -125,14 +130,14 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                         height: 5,
                       ),
                       Text(
-                        "Date: ${widget.model.pickupDate}",
+                        "${AppLocalizations.getLocalizationValue(locale, LocaleKey.date)}: ${widget.model.pickupDate}",
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
-                        "Fare \u20B9 ${widget.model.price}",
+                        "${AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)} \u20B9 ${widget.model.price}",
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
@@ -182,7 +187,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                           ),
                           child: Center(
                             child: Text(
-                              'Order Summary',
+                              AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary),
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -199,7 +204,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                               decoration: completedDecoration,
                               child: Center(
                                 child: Text(
-                                  'Delivered',
+                                  AppLocalizations.getLocalizationValue(locale, LocaleKey.delivered),
                                   style: enabledTextStyle,
                                   textAlign: TextAlign.left,
                                 ),
@@ -230,7 +235,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                                     : disabledBoxDecoration,
                                 child: Center(
                                   child: Text(
-                                    'Track',
+                                    AppLocalizations.getLocalizationValue(locale, LocaleKey.track),
                                     style: widget.model.status == RequestStatus.started
                                         ? enabledTextStyle
                                         : disabledTextStyle,

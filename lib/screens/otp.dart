@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/sessionmanagement/session_manager.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../models/user_model.dart';
@@ -28,6 +30,7 @@ class _OTPState extends State<OTP> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String phoneNumber = '';
   int secondsRemaining = 15;
+  Locale locale;
 
   bool isFilled = false, isLoading = true, isCodeNotSent = true;
   String smsCode;
@@ -67,12 +70,13 @@ class _OTPState extends State<OTP> {
     };
 
     await _auth.verifyPhoneNumber(
-        phoneNumber: "+91" + widget.number,
-        timeout: const Duration(seconds: 5),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationFailed,
-        codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+      phoneNumber: "+91" + widget.number,
+      timeout: const Duration(seconds: 5),
+      verificationCompleted: verificationCompleted,
+      verificationFailed: verificationFailed,
+      codeSent: codeSent,
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    );
   }
 
   // Example code of how to sign in with phone.
@@ -153,6 +157,7 @@ class _OTPState extends State<OTP> {
 
   @override
   Widget build(BuildContext context) {
+    locale = AppLocalizations.of(context).locale;
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
@@ -179,7 +184,7 @@ class _OTPState extends State<OTP> {
                 Container(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    'Enter the OTP sent to you at',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.enterOtp),
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -200,7 +205,7 @@ class _OTPState extends State<OTP> {
                           Navigator.pop(context);
                         },
                         child: Text(
-                          'Edit',
+                          AppLocalizations.getLocalizationValue(locale, LocaleKey.edit),
                           style: TextStyle(fontSize: 18, color: Colors.blue),
                         ),
                       )
@@ -217,7 +222,7 @@ class _OTPState extends State<OTP> {
                     controller: _otpController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return '*Required';
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                       }
                       if (value.trim().length < 6) {
                         return '*Invalid OTP';
@@ -226,7 +231,7 @@ class _OTPState extends State<OTP> {
                     },
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: 'Please enter the OTP',
+                      hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.enterOtp),
                       counterText: "",
                       border: OutlineInputBorder(),
                     ),
@@ -282,7 +287,7 @@ class _OTPState extends State<OTP> {
                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           )
                         : Text(
-                            'Verify Now',
+                            AppLocalizations.getLocalizationValue(locale, LocaleKey.verifyNow),
                             style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                   ),
@@ -300,8 +305,12 @@ class _OTPState extends State<OTP> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Successfully"),
-          content: Text("Otp matched successfully."),
+          title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.successful),
+          ),
+          content: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.otpSuccessful),
+          ),
           actions: [
             IconButton(
               icon: Icon(Icons.check),

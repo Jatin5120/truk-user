@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:trukapp/models/localization_controller.dart';
 import '../screens/carousel.dart';
 import '../screens/home.dart';
 import '../screens/signup.dart';

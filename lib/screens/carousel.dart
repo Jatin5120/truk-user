@@ -1,3 +1,8 @@
+import 'package:flutter/cupertino.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/screens/change_language_screen.dart';
+
 import '../screens/signup.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +10,6 @@ import '../sessionmanagement/session_manager.dart';
 import '../utils/constants.dart';
 import '../utils/walkthrough_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../utils/constants.dart';
 
 class CarouselScreen extends StatefulWidget {
   @override
@@ -19,7 +22,21 @@ class CarouselScreenState extends State<CarouselScreen> {
   double get width => MediaQuery.of(context).size.width;
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero).then(
+      (value) => Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => ChangeLanguageScreen(),
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context).locale;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -41,7 +58,7 @@ class CarouselScreenState extends State<CarouselScreen> {
                 animationCurve: Curves.easeInSine,
                 dotIncreasedColor: Colors.white,
                 dotColor: Colors.white,
-                images: walkthroughList.map((e) {
+                images: Constants(locale).walkthroughList.map((e) {
                   return WalkthroughWidget(
                     image: e['image'],
                     textHead: e['title'],
@@ -55,7 +72,7 @@ class CarouselScreenState extends State<CarouselScreen> {
               child: Center(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: walkthroughList.length,
+                  itemCount: Constants(locale).walkthroughList.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
@@ -91,7 +108,7 @@ class CarouselScreenState extends State<CarouselScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: Center(
                     child: Text(
-                      "Get Started",
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.getStarted),
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),

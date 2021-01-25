@@ -8,6 +8,8 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:trukapp/firebase_helper/firebase_helper.dart';
 import 'package:trukapp/helper/payment_type.dart';
 import 'package:trukapp/helper/request_status.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/models/wallet_model.dart';
@@ -36,7 +38,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
   String destinationAddress = '';
   String payment;
   final User user = FirebaseAuth.instance.currentUser;
-
+  Locale locale;
   Razorpay _razorpay;
   bool isPaymentLoading = false;
 
@@ -72,6 +74,15 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     setState(() {
       isPaymentLoading = false;
     });
+    paymentSuccessful(
+      context: context,
+      shipmentId: "${widget.quoteModel.bookingId}",
+      isPayment: true,
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -114,13 +125,18 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     final TextStyle style = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
     final pWallet = Provider.of<MyWallet>(context);
     final pUser = Provider.of<MyUser>(context);
+    locale = AppLocalizations.of(context).locale;
+    String title = AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary);
+    if (!widget.onlyView) {
+      title = AppLocalizations.getLocalizationValue(locale, LocaleKey.quotes);
+    }
     return LoadingOverlay(
       isLoading: isLoading,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('${widget.onlyView ? "Order" : "Quotation"} Summary'),
+          title: Text(title),
         ),
         bottomNavigationBar: widget.onlyView
             ? Container(
@@ -145,25 +161,37 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                       });
                       if (payment == PaymentType.online) {
                         createOrder(int.parse(widget.quoteModel.price), pUser.user.email, pUser.user.name);
+                      } else if (payment == PaymentType.trukMoney) {
+                        await FirebaseHelper().updateWallet(
+                            widget.quoteModel.bookingId.toString(), double.parse(widget.quoteModel.price), 0);
+                        paymentSuccessful(
+                          context: context,
+                          shipmentId: "${widget.quoteModel.bookingId}",
+                          isPayment: true,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        );
                       } else {
                         await FirebaseHelper()
                             .updateQuoteStatus(widget.quoteModel.id, RequestStatus.accepted, paymentStatus: payment);
+                        paymentSuccessful(
+                          context: context,
+                          shipmentId: "${widget.quoteModel.bookingId}",
+                          isPayment: true,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        );
                       }
                       setState(() {
                         isLoading = false;
                       });
-                      paymentSuccessful(
-                        context: context,
-                        shipmentId: "${widget.quoteModel.bookingId}",
-                        isPayment: true,
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                      );
                     },
                     child: Text(
-                      'Accept Quotation',
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
@@ -174,18 +202,18 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
             children: [
               Container(
                 padding: padding,
-                child: Text('Shipment Details', style: style),
+                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentDetails), style: style),
               ),
               buildMaterialContainer(size),
               buildTypes(size),
               Container(
                 padding: padding,
-                child: Text('Pickup Location', style: style),
+                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupLocation), style: style),
               ),
               createLocationBlock(size, 0),
               Container(
                 padding: padding,
-                child: Text('Drop Location', style: style),
+                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.dropLocation), style: style),
               ),
               createLocationBlock(size, 1),
               SizedBox(
@@ -195,7 +223,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
                 child: Container(
                   child: Text(
-                    '${widget.quoteModel.insured ? "With" : "Without"} insurance',
+                    '${widget.quoteModel.insured ? AppLocalizations.getLocalizationValue(locale, LocaleKey.withInsurance) : AppLocalizations.getLocalizationValue(locale, LocaleKey.withOutInsurance)}',
                     style: TextStyle(color: primaryColor),
                   ),
                 ),
@@ -203,7 +231,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
                 child: Text(
-                  "${PaymentType.paymentKeys[widget.quoteModel.paymentStatus]} - \u20B9${widget.quoteModel.price}",
+                  "${AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus)} - \u20B9${widget.quoteModel.price}",
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 14,
@@ -214,6 +242,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   textAlign: TextAlign.left,
                 ),
               ),
+              if (!widget.onlyView && payment != null && payment != PaymentType.cod) buildCouponWidget(),
               if (!widget.onlyView)
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
@@ -229,7 +258,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         },
                       ),
                       Expanded(
-                        child: Text(PaymentType.paymentKeys[PaymentType.cod]),
+                        child: Text(AppLocalizations.getLocalizationValue(locale, PaymentType.cod)),
                       ),
                     ],
                   ),
@@ -249,7 +278,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         },
                       ),
                       Expanded(
-                        child: Text("${PaymentType.paymentKeys[PaymentType.online]}(Discount of 200)"),
+                        child: Text("${AppLocalizations.getLocalizationValue(locale, PaymentType.online)}"),
                       ),
                     ],
                   ),
@@ -272,7 +301,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          "${PaymentType.paymentKeys[PaymentType.trukMoney]} ${double.parse(widget.quoteModel.price) > pWallet.myWallet.amount ? '(Not Enough balance)' : ''}",
+                          "${AppLocalizations.getLocalizationValue(locale, PaymentType.trukMoney)} ${double.parse(widget.quoteModel.price) > pWallet.myWallet.amount ? '(${AppLocalizations.getLocalizationValue(locale, LocaleKey.notEnoughMoney)})' : ''}",
                           style: TextStyle(
                             color: double.parse(widget.quoteModel.price) > pWallet.myWallet.amount
                                 ? Colors.red
@@ -350,16 +379,54 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       ),
       child: Column(
         children: [
-          createTypes('Mandate Type', widget.quoteModel.mandate),
+          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
+              AppLocalizations.getLocalizationValue(this.locale, widget.quoteModel.mandate)),
           SizedBox(
             height: 10,
           ),
-          createTypes('Load Type', widget.quoteModel.load),
+          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
+              AppLocalizations.getLocalizationValue(this.locale, widget.quoteModel.load)),
           SizedBox(
             height: 10,
           ),
-          createTypes('TruK Type', widget.quoteModel.truk),
+          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
+              AppLocalizations.getLocalizationValue(this.locale, widget.quoteModel.truk)),
         ],
+      ),
+    );
+  }
+
+  Widget buildCouponWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 400),
+        height: payment != null && payment != PaymentType.cod ? 55 : 0,
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Coupon'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: RaisedButton(
+                onPressed: () {},
+                color: primaryColor,
+                child: Container(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      "Apply",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

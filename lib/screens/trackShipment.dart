@@ -5,6 +5,8 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:trukapp/helper/helper.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/models/pin_info_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
 import 'package:trukapp/utils/constants.dart';
@@ -24,7 +26,7 @@ class TrackShipment extends StatefulWidget {
 
 class _TrackShipmentState extends State<TrackShipment> {
   final int currentMonth = DateTime.now().month;
-
+  Locale locale;
   LatLng myLatLng;
   LatLng source;
   LatLng destination;
@@ -184,6 +186,7 @@ class _TrackShipmentState extends State<TrackShipment> {
 
   @override
   Widget build(BuildContext context) {
+    locale = AppLocalizations.of(context).locale;
     Size size = MediaQuery.of(context).size;
     source = widget.shipmentModel.source;
     CameraPosition initialCameraPosition =
@@ -197,7 +200,9 @@ class _TrackShipmentState extends State<TrackShipment> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Track Shipment'),
+        title: Text(
+          AppLocalizations.getLocalizationValue(locale, LocaleKey.trackShipment),
+        ),
       ),
       body: Container(
         width: size.width,
@@ -230,14 +235,16 @@ class _TrackShipmentState extends State<TrackShipment> {
                         children: [
                           FittedBox(
                             child: Container(
-                              child: Text('Shipment ID: ${widget.shipmentModel.bookingId}'),
+                              child: Text(
+                                  '${AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentId)}: ${widget.shipmentModel.bookingId}'),
                             ),
                           ),
                           SizedBox(
                             height: 5,
                           ),
                           Container(
-                            child: Text('Quantity: ${widget.weight} Kg'),
+                            child: Text(
+                                '${AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity)}: ${widget.weight} Kg'),
                           ),
                           SizedBox(
                             height: 5,
@@ -249,7 +256,7 @@ class _TrackShipmentState extends State<TrackShipment> {
                                 return Text('Address...');
                               }
                               return Text(
-                                "Destination: ${snapshot.data.split(',')[1].trimLeft()}",
+                                "${AppLocalizations.getLocalizationValue(locale, LocaleKey.destination)}: ${snapshot.data.split(',')[1].trimLeft()}",
                                 textAlign: TextAlign.start,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

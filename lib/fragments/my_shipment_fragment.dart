@@ -2,12 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/helper/helper.dart';
-import 'package:trukapp/models/material_model.dart';
+import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/models/shipment_model.dart';
-import 'package:trukapp/screens/trackShipment.dart';
 import 'package:trukapp/utils/constants.dart';
 import 'package:trukapp/utils/expandable_card_container.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../utils/no_data_page.dart';
 
 class MyShipment extends StatefulWidget {
@@ -24,16 +23,21 @@ class _MyShipmentState extends State<MyShipment> {
   bool isStatusUpdating = false;
   List<ShipmentModel> filteredList = [];
   bool isFilter = false;
-  final _debouncer = Debouncer(milliseconds: 500);
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final pShips = Provider.of<MyShipments>(context);
+    final locale = AppLocalizations.of(context).locale;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('My Shipments'),
+        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.shipments)),
         centerTitle: true,
         leading: InkWell(
           onTap: widget.onAppbarBack,
@@ -54,27 +58,20 @@ class _MyShipmentState extends State<MyShipment> {
               ))
             : (pShips.shipments.length <= 0
                 ? NoDataPage(
-                    text: 'No Shipments',
+                    text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noShipment),
                   )
-                : myShipments(pShips.shipments)),
+                : myShipments(pShips.shipments, locale: locale)),
       ),
     );
   }
 
-  Widget myShipments(List<ShipmentModel> shipments) {
+  Widget myShipments(List<ShipmentModel> shipments, {Locale locale}) {
     List<int> ids = [];
     for (ShipmentModel d in shipments) {
       ids.add(d.bookingId);
     }
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'My Shipments',
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        ),
         TextFormField(
           keyboardType: TextInputType.number,
           onChanged: (string) {
@@ -96,9 +93,9 @@ class _MyShipmentState extends State<MyShipment> {
             }
           },
           decoration: InputDecoration(
-            hintText: 'Type Order Id, pickup date, fare...',
+            hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.searchHint),
             border: OutlineInputBorder(),
-            labelText: 'Search',
+            labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.search),
           ),
         ),
         SizedBox(

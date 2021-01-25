@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 
 class About extends StatefulWidget {
   @override
@@ -11,10 +13,13 @@ class _AboutState extends State<About> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('About Us'),
+        title: Text(
+          AppLocalizations.getLocalizationValue(locale, LocaleKey.about),
+        ),
       ),
       body: Container(
         child: SingleChildScrollView(

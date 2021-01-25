@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../models/user_model.dart';
 import '../models/wallet_model.dart';
@@ -15,8 +17,7 @@ class TrukMoney extends StatefulWidget {
   _TrukMoneyState createState() => _TrukMoneyState();
 }
 
-class _TrukMoneyState extends State<TrukMoney>
-    with SingleTickerProviderStateMixin {
+class _TrukMoneyState extends State<TrukMoney> with SingleTickerProviderStateMixin {
   static int initialIndex = 0;
   TabController tabController;
   List<String> moneySuggest = ['500', '1000', '2000'];
@@ -26,6 +27,7 @@ class _TrukMoneyState extends State<TrukMoney>
   final TextEditingController _amountController = TextEditingController();
   Razorpay _razorpay;
   bool isPaymentLoading = false;
+  Locale locale;
 
   createOrder(int amount, String email, String name) async {
     setState(() {
@@ -38,10 +40,7 @@ class _TrukMoneyState extends State<TrukMoney>
       'description': 'Wallet topup',
       'timeout': 300, // in seconds
       'currency': 'INR',
-      'prefill': {
-        'contact': '${user.phoneNumber.substring(3)}',
-        'email': '$email'
-      }
+      'prefill': {'contact': '${user.phoneNumber.substring(3)}', 'email': '$email'}
     };
     _razorpay.open(options);
   }
@@ -107,14 +106,16 @@ class _TrukMoneyState extends State<TrukMoney>
     final Size size = MediaQuery.of(context).size;
     final pWallet = Provider.of<MyWallet>(context);
     final pUser = Provider.of<MyUser>(context);
-
+    locale = AppLocalizations.of(context).locale;
     return LoadingOverlay(
       isLoading: isPaymentLoading,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('TrukMoney'),
+          title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.trukMoney),
+          ),
           centerTitle: true,
         ),
         body: Form(
@@ -134,7 +135,9 @@ class _TrukMoneyState extends State<TrukMoney>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('TrukMoney Balance'),
+                      Text(
+                        AppLocalizations.getLocalizationValue(locale, LocaleKey.balance),
+                      ),
                       SizedBox(
                         height: 5,
                       ),
@@ -156,7 +159,7 @@ class _TrukMoneyState extends State<TrukMoney>
                 Container(
                   padding: EdgeInsets.only(top: 10, bottom: 10),
                   child: Text(
-                    'Topup Wallet',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.topupWallet),
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 18,
@@ -169,7 +172,7 @@ class _TrukMoneyState extends State<TrukMoney>
                   ),
                   validator: (value) {
                     if (value.isEmpty) {
-                      return '*Required';
+                      return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                     }
                     if (int.parse(value) <= 0) {
                       return '*Invalid amount';
@@ -187,7 +190,7 @@ class _TrukMoneyState extends State<TrukMoney>
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Enter Amount',
+                    labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.enterAmount),
                     prefixText: '\u20B9',
                     prefixStyle: TextStyle(
                       fontSize: 18,
@@ -203,7 +206,7 @@ class _TrukMoneyState extends State<TrukMoney>
                     bottom: 10,
                   ),
                   child: Text(
-                    'Recommended',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.recommended),
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 18,
@@ -280,8 +283,7 @@ class _TrukMoneyState extends State<TrukMoney>
                 // ),
                 Spacer(),
                 Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   width: size.width,
                   padding: const EdgeInsets.only(bottom: 16),
                   child: RaisedButton(
@@ -289,15 +291,14 @@ class _TrukMoneyState extends State<TrukMoney>
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         int amount = int.parse(_amountController.text) * 100;
-                        await createOrder(
-                            amount, pUser.user.email, pUser.user.name);
+                        await createOrder(amount, pUser.user.email, pUser.user.name);
                         //pWallet.getWalletBalance();
                       }
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Text(
-                        'Topup Wallet',
+                        AppLocalizations.getLocalizationValue(locale, LocaleKey.topupWallet),
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),

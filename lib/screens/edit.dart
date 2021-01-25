@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../models/user_model.dart';
 import '../helper/email_validator.dart';
@@ -34,12 +36,13 @@ class _EditProfileState extends State<EditProfile> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context).locale;
     return LoadingOverlay(
       isLoading: isLoading,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Edit Profile'),
+          title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.editProfile)),
           centerTitle: true,
         ),
         body: Form(
@@ -55,13 +58,13 @@ class _EditProfileState extends State<EditProfile> {
                   child: TextFormField(
                     validator: (value) {
                       if (value.isEmpty) {
-                        return '*Required';
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     controller: nameController,
                     decoration: InputDecoration(
-                      labelText: 'Name',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.name),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -75,7 +78,7 @@ class _EditProfileState extends State<EditProfile> {
                     readOnly: true,
                     controller: mobileNumberController,
                     decoration: InputDecoration(
-                      labelText: 'Mobile Number',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.mobile),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -87,9 +90,11 @@ class _EditProfileState extends State<EditProfile> {
                   padding: EdgeInsets.only(left: 20, right: 15),
                   child: TextFormField(
                     controller: emailController,
-                    validator: (input) => input.isValidEmail() ? null : "*Invalid email",
+                    validator: (input) => input.isValidEmail()
+                        ? null
+                        : AppLocalizations.getLocalizationValue(locale, LocaleKey.invalidEmail),
                     decoration: InputDecoration(
-                      labelText: 'Email ID',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.email),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -102,13 +107,13 @@ class _EditProfileState extends State<EditProfile> {
                   child: TextFormField(
                     validator: (value) {
                       if (value.isEmpty) {
-                        return '*Required';
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     controller: companyNameController,
                     decoration: InputDecoration(
-                      labelText: 'Company Name',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.company),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -139,11 +144,12 @@ class _EditProfileState extends State<EditProfile> {
                         setState(() {
                           isLoading = false;
                         });
-                        Fluttertoast.showToast(msg: 'Profile Updated');
+                        Fluttertoast.showToast(
+                            msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.profileUpdated));
                       }
                     },
                     child: Text(
-                      'Update',
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.update),
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),

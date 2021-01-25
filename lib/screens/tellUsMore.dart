@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../screens/home.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,7 @@ class _MoreAboutState extends State<MoreAbout> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context).locale;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -65,7 +68,8 @@ class _MoreAboutState extends State<MoreAbout> {
                   String name = _nameController.text.trim();
                   String city = _cityController.text.trim();
                   String state = _stateController.text.trim();
-                  String company = _companyNameController.text.trim();
+                  String company =
+                      _companyNameController.text.trim().isEmpty ? 'Individual' : _companyNameController.text.trim();
                   await FirebaseHelper().insertUser(uid, name, email, mobile, company, city, state);
                   setState(() {
                     isLoading = false;
@@ -83,7 +87,7 @@ class _MoreAboutState extends State<MoreAbout> {
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   )
                 : Text(
-                    'Continue',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
           ),
@@ -113,7 +117,7 @@ class _MoreAboutState extends State<MoreAbout> {
                     height: 40,
                   ),
                   Text(
-                    'Tell us more about you:',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.registerTitle),
                     style: TextStyle(fontSize: 18),
                   ),
                   SizedBox(
@@ -123,12 +127,12 @@ class _MoreAboutState extends State<MoreAbout> {
                     controller: _nameController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return '*Required';
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Name*',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.name),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -137,9 +141,11 @@ class _MoreAboutState extends State<MoreAbout> {
                   ),
                   TextFormField(
                     controller: _emailController,
-                    validator: (input) => input.isValidEmail() ? null : "*Invalid email",
+                    validator: (input) => input.isValidEmail()
+                        ? null
+                        : AppLocalizations.getLocalizationValue(locale, LocaleKey.invalidEmail),
                     decoration: InputDecoration(
-                      labelText: 'Email ID*',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.email),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -148,14 +154,14 @@ class _MoreAboutState extends State<MoreAbout> {
                   ),
                   TextFormField(
                     controller: _companyNameController,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return '*Required';
-                      }
-                      return null;
-                    },
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                    //   }
+                    //   return null;
+                    // },
                     decoration: InputDecoration(
-                      labelText: 'Company/Individual*',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.company),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -166,12 +172,12 @@ class _MoreAboutState extends State<MoreAbout> {
                     controller: _cityController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return '*Required';
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'City*',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.city),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -181,13 +187,13 @@ class _MoreAboutState extends State<MoreAbout> {
                   TextFormField(
                     validator: (value) {
                       if (value.isEmpty) {
-                        return '*Required';
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     controller: _stateController,
                     decoration: InputDecoration(
-                      labelText: 'State*',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.state),
                       border: OutlineInputBorder(),
                     ),
                   ),

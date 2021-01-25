@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../screens/otp.dart';
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
@@ -23,6 +25,7 @@ class SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     ImageProvider image = AssetImage('assets/images/india.png');
     final size = MediaQuery.of(context).size;
+    final locale = AppLocalizations.of(context).locale;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -50,7 +53,7 @@ class SignupState extends State<Signup> {
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    'Enter your mobile number',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.enterMobile),
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                 ),
@@ -63,7 +66,7 @@ class SignupState extends State<Signup> {
                     autofocus: false,
                     validator: (st) {
                       if (st.isEmpty) {
-                        return '*Required';
+                        return "${AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText)}";
                       }
                       if (st.trim().length < 10) {
                         return '*Invalid mobile number';
@@ -79,7 +82,7 @@ class SignupState extends State<Signup> {
                         image: image,
                       ),
                       counterText: "",
-                      labelText: 'Mobile Number',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.mobile),
                       hintText: 'e.g., 1234567890',
                       border: OutlineInputBorder(),
                     ),
@@ -107,7 +110,7 @@ class SignupState extends State<Signup> {
                       }
                     },
                     child: Text(
-                      'Generate OTP',
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.generateOtp),
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),

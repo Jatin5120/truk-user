@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/models/chat_controller.dart';
 import 'package:trukapp/models/shipment_model.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../firebase_helper/notification_helper.dart';
 import '../fragments/home_map_fragment.dart';
 import '../fragments/my_shipment_fragment.dart';
@@ -11,7 +15,6 @@ import '../models/user_model.dart';
 import '../models/wallet_model.dart';
 import '../screens/notification.dart';
 import 'package:flutter/material.dart';
-
 import '../utils/drawer_part.dart';
 
 import '../utils/constants.dart';
@@ -27,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex, backTaps = 0;
   bool back = false;
   static final PageController _pageController = PageController(initialPage: 0, keepPage: true);
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -41,6 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<bool> _onBackPress() async {
+    if (_drawerKey.currentState.isDrawerOpen) {
+      Navigator.pop(context);
+      return false;
+    }
     if (currentIndex != 0) {
       setState(() {
         currentIndex = 0;
@@ -66,10 +74,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void onTabTap(int value) {
-    setState(() {
-      currentIndex = value;
-    });
-    _pageController.jumpToPage(currentIndex);
+    if (value < 2) {
+      setState(() {
+        currentIndex = value;
+      });
+      _pageController.jumpToPage(currentIndex);
+    } else {
+      _drawerKey.currentState.openDrawer();
+    }
   }
 
   final List<Widget> children = [
@@ -82,10 +94,18 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context).locale;
     return WillPopScope(
       onWillPop: _onBackPress,
       child: Scaffold(
+        key: _drawerKey,
         drawer: Theme(
           data: ThemeData(disabledColor: Colors.black),
           child: Drawer(
@@ -101,6 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
             : AppBar(
                 iconTheme: IconThemeData(color: Colors.black),
                 backgroundColor: Colors.white,
+                automaticallyImplyLeading: Platform.isAndroid,
                 title: Container(
                   alignment: Alignment.center,
                   child: Image.asset(
@@ -140,12 +161,12 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Icon(
-                  Icons.dashboard,
+                  Icons.home,
                   color: currentIndex == 0 ? primaryColor : Colors.grey,
                   size: 22,
                 ),
               ),
-              label: 'Home',
+              label: AppLocalizations.getLocalizationValue(locale, LocaleKey.home), //'Home',
             ),
             BottomNavigationBarItem(
               icon: Padding(
@@ -157,8 +178,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: currentIndex == 1 ? primaryColor : Colors.grey,
                 ),
               ),
-              label: 'My Shipments',
-            )
+              label: AppLocalizations.getLocalizationValue(locale, LocaleKey.shipments),
+            ),
+            if (Platform.isIOS)
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Icon(
+                    Icons.more_vert,
+                    color: Colors.grey,
+                    size: 22,
+                  ),
+                ),
+                label: AppLocalizations.getLocalizationValue(locale, LocaleKey.more),
+              ),
           ],
         ),
         body: PageView.builder(

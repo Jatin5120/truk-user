@@ -4,6 +4,9 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/english.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../models/material_model.dart';
 import '../screens/shipmentSummary.dart';
 import '../utils/constants.dart';
@@ -33,14 +36,16 @@ class _MaterialDetailsState extends State<MaterialDetails> {
   bool isLoading = false;
   String trukTypeValue, mandateTypeValue, loadTypeValue;
   String materialType;
+  Locale locale;
 
   @override
   Widget build(BuildContext context) {
+    locale = AppLocalizations.of(context).locale;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Material Details'),
+        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.materialDetails)),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
@@ -87,7 +92,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
               );
             },
             child: Text(
-              'Continue Booking',
+              AppLocalizations.getLocalizationValue(locale, LocaleKey.continueBooking),
               style: TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
@@ -120,7 +125,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text('Select Material Type'),
+                      hint: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.materialType)),
                       value: materialType,
                       items: materialTypes.map((String value) {
                         return DropdownMenuItem<String>(
@@ -130,6 +135,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                       }).toList(),
                       onChanged: (_) {
                         materialType = _;
+                        _materialController.text = _;
                         setState(() {});
                       },
                     ),
@@ -141,14 +147,14 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return '*Required';
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     controller: _materialController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Material',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.materialName),
                     ),
                   ),
                 ),
@@ -161,7 +167,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return '*Required';
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
                       }
                       if (int.parse(value) <= 0) {
                         return '*Invalid';
@@ -170,7 +176,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Quantity',
+                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity),
                       suffix: Text("KG"),
                     ),
                   ),
@@ -181,7 +187,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 Container(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    'Load Dimensions (Cm)',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.loadDimensions),
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
@@ -197,41 +203,19 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                         child: Container(
                           child: TextFormField(
                             textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return '*Required';
-                              }
-                              if (int.parse(value) <= 0) {
-                                return '*Invalid';
-                              }
-                              return null;
-                            },
+                            // validator: (value) {
+                            //   if (value.isEmpty) {
+                            //     return '*Required';
+                            //   }
+                            //   if (int.parse(value) <= 0) {
+                            //     return '*Invalid';
+                            //   }
+                            //   return null;
+                            // },
                             controller: _lengthController,
                             keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: 'Length', border: OutlineInputBorder()),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: TextFormField(
-                            textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return '*Required';
-                              }
-                              if (int.parse(value) <= 0) {
-                                return '*Invalid';
-                              }
-                              return null;
-                            },
-                            controller: _widthController,
-                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              labelText: 'Width',
+                              labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.length),
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -244,19 +228,44 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                         child: Container(
                           child: TextFormField(
                             textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return '*Required';
-                              }
-                              if (int.parse(value) <= 0) {
-                                return '*Invalid';
-                              }
-                              return null;
-                            },
+                            // validator: (value) {
+                            //   if (value.isEmpty) {
+                            //     return '*Required';
+                            //   }
+                            //   if (int.parse(value) <= 0) {
+                            //     return '*Invalid';
+                            //   }
+                            //   return null;
+                            // },
+                            controller: _widthController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.width),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          child: TextFormField(
+                            textInputAction: TextInputAction.next,
+                            // validator: (value) {
+                            //   if (value.isEmpty) {
+                            //     return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                            //   }
+                            //   if (int.parse(value) <= 0) {
+                            //     return '*Invalid';
+                            //   }
+                            //   return null;
+                            // },
                             keyboardType: TextInputType.number,
                             controller: _heightController,
                             decoration: InputDecoration(
-                              labelText: 'Height',
+                              labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.height),
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -275,14 +284,15 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     onTap: () {
                       if (_formKey.currentState.validate()) {
                         if (materialType == null) {
-                          Fluttertoast.showToast(msg: 'Select material Type');
+                          Fluttertoast.showToast(
+                              msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.materialType));
                           return;
                         }
                         String materialName = _materialController.text.trim();
-                        double quantity = double.parse(_quantityController.text.trim());
-                        double length = double.parse(_lengthController.text.trim());
-                        double width = double.parse(_widthController.text.trim());
-                        double height = double.parse(_heightController.text.trim());
+                        double quantity = double.parse(_quantityController.text.trim(), (st) => 0.0);
+                        double length = double.parse(_lengthController.text.trim(), (st) => 0.0);
+                        double width = double.parse(_widthController.text.trim(), (st) => 0.0);
+                        double height = double.parse(_heightController.text.trim(), (st) => 0.0);
                         MaterialModel model = MaterialModel(
                           height: height,
                           length: length,
@@ -292,12 +302,13 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           materialType: materialType,
                         );
                         materials.add(model);
+                        print(model.length);
                         materialType = null;
                         setState(() {});
                       }
                     },
                     child: Text(
-                      '+ Add Material',
+                      "+ ${AppLocalizations.getLocalizationValue(locale, LocaleKey.addMaterial)}",
                       style: TextStyle(color: Colors.blue, fontSize: 16),
                     ),
                   ),
@@ -305,7 +316,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
                   child: Text(
-                    'Your Materials',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.yourMaterial),
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                 ),
@@ -323,7 +334,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
                   child: Text(
-                    'Pickup Date',
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupDate),
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                 ),
@@ -389,16 +400,17 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text('Select Mandate Type'),
+                      hint: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.selectMandateType)),
                       value: mandateTypeValue,
-                      items: mandateType.map((String value) {
+                      items: Constants(locale).mandateType.map((value) {
                         return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+                          value: value['key'],
+                          child: Text(value['value']),
                         );
                       }).toList(),
                       onChanged: (_) {
                         mandateTypeValue = _;
+                        print(_);
                         setState(() {});
                       },
                     ),
@@ -418,12 +430,12 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text('Select Load Type'),
+                      hint: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.selectLoadType)),
                       value: loadTypeValue,
-                      items: loadType.map((String value) {
+                      items: Constants(locale).loadType.map((value) {
                         return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+                          value: value['key'],
+                          child: Text(value['value']),
                         );
                       }).toList(),
                       onChanged: (_) {
@@ -447,16 +459,17 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text('Select Truk Type'),
+                      hint: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.selectTrukType)),
                       value: trukTypeValue,
-                      items: trukType.map((String value) {
+                      items: Constants(locale).trukType.map((value) {
                         return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+                          value: value['key'],
+                          child: Text(value['value']),
                         );
                       }).toList(),
                       onChanged: (_) {
                         trukTypeValue = _;
+                        print(_);
                         setState(() {});
                       },
                     ),
@@ -476,7 +489,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
   Widget buildMaterialCart() {
     return materials.length <= 0
         ? Center(
-            child: Text('No Material Added'),
+            child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noMaterial)),
           )
         : ListView.builder(
             physics: BouncingScrollPhysics(),

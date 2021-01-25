@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trukapp/helper/helper.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/models/chat_controller.dart';
-import '../firebase_helper/firebase_helper.dart';
 import '../models/chatting_list_model.dart';
-import '../utils/chat_list_row.dart';
 import '../utils/constants.dart';
 import '../screens/support.dart';
 import '../utils/no_data_page.dart';
@@ -20,6 +19,7 @@ class SupportTicketScreen extends StatefulWidget {
 
 class _SupportTicketScreenState extends State<SupportTicketScreen> {
   final User user = FirebaseAuth.instance.currentUser;
+  Locale locale;
   @override
   void initState() {
     super.initState();
@@ -30,10 +30,13 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final pChatList = Provider.of<ChatController>(context);
+    locale = AppLocalizations.of(context).locale;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Support Tickets'),
+        title: Text(
+          AppLocalizations.getLocalizationValue(locale, LocaleKey.supportTicket),
+        ),
         centerTitle: true,
       ),
       body: Container(
@@ -48,7 +51,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
               )
             : (pChatList.chattings.length <= 0
                 ? NoDataPage(
-                    text: 'No Support Chat',
+                    text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noData),
                   )
                 : ListView.builder(
                     shrinkWrap: true,

@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 
 class SharedPref {
   SharedPreferences pref;
@@ -23,6 +25,12 @@ class SharedPref {
   static const String KEY_THEME = "theme";
   static const String KEY_ISLOGIN = "islogin";
   static const String KEY_UID = "uid";
+
+  //localization
+  static const String KEY_LANG = "lang";
+  static const Locale en = Locale('en', 'US');
+  static const Locale hi = Locale('hi', 'IN');
+  static const Locale te = Locale('te', 'IN');
 
   Future<bool> isOld() async {
     pref = await SharedPreferences.getInstance();
@@ -89,5 +97,30 @@ class SharedPref {
   Future<bool> isLocation() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.get(SharedPref.LOC) ?? false;
+  }
+
+  //setLocale
+  Future<void> setLocale(String locale) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString(KEY_LANG, locale);
+  }
+
+  //getLocale
+  Future<Locale> getLocale() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String localeString = pref.getString(KEY_LANG) ?? 'en';
+    Locale locale = en;
+    switch (localeString) {
+      case 'en':
+        locale = en;
+        break;
+      case 'hi':
+        locale = hi;
+        break;
+      case 'te':
+        locale = te;
+        break;
+    }
+    return locale;
   }
 }

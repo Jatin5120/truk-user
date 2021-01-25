@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:trukapp/locale/app_localization.dart';
+import 'package:trukapp/locale/locale_keys.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../helper/helper.dart';
 
@@ -39,6 +41,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
   String sourceAddress = '';
   String destinationAddress = '';
   bool isInsured;
+  Locale locale;
 
   @override
   void initState() {
@@ -52,13 +55,14 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
     final Size size = MediaQuery.of(context).size;
     final EdgeInsetsGeometry padding = EdgeInsets.only(left: 16, right: 16, top: 20);
     final TextStyle style = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+    locale = AppLocalizations.of(context).locale;
     return LoadingOverlay(
       isLoading: isLoading,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Shipment Summary'),
+          title: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.shipmentSummary)),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Container(
@@ -70,7 +74,8 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
               color: primaryColor,
               onPressed: () async {
                 if (isInsured == null) {
-                  Fluttertoast.showToast(msg: 'Please select insurance');
+                  Fluttertoast.showToast(
+                      msg: AppLocalizations.getLocalizationValue(this.locale, LocaleKey.selectInsurance));
                   return;
                 }
 
@@ -106,7 +111,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                 );
               },
               child: Text(
-                'Request Quote',
+                AppLocalizations.getLocalizationValue(this.locale, LocaleKey.requestButton),
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
@@ -117,18 +122,19 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
             children: [
               Container(
                 padding: padding,
-                child: Text('Shipment Details', style: style),
+                child:
+                    Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.shipmentDetails), style: style),
               ),
               buildMaterialContainer(size),
               buildTypes(size),
               Container(
                 padding: padding,
-                child: Text('Pickup Location', style: style),
+                child: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.pickupLocation), style: style),
               ),
               createLocationBlock(size, 0),
               Container(
                 padding: padding,
-                child: Text('Drop Location', style: style),
+                child: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.dropLocation), style: style),
               ),
               createLocationBlock(size, 1),
               SizedBox(
@@ -152,12 +158,11 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text:
-                                  'Yes, secure and insure my cargo shipment. I have read, understood and agree to the ',
+                              text: AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insuranceText1),
                               style: TextStyle(color: Colors.black),
                             ),
                             TextSpan(
-                              text: 'Terms and Conditions',
+                              text: " ${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insuranceText2)}",
                               style: TextStyle(color: primaryColor, decoration: TextDecoration.underline),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -185,7 +190,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                       },
                     ),
                     Expanded(
-                      child: Text('No'),
+                      child: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.no)),
                     ),
                   ],
                 ),
@@ -257,15 +262,18 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
       ),
       child: Column(
         children: [
-          createTypes('Mandate Type', widget.mandateType),
+          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
+              AppLocalizations.getLocalizationValue(this.locale, widget.mandateType)),
           SizedBox(
             height: 10,
           ),
-          createTypes('Load Type', widget.loadType),
+          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
+              AppLocalizations.getLocalizationValue(this.locale, widget.loadType)),
           SizedBox(
             height: 10,
           ),
-          createTypes('TruK Type', widget.trukType),
+          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
+              AppLocalizations.getLocalizationValue(this.locale, widget.trukType)),
         ],
       ),
     );
