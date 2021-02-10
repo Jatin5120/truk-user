@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../screens/addCard.dart';
 import '../utils/constants.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -124,10 +123,7 @@ class _PaymentState extends State<Payment> {
                     Icons.add,
                     size: 30,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => AddCard()));
-                  },
+                  onPressed: () {},
                 ),
               ),
             ),
@@ -135,8 +131,7 @@ class _PaymentState extends State<Payment> {
               height: 20,
             ),
             Container(
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
               height: 65,
               width: width,
               padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),

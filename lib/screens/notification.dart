@@ -94,13 +94,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
             List<NotificationModel> n = [];
             for (QueryDocumentSnapshot s in snapshot.data.docs) {
               NotificationModel notificationModel = NotificationModel.fromSnap(s);
-              if (!notificationModel.isDriver) n.add(NotificationModel.fromSnap(s));
+              if (!notificationModel.isVendor) n.add(NotificationModel.fromSnap(s));
             }
             if (n.length <= 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.notification),
+                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noNotification),
               );
             }
+            FirebaseHelper().seenNotification(n);
             int count = snapshot.data.docs.length;
             return ListView.builder(
               itemCount: count,

@@ -204,19 +204,19 @@ class _SupportState extends State<Support> {
                           );
                         },
                       ),
-                      prefixIcon: IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {},
-                      ),
+                      // prefixIcon: IconButton(
+                      //   icon: Icon(
+                      //     Icons.add,
+                      //     color: Colors.black,
+                      //   ),
+                      //   onPressed: () {},
+                      // ),
                       hintText: 'Add text to this message',
                       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

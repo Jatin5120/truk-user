@@ -1,11 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/firebase_helper/firebase_helper.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/models/chat_controller.dart';
+import 'package:trukapp/models/notification_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
 import 'package:trukapp/locale/locale_keys.dart';
 import '../firebase_helper/notification_helper.dart';
@@ -29,9 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
   double get height => MediaQuery.of(context).size.height;
   int currentIndex, backTaps = 0;
   bool back = false;
+  int count = 0;
   static final PageController _pageController = PageController(initialPage: 0, keepPage: true);
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
-
+  StreamSubscription streamSubscription;
   @override
   void initState() {
     super.initState();
@@ -42,6 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
     Provider.of<ChatController>(context, listen: false).getAllMessages();
     NotificationHelper().configLocalNotification();
     NotificationHelper().registerNotification();
+    streamSubscription = FirebaseHelper().getNotificationCount();
+    streamSubscription.onData((d) {
+      count = 0;
+      for (QueryDocumentSnapshot s in d.docs) {
+        NotificationModel m = NotificationModel.fromSnap(s);
+        if (!m.isSeen) {
+          count++;
+        }
+      }
+      setState(() {});
+    });
   }
 
   Future<bool> _onBackPress() async {
@@ -96,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _pageController.dispose();
+    streamSubscription.cancel();
     super.dispose();
   }
 
@@ -132,9 +150,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 actions: [
                   IconButton(
-                    icon: Icon(
-                      Icons.notifications,
-                      color: Colors.black,
+                    icon: Badge(
+                      child: Icon(Icons.notifications),
+                      padding: EdgeInsets.all(count == 0 ? 0 : 5),
+                      position: BadgePosition.topEnd(end: -5),
+                      badgeContent: Text(
+                        count == 0 ? "" : "$count",
+                        style: TextStyle(color: Colors.white, fontSize: 10),
+                      ),
                     ),
                     onPressed: () {
                       Navigator.of(context).push(

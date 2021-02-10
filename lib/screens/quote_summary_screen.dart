@@ -9,12 +9,12 @@ import 'package:trukapp/helper/payment_type.dart';
 import 'package:trukapp/helper/request_status.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/models/coupon_model.dart';
 import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/models/wallet_model.dart';
 import 'package:trukapp/widgets/widgets.dart';
 import '../helper/helper.dart';
-
 import '../models/material_model.dart';
 import '../utils/constants.dart';
 
@@ -40,6 +40,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
   Locale locale;
   Razorpay _razorpay;
   bool isPaymentLoading = false;
+  final _couponController = TextEditingController();
+  bool isCouponApplied = false;
+  double discountedPrice = 0;
+  String coupon = "";
 
   createOrder(int amount, String email, String name) async {
     setState(() {
@@ -62,6 +66,16 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     //double amount = double.parse(_amountController.text);
     final time = DateTime.now().millisecondsSinceEpoch;
     await FirebaseHelper().updateQuoteStatus(widget.quoteModel.id, RequestStatus.accepted, paymentStatus: payment);
+    await FirebaseHelper().insertPayout(
+      agent: widget.quoteModel.agent,
+      amount: double.parse(widget.quoteModel.price),
+      bookingId: widget.quoteModel.bookingId,
+      status: 'pending',
+      time: time,
+    );
+    if (isCouponApplied)
+      await FirebaseHelper()
+          .insertCouponUsage(quoteModel: widget.quoteModel, coupon: coupon, discountPrice: discountedPrice);
     await FirebaseHelper().transaction(
       response.paymentId,
       double.parse(widget.quoteModel.price),
@@ -72,6 +86,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     );
     setState(() {
       isPaymentLoading = false;
+      isCouponApplied = false;
+      coupon = "";
     });
     paymentSuccessful(
       context: context,
@@ -114,6 +130,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
   @override
   void dispose() {
     _razorpay.clear();
+    _couponController.dispose();
     super.dispose();
   }
 
@@ -159,8 +176,18 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         isLoading = true;
                       });
                       if (payment == PaymentType.online) {
-                        createOrder(int.parse(widget.quoteModel.price), pUser.user.email, pUser.user.name);
+                        int price = int.parse(widget.quoteModel.price);
+                        createOrder(
+                            isCouponApplied ? discountedPrice.floor() : price, pUser.user.email, pUser.user.name);
                       } else if (payment == PaymentType.trukMoney) {
+                        final time = DateTime.now().millisecondsSinceEpoch;
+                        await FirebaseHelper().insertPayout(
+                          agent: widget.quoteModel.agent,
+                          amount: isCouponApplied ? discountedPrice : double.parse(widget.quoteModel.price),
+                          bookingId: widget.quoteModel.bookingId,
+                          status: 'pending',
+                          time: time,
+                        );
                         await FirebaseHelper().updateWallet(
                             widget.quoteModel.bookingId.toString(), double.parse(widget.quoteModel.price), 0);
                         paymentSuccessful(
@@ -230,7 +257,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
                 child: Text(
-                  "${AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus)} - \u20B9${widget.quoteModel.price}",
+                  "${widget.onlyView ? AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus) : ''} \u20B9${widget.quoteModel.price}",
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 14,
@@ -253,6 +280,11 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         onChanged: (b) {
                           setState(() {
                             payment = b;
+                            isCouponApplied = false;
+                            coupon = "";
+                            if (_couponController != null) {
+                              _couponController.text = "";
+                            }
                           });
                         },
                       ),
@@ -378,18 +410,27 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       ),
       child: Column(
         children: [
-          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
-              AppLocalizations.getLocalizationValue(this.locale, widget.quoteModel.mandate)),
+          createTypes(
+              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
+              AppLocalizations.getLocalizationValue(this.locale,
+                  widget.quoteModel.mandate.toLowerCase().contains('ondemand') ? LocaleKey.onDemand : LocaleKey.lease)),
           SizedBox(
             height: 10,
           ),
-          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
-              AppLocalizations.getLocalizationValue(this.locale, widget.quoteModel.load)),
+          createTypes(
+              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.quoteModel.load.toLowerCase().contains('partial')
+                      ? LocaleKey.partialTruk
+                      : LocaleKey.fullTruk)),
           SizedBox(
             height: 10,
           ),
-          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
-              AppLocalizations.getLocalizationValue(this.locale, widget.quoteModel.truk)),
+          createTypes(
+              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
+              AppLocalizations.getLocalizationValue(this.locale,
+                  widget.quoteModel.truk.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)),
         ],
       ),
     );
@@ -405,6 +446,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
           children: [
             Expanded(
               child: TextFormField(
+                controller: _couponController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.coupon),
@@ -414,7 +456,64 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 8),
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  String coupon = _couponController.text;
+                  if (coupon.isEmpty) {
+                    Fluttertoast.showToast(msg: 'Please enter coupon');
+                    return;
+                  }
+                  setState(() {
+                    isLoading = true;
+                  });
+                  CouponModel c = await FirebaseHelper().validateCoupon(coupon);
+
+                  setState(() {
+                    isLoading = false;
+                  });
+                  if (c == null) {
+                    Fluttertoast.showToast(
+                      msg: 'Invalid Coupon',
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: primaryColor,
+                      toastLength: Toast.LENGTH_LONG,
+                    );
+                    return;
+                  }
+
+                  if (int.parse(widget.quoteModel.price) < c.minimum) {
+                    Fluttertoast.showToast(
+                      msg: 'Minimum price is ${c.minimum}',
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: primaryColor,
+                      toastLength: Toast.LENGTH_LONG,
+                    );
+                    return;
+                  }
+
+                  bool isUsed = await FirebaseHelper().checkCouponUsage(coupon);
+                  if (isUsed) {
+                    Fluttertoast.showToast(
+                      msg: 'Coupon already used',
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: primaryColor,
+                      toastLength: Toast.LENGTH_LONG,
+                    );
+                    return;
+                  }
+                  setState(() {
+                    isCouponApplied = true;
+                    coupon = c.code.toUpperCase();
+                  });
+                  double actualPrice = double.parse(widget.quoteModel.price);
+                  discountedPrice = actualPrice - (actualPrice * (c.discountPercent / 100));
+                  Fluttertoast.showToast(
+                    msg: 'Coupon applied! You get discount of \u20B9${actualPrice * (c.discountPercent / 100)}',
+                    gravity: ToastGravity.CENTER,
+                    backgroundColor: primaryColor,
+                    toastLength: Toast.LENGTH_LONG,
+                  );
+                  print(discountedPrice);
+                },
                 color: primaryColor,
                 child: Container(
                   height: 50,

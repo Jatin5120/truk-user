@@ -262,18 +262,24 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
       ),
       child: Column(
         children: [
-          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
-              AppLocalizations.getLocalizationValue(this.locale, widget.mandateType)),
+          createTypes(
+              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
+              AppLocalizations.getLocalizationValue(this.locale,
+                  widget.mandateType.toLowerCase().contains('ondemand') ? LocaleKey.onDemand : LocaleKey.lease)),
           SizedBox(
             height: 10,
           ),
-          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
-              AppLocalizations.getLocalizationValue(this.locale, widget.loadType)),
+          createTypes(
+              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
+              AppLocalizations.getLocalizationValue(this.locale,
+                  widget.loadType.toLowerCase().contains('partial') ? LocaleKey.partialTruk : LocaleKey.fullTruk)),
           SizedBox(
             height: 10,
           ),
-          createTypes(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
-              AppLocalizations.getLocalizationValue(this.locale, widget.trukType)),
+          createTypes(
+              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
+              AppLocalizations.getLocalizationValue(this.locale,
+                  widget.trukType.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)),
         ],
       ),
     );

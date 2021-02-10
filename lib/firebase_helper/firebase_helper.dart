@@ -1,25 +1,34 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trukapp/helper/payment_type.dart';
+import 'package:trukapp/models/coupon_model.dart';
+import 'package:trukapp/models/notification_model.dart';
+import 'package:trukapp/models/pending_payout_model.dart';
+import 'package:trukapp/models/quote_model.dart';
 import '../models/material_model.dart';
 import '../models/user_model.dart';
 import '../sessionmanagement/session_manager.dart';
 
 class FirebaseHelper {
-  static final String walletCollection = 'Wallet';
-  static final String walletTranscationCollection = 'WalletTransaction';
-  static final String userCollection = 'Users';
-  static final String transactionCollection = 'Transaction';
-  static final String requestCollection = 'Request';
-  static final String quoteCollection = 'Quote';
-  static final String driverCollection = 'Drivers';
-  static final String fleetOwnerCollection = 'FleetOwners';
-  static final String chatListCollection = 'ChatList';
-  static final String chatCollection = 'Chats';
-  static final String shipmentCollection = 'Shipment';
-  static final String notificationCollection = "Notifications";
+  static const String walletCollection = 'Wallet';
+  static const String walletTranscationCollection = 'WalletTransaction';
+  static const String userCollection = 'Users';
+  static const String transactionCollection = 'Transaction';
+  static const String requestCollection = 'Request';
+  static const String quoteCollection = 'Quote';
+  static const String driverCollection = 'Drivers';
+  static const String fleetOwnerCollection = 'FleetOwners';
+  static const String chatListCollection = 'ChatList';
+  static const String chatCollection = 'Chats';
+  static const String shipmentCollection = 'Shipment';
+  static const String notificationCollection = "Notifications";
+  static const String payoutCollection = "PendingPayout";
+  static const String couponCollection = "Coupons";
+  static const String couponUsageCollection = "CouponUsage";
 
   static FirebaseAuth _auth = FirebaseAuth.instance;
   User user = _auth.currentUser;
@@ -110,11 +119,6 @@ class FirebaseHelper {
       'paymentStatus': paymentStatus,
     });
   }
-  //    CollectionReference referenceReq = FirebaseFirestore.instance.collection(quoteCollection);
-  //   await referenceReq.doc(requestId).update({
-  //     'status': status,
-  //   });
-  // }
 
   Future deleteRequest(String id) async {
     CollectionReference reference = FirebaseFirestore.instance.collection(requestCollection);
@@ -157,6 +161,65 @@ class FirebaseHelper {
       'uid': user.uid,
       'time': time,
       'note': note
+    });
+  }
+
+  Future insertPayout({int bookingId, double amount, String status, String agent, int time}) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection(payoutCollection);
+    PendingPayoutModel model =
+        PendingPayoutModel(agent: agent, amount: amount, bookingId: bookingId, time: time, uid: user.uid);
+    await reference.add(model.toMap());
+  }
+
+  StreamSubscription getNotificationCount() {
+    CollectionReference ref = FirebaseFirestore.instance.collection(FirebaseHelper.notificationCollection);
+    final stream = ref.where('uid', isEqualTo: user.uid).snapshots();
+
+    StreamSubscription s = stream.listen((element) {});
+    return s;
+  }
+
+  Future seenNotification(List<NotificationModel> notifications) async {
+    CollectionReference ref = FirebaseFirestore.instance.collection(FirebaseHelper.notificationCollection);
+    for (NotificationModel m in notifications) {
+      await ref.doc(m.id).update({
+        'isSeen': true,
+      });
+    }
+  }
+
+  Future<CouponModel> validateCoupon(String coupon) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.couponCollection);
+    final d = await reference.where('code', isEqualTo: coupon.toUpperCase()).snapshots().first;
+    if (d.docs.length <= 0) {
+      return null;
+    }
+    CouponModel c = CouponModel.fromSnap(d.docs[0]);
+    print(c.minimum);
+    return c;
+  }
+
+  Future<bool> checkCouponUsage(String coupon) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.couponUsageCollection);
+    final d = await reference
+        .where('uid', isEqualTo: user.uid)
+        .where('code', isEqualTo: coupon.toUpperCase())
+        .snapshots()
+        .first;
+    if (d.docs.length <= 0) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> insertCouponUsage({QuoteModel quoteModel, String coupon, double discountPrice}) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.couponUsageCollection);
+    await reference.add({
+      'code': coupon,
+      'bookingId': quoteModel.bookingId,
+      'price': double.parse(quoteModel.price),
+      'discountPrice': discountPrice,
+      'uid': user.uid,
     });
   }
 }

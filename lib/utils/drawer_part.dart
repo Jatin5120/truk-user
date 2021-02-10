@@ -137,7 +137,7 @@ class DrawerMenu extends StatelessWidget {
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
+          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.chat),
           leading: Icon(
             Icons.forum,
             color: Colors.black,

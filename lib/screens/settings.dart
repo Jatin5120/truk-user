@@ -135,7 +135,7 @@ class _SettingsState extends State<Settings> {
               },
               title: Center(
                 child: Text(
-                  'Developed by Agumentik\nSoftware Pvt. Ltd.',
+                  'Developed by Agumentik Software Pvt. Ltd.',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: primaryColor),
                 ),

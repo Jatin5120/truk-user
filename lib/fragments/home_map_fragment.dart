@@ -9,7 +9,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
-
 import '../screens/matDetails.dart';
 import '../sessionmanagement/session_manager.dart';
 import '../utils/constants.dart';
@@ -65,17 +64,12 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
     mapController = controller;
     CameraUpdate c = CameraUpdate.newLatLngZoom(myLatLng, 16);
     mapController.animateCamera(c);
-    myMarker.clear();
+    //
 
     setState(() {});
   }
 
   Future _checkGps() async {
-    // SchedulerBinding.instance.addPostFrameCallback((_) async {
-    //   await Future.delayed(_);
-    //   locale = AppLocalizations.of(context).locale;
-    // });
-
     if (!(await Geolocator.isLocationServiceEnabled())) {
       if (Theme.of(context).platform == TargetPlatform.android) {
         showDialog(
@@ -125,6 +119,15 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
     if (pos != null) {
       myLatLng = LatLng(lat, lng);
       await SharedPref().createLocationData(lat, lng);
+      myMarker.clear();
+      myMarker['source'] = Marker(
+        markerId: MarkerId('source'),
+        position: myLatLng,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+        infoWindow: InfoWindow(title: 'Source'),
+      );
+
+      setLocationText(0);
     }
     isLoading = false;
     if (mounted) setState(() {});
@@ -150,9 +153,9 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
     String city = address.first.subAdminArea;
     String state = address.first.adminArea;
     if (type == 0) {
-      _sourceTextController.text = '$street, $area, $city';
+      _sourceTextController.text = '$street, $area, $city, $pincode';
     } else {
-      _destinationTextController.text = '$street, $area, $city';
+      _destinationTextController.text = '$street, $area, $city, $pincode';
     }
 
     //setState(() {});
