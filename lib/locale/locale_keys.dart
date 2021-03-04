@@ -125,4 +125,5 @@ class LocaleKey {
   static const String date = "date";
   static const String apply = "apply";
   static const String coupon = "coupon";
+  static const String cancel = "cancel";
 }

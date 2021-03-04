@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/models/chat_controller.dart';
 import 'package:trukapp/models/localization_controller.dart';
+import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/wallet_model.dart';
 import 'package:trukapp/sessionmanagement/session_manager.dart';
 import 'locale/language_bloc/language_bloc.dart';
@@ -60,6 +61,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => LocalizationController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MyQuotes(),
         ),
       ],
       child: BlocProvider(

@@ -200,3 +200,82 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
           ),
         );
 }
+
+void reasonDialog({BuildContext context, String title, Function onTap}) {
+  final locale = AppLocalizations.of(context).locale;
+  Platform.isAndroid
+      ? showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('$title'),
+            content: TextFormField(
+              keyboardType: TextInputType.multiline,
+              minLines: null,
+              maxLines: 3,
+              decoration: InputDecoration(border: OutlineInputBorder()),
+            ),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  onTap();
+                },
+                child: Center(
+                  child: Text(
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ),
+              RaisedButton(
+                color: primaryColor,
+                onPressed: () => Navigator.pop(context),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.cancel),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      : showCupertinoDialog(
+          context: context,
+          builder: (context) => Material(
+            color: Colors.transparent,
+            child: CupertinoAlertDialog(
+              title: Text('$title'),
+              content: TextFormField(
+                keyboardType: TextInputType.multiline,
+                minLines: null,
+                maxLines: null,
+                expands: true,
+              ),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    onTap();
+                  },
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.yes),
+                      style: TextStyle(color: primaryColor),
+                    ),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.no),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+}

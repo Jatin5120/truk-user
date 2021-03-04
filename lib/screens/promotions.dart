@@ -25,6 +25,7 @@ class _PromotionState extends State<Promotion> {
   Locale locale;
   final PageController pageController = PageController(initialPage: 0, viewportFraction: 0.90);
   String packageName = "";
+  int currentCoupon = 0;
   @override
   void initState() {
     super.initState();
@@ -77,6 +78,7 @@ class _PromotionState extends State<Promotion> {
                       scrollDirection: Axis.horizontal,
                       controller: pageController,
                       pageSnapping: true,
+                      //onPageChanged: (index) => setState(() => currentCoupon = index),
                       itemBuilder: (context, index) {
                         CouponModel cM = CouponModel.fromSnap(snapshot.data.docs[index]);
                         print(cM.code);
@@ -225,30 +227,30 @@ class _PromotionState extends State<Promotion> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () async {
-                      String d = await FlutterShareMe().shareToFacebook(
-                          msg:
-                              'Look this awesome transportation app\n\nCheck out Truk App https://play.google.com/store/apps/details?id=$packageName');
-                      if (d.contains('false')) {
-                        Fluttertoast.showToast(msg: 'App isn\'t installed');
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: primaryColor,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.asset(
-                          'assets/images/fb_share.png',
-                          height: 50,
-                          width: 50,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () async {
+                  //     String d = await FlutterShareMe().shareToFacebook(
+                  //         msg:
+                  //             'Look this awesome transportation app\n\nCheck out Truk App https://play.google.com/store/apps/details?id=$packageName');
+                  //     if (d.contains('false')) {
+                  //       Fluttertoast.showToast(msg: 'App isn\'t installed');
+                  //     }
+                  //   },
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(50),
+                  //       color: primaryColor,
+                  //     ),
+                  //     child: ClipRRect(
+                  //       borderRadius: BorderRadius.circular(50),
+                  //       child: Image.asset(
+                  //         'assets/images/fb_share.png',
+                  //         height: 50,
+                  //         width: 50,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),

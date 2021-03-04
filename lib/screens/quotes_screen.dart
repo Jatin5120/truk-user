@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:async/async.dart';
+import 'package:provider/provider.dart';
 import 'package:trukapp/helper/request_status.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
@@ -31,25 +32,16 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
   List<QuoteModel> filteredList = [];
   bool isFilter = false;
 
-  final AsyncMemoizer _memoizer = AsyncMemoizer();
-
-  getStream() async {
-    final stream = FirebaseFirestore.instance
-        .collection('Quote')
-        .where('uid', isEqualTo: user.uid)
-        .orderBy('bookingId', descending: true)
-        .snapshots();
-    return await _memoizer.runOnce(() {}) as Stream<QuerySnapshot>;
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    _memoizer.runOnce(() => null);
+
     locale = AppLocalizations.of(context).locale;
     final size = MediaQuery.of(context).size;
+    final pQuotes = Provider.of<MyQuotes>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -83,91 +75,61 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
         width: size.width,
         height: size.height,
         padding: const EdgeInsets.all(20),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('Quote')
-              .where('uid', isEqualTo: user.uid)
-              .orderBy('bookingId', descending: true)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-                ),
-              );
-            }
-            if (snapshot.hasError || !snapshot.hasData) {
-              return Center(
-                child: Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.noData),
-                ),
-              );
-            }
-            if (snapshot.data.size <= 0) {
-              return NoDataPage(
+        child: pQuotes.quotes.length <= 0
+            ? NoDataPage(
                 text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noQuotesRequested),
-              );
-            }
-            List<QuoteModel> list = [];
-            for (QueryDocumentSnapshot m in snapshot.data.docs) {
-              list.add(QuoteModel.fromSnapshot(m));
-            }
-            return Container(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    onChanged: (string) {
-                      if (string.trim().length <= 0 || string.isEmpty) {
-                        setState(() {
-                          isFilter = false;
-                          filteredList = [];
-                        });
-                      } else {
-                        setState(() {
-                          filteredList = list
-                              .where((element) =>
-                                  element.bookingId.toString().contains(string.trim().toLowerCase()) ||
-                                  element.price.contains(string.toLowerCase()) ||
-                                  element.pickupDate.contains(string.toLowerCase()))
-                              .toList();
-                          isFilter = true;
-                        });
-                      }
-                    },
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.searchHint),
-                      border: OutlineInputBorder(),
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.search),
+              )
+            : SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Scrollbar(
-                    isAlwaysShown: false,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: isFilter ? filteredList.length : snapshot.data.size,
-                      itemBuilder: (context, index) {
-                        QuoteModel model =
-                            isFilter ? filteredList[index] : QuoteModel.fromSnapshot(snapshot.data.docs[index]);
-                        String docID = isFilter ? filteredList[index] : snapshot.data.docs[index].id;
-                        if (model.status == RequestStatus.assigned) {
-                          return Container();
+                    TextFormField(
+                      onChanged: (string) {
+                        if (string.trim().length <= 0 || string.isEmpty) {
+                          setState(() {
+                            isFilter = false;
+                            filteredList = [];
+                          });
+                        } else {
+                          setState(() {
+                            filteredList = pQuotes.quotes
+                                .where((element) =>
+                                    element.bookingId.toString().contains(string.trim().toLowerCase()) ||
+                                    element.price.contains(string.toLowerCase()) ||
+                                    element.pickupDate.contains(string.toLowerCase()))
+                                .toList();
+                            isFilter = true;
+                          });
                         }
+                      },
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.searchHint),
+                        border: OutlineInputBorder(),
+                        labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.search),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: isFilter ? filteredList.length : pQuotes.quotes.length,
+                      itemBuilder: (context, index) {
+                        QuoteModel model = isFilter ? filteredList[index] : pQuotes.quotes[index];
+                        String docID = isFilter ? filteredList[index].id : pQuotes.quotes[index].id;
+                        // if (model.status == RequestStatus.assigned) {
+                        //   return Container();
+                        // }
                         return buildQuoteBlock(model, docID);
                       },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            );
-          },
-        ),
       ),
     );
   }

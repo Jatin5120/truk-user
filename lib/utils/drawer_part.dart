@@ -105,21 +105,21 @@ class DrawerMenu extends StatelessWidget {
                 builder: (context) => QuotesScreen(),
               ));
             }),
-        myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.payments),
-          leading: Icon(
-            Icons.payments,
-            color: Colors.black,
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => Payment(),
-              ),
-            );
-          },
-        ),
+        // myListTile(
+        //   title: AppLocalizations.getLocalizationValue(locale, LocaleKey.payments),
+        //   leading: Icon(
+        //     Icons.payments,
+        //     color: Colors.black,
+        //   ),
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     Navigator.of(context).push(
+        //       CupertinoPageRoute(
+        //         builder: (context) => Payment(),
+        //       ),
+        //     );
+        //   },
+        // ),
         myListTile(
           title: AppLocalizations.getLocalizationValue(locale, LocaleKey.trukMoney),
           leading: Icon(

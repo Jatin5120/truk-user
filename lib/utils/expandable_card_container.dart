@@ -10,6 +10,7 @@ import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
 import 'package:trukapp/screens/quote_summary_screen.dart';
 import 'package:trukapp/screens/trackShipment.dart';
+import 'package:trukapp/widgets/widgets.dart';
 
 class ExpandableCardContainer extends StatefulWidget {
   final ShipmentModel model;
@@ -46,6 +47,18 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
     boxShadow: [
       BoxShadow(
         color: Colors.green.withOpacity(0.8),
+        offset: Offset(0, 3),
+        blurRadius: 10,
+      ),
+    ],
+  );
+  final BoxDecoration cancelBoxDecoration = BoxDecoration(
+    borderRadius: BorderRadius.circular(5.0),
+    border: Border.all(width: 1.0, color: Colors.red),
+    color: Colors.red,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.red.withOpacity(0.8),
         offset: Offset(0, 3),
         blurRadius: 10,
       ),
@@ -247,6 +260,28 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                     ),
                   ],
                 ),
+                if (widget.model.status != RequestStatus.completed ||
+                    widget.model.status != RequestStatus.started ||
+                    widget.model.status != RequestStatus.cancelled)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: GestureDetector(
+                      onTap: () {
+                        reasonDialog(context: context, title: "Specify Reason", onTap: () {});
+                      },
+                      child: Container(
+                        height: 40.0,
+                        decoration: cancelBoxDecoration,
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.getLocalizationValue(locale, LocaleKey.cancel),
+                            style: enabledTextStyle,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

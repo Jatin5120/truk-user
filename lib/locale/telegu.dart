@@ -129,5 +129,6 @@ Map<String, String> telugu() {
     "date": "తేదీ",
     "apply": "వర్తించు",
     "coupon": "కూపన్",
+    "cancel": "దాన్ని రద్దు చేయండి",
   };
 }

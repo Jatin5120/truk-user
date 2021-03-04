@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:trukapp/firebase_helper/firebase_helper.dart';
 import 'package:trukapp/helper/helper.dart';
 import 'package:trukapp/helper/payment_type.dart';
 import 'package:trukapp/helper/request_status.dart';
@@ -159,5 +158,25 @@ class QuoteModel {
       agent: map.get('agent') ?? 'na',
       paymentStatus: map.data().containsKey('paymentStatus') ? map.get('paymentStatus') : PaymentType.pending,
     );
+  }
+}
+
+class MyQuotes with ChangeNotifier {
+  List<QuoteModel> quoteList = [];
+  List<QuoteModel> get quotes => quoteList;
+
+  getAllQuotes(String uid) async {
+    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
+    Stream<QuerySnapshot> d = reference.where('uid', isEqualTo: uid).orderBy('bookingId', descending: true).snapshots();
+    d.listen((event) {
+      quoteList = [];
+      for (QueryDocumentSnapshot snapshot in event.docs) {
+        QuoteModel quoteModel = QuoteModel.fromSnapshot(snapshot);
+        if (quoteModel.status != RequestStatus.assigned) {
+          quoteList.add(quoteModel);
+        }
+      }
+      notifyListeners();
+    });
   }
 }

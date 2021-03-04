@@ -257,7 +257,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
                 child: Text(
-                  "${widget.onlyView ? AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus) : ''} \u20B9${widget.quoteModel.price}",
+                  "${widget.onlyView ? AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus) : AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)}:  \u20B9${widget.quoteModel.price}",
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 14,

@@ -125,6 +125,7 @@ Map<String, String> hindi() {
     "fare": "किराया",
     "date": "दिनांक",
     "apply": "लागू करें",
-    "coupon": "कूपन"
+    "coupon": "कूपन",
+    "cancel": "इसे रद्द करें",
   };
 }

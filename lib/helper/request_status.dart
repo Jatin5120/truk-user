@@ -6,4 +6,5 @@ class RequestStatus {
   static const String started = 'started';
   static const String completed = 'completed';
   static const String assigned = 'assigned';
+  static const String cancelled = 'cancelled';
 }

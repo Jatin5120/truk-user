@@ -137,7 +137,7 @@ class _SettingsState extends State<Settings> {
                 child: Text(
                   'Developed by Agumentik Software Pvt. Ltd.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: primaryColor),
+                  style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w300),
                 ),
               ),
             ),

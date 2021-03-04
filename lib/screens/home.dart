@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,6 +12,7 @@ import 'package:trukapp/firebase_helper/firebase_helper.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/models/chat_controller.dart';
 import 'package:trukapp/models/notification_model.dart';
+import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
 import 'package:trukapp/locale/locale_keys.dart';
 import '../firebase_helper/notification_helper.dart';
@@ -38,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static final PageController _pageController = PageController(initialPage: 0, keepPage: true);
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
   StreamSubscription streamSubscription;
+  final User user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
@@ -46,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Provider.of<MyWallet>(context, listen: false).getWalletBalance();
     Provider.of<MyShipments>(context, listen: false).getAllShipments();
     Provider.of<ChatController>(context, listen: false).getAllMessages();
+    Provider.of<MyQuotes>(context, listen: false).getAllQuotes(user.uid);
     NotificationHelper().configLocalNotification();
     NotificationHelper().registerNotification();
     streamSubscription = FirebaseHelper().getNotificationCount();
