@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:trukapp/helper/request_status.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/screens/matDetails.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../helper/helper.dart';
 import '../models/material_model.dart';
@@ -43,7 +45,6 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
           stream: FirebaseFirestore.instance
               .collection('Request')
               .where('uid', isEqualTo: user.uid)
-              //.where('status', isEqualTo: 'pending')
               .orderBy('bookingId', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
@@ -96,6 +97,21 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
       actionPane: SlidableScrollActionPane(),
       secondaryActions: [
         IconSlideAction(
+          icon: Icons.edit,
+          color: Colors.blue,
+          closeOnTap: true,
+          onTap: () {
+            Navigator.pushReplacement(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => MaterialDetails(
+                    prevQuote: model,
+                    isUpdate: true,
+                  ),
+                ));
+          },
+        ),
+        IconSlideAction(
           icon: Icons.delete,
           color: Colors.red,
           closeOnTap: true,
@@ -128,7 +144,7 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
                     ),
                     SizedBox(height: 5),
                     FutureBuilder<String>(
-                        future: Helper().setLocationText(model.source),
+                        future: Helper().setLocationText(model.source) ?? Future.value("Location,Location,location"),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Text('Address...');
@@ -140,7 +156,8 @@ class _MyRequestScreenState extends State<MyRequestScreen> {
                           );
                         }),
                     FutureBuilder<String>(
-                        future: Helper().setLocationText(model.destination),
+                        future:
+                            Helper().setLocationText(model.destination) ?? Future.value("Location,Location,location"),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Text('|');

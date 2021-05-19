@@ -47,6 +47,7 @@ class LocaleKey {
   static const String mobile = "mobile";
   static const String more = "more";
   static const String myRequest = "myRequest";
+  static const String myBooking = "myBooking";
   static const String name = "name";
   static const String no = "no";
   static const String noData = "noData";
@@ -126,4 +127,6 @@ class LocaleKey {
   static const String apply = "apply";
   static const String coupon = "coupon";
   static const String cancel = "cancel";
+  static const String gst = "gst";
+  static const String cancelled = "cancelled";
 }

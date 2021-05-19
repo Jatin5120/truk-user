@@ -1,6 +1,8 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trukapp/firebase_helper/firebase_helper.dart';
+import 'package:trukapp/helper/cancel_booking.dart';
 import 'package:trukapp/helper/helper.dart';
 import 'package:trukapp/helper/request_status.dart';
 import 'package:trukapp/locale/app_localization.dart';
@@ -81,10 +83,12 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
     for (MaterialModel val in widget.model.materials) {
       weight += val.quantity;
     }
+    print(widget.model.status);
 
     return Card(
       elevation: 8,
       child: ExpandablePanel(
+        collapsed: Container(),
         header: Container(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -260,28 +264,74 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                     ),
                   ],
                 ),
-                if (widget.model.status != RequestStatus.completed ||
-                    widget.model.status != RequestStatus.started ||
-                    widget.model.status != RequestStatus.cancelled)
+                (widget.model.status == RequestStatus.completed ||
+                        widget.model.status == RequestStatus.started ||
+                        widget.model.status == RequestStatus.cancelled)
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: GestureDetector(
+                          onTap: () {
+                            reasonDialog(
+                              context: context,
+                              title: "Specify Reason",
+                              onTap: (reason) {
+                                CancelBooking cancelBooking = CancelBooking(
+                                  collectionName: FirebaseHelper.shipmentCollection,
+                                  docId: widget.docID,
+                                  status: RequestStatus.assigned,
+                                );
+                                cancelBooking.cancelBooking(
+                                  reason,
+                                  agent: widget.model.agent,
+                                  bookingId: widget.model.bookingId.toString(),
+                                  price: double.parse(widget.model.price),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            height: 40.0,
+                            decoration: cancelBoxDecoration,
+                            child: Center(
+                              child: Text(
+                                AppLocalizations.getLocalizationValue(locale, LocaleKey.cancel),
+                                style: enabledTextStyle,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                if (widget.model.status == RequestStatus.completed || widget.model.status == RequestStatus.cancelled)
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: GestureDetector(
-                      onTap: () {
-                        reasonDialog(context: context, title: "Specify Reason", onTap: () {});
-                      },
+                      onTap: () {},
                       child: Container(
                         height: 40.0,
-                        decoration: cancelBoxDecoration,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(width: 1.0, color: Colors.blue),
+                          color: Colors.blue,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blueAccent.withOpacity(0.8),
+                              offset: Offset(0, 3),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
                         child: Center(
                           child: Text(
-                            AppLocalizations.getLocalizationValue(locale, LocaleKey.cancel),
+                            "Repeat Order",
                             style: enabledTextStyle,
                             textAlign: TextAlign.left,
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  )
               ],
             ),
           ),

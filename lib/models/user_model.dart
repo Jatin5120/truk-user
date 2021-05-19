@@ -18,6 +18,7 @@ class UserModel {
   String token;
   String image;
   bool notification;
+  String gst;
   UserModel({
     this.uid,
     this.name,
@@ -30,6 +31,7 @@ class UserModel {
     this.token,
     this.image,
     this.notification,
+    this.gst = "NA",
   });
 
   UserModel copyWith({
@@ -44,6 +46,7 @@ class UserModel {
     String token,
     String image,
     bool notification,
+    String gst,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -57,6 +60,7 @@ class UserModel {
       token: token ?? this.token,
       image: image ?? this.image,
       notification: notification ?? this.notification,
+      gst: gst ?? this.gst,
     );
   }
 
@@ -73,6 +77,7 @@ class UserModel {
       'token': token,
       'image': image ?? 'na',
       'notification': notification ?? true,
+      'gst': gst ?? "NA",
     };
   }
 
@@ -91,6 +96,7 @@ class UserModel {
       joining: map['joining'],
       image: map['image'] ?? 'na',
       notification: map['notification'] ?? true,
+      gst: map['gst'] ?? "NA",
     );
   }
 
@@ -109,6 +115,7 @@ class UserModel {
       token: map.data().containsKey('token') ? map.get('token') : 'token',
       image: map.data().containsKey('image') ? map.get('image') : 'na',
       notification: map.data().containsKey('notification') ? map.get('notification') : true,
+      gst: map.data().containsKey('gst') ? map.get('gst') : "NA",
     );
   }
 }

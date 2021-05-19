@@ -1,3 +1,5 @@
+import 'package:trukapp/locale/locale_keys.dart';
+
 Map<String, String> hindi() {
   return {
     "about": "हमारे बारे में",
@@ -48,6 +50,7 @@ Map<String, String> hindi() {
     "materialType": "सामग्री के प्रकार",
     "mobile": "मोबाइल नंबर",
     "more": "अधिक",
+    "myBooking": "मेरी बुकिंग",
     "myRequest": "मेरा निवेदन",
     "name": "नाम",
     "no": "नहीं",
@@ -100,6 +103,7 @@ Map<String, String> hindi() {
     "TRUKMONEY": "ट्रक मनी",
     "trukType": "ट्रक का प्रकार",
     "update": "अपडेट करें",
+    LocaleKey.gst: "जीएसटी",
     "vendorName": "विक्रेता का नाम",
     "verifyNow": "अभी सत्यापित करें",
     "walkThroughSubTitle1": "बुक ट्रक, ट्रेलर और टैंकर लाइव से बाजार और सबसे अच्छा सौदा मिल।",
@@ -127,5 +131,6 @@ Map<String, String> hindi() {
     "apply": "लागू करें",
     "coupon": "कूपन",
     "cancel": "इसे रद्द करें",
+    LocaleKey.cancelled: "रद्द बुकिंग",
   };
 }

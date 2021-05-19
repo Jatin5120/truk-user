@@ -7,6 +7,7 @@ class MaterialModel {
   final double length;
   final double width;
   final double height;
+  final String unit;
   MaterialModel({
     this.materialName,
     this.materialType,
@@ -14,6 +15,7 @@ class MaterialModel {
     this.length,
     this.width,
     this.height,
+    this.unit = "KG",
   });
 
   MaterialModel copyWith({
@@ -23,6 +25,7 @@ class MaterialModel {
     double length,
     double width,
     double height,
+    String unit,
   }) {
     return MaterialModel(
       materialName: materialName ?? this.materialName,
@@ -31,6 +34,7 @@ class MaterialModel {
       length: length ?? this.length,
       width: width ?? this.width,
       height: height ?? this.height,
+      unit: unit ?? this.unit,
     );
   }
 
@@ -42,6 +46,7 @@ class MaterialModel {
       'length': length,
       'width': width,
       'height': height,
+      'unit': unit
     };
   }
 
@@ -53,6 +58,7 @@ class MaterialModel {
       length: map['length'],
       width: map['width'],
       height: map['height'],
+      unit: map['unit'] ?? "KG",
     );
   }
 }

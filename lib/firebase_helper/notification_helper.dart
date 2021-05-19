@@ -4,29 +4,41 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class NotificationHelper {
   final User user = FirebaseAuth.instance.currentUser;
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   void registerNotification() async {
-    await firebaseMessaging.requestNotificationPermissions();
+    await firebaseMessaging.requestPermission();
 
-    firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
-      print('onMessage: $message');
-      Platform.isAndroid ? showNotification(message['notification']) : showNotification(message['aps']['alert']);
-      return;
-    }, onResume: (Map<String, dynamic> message) {
-      print('onResume: $message');
-      return;
-    }, onLaunch: (Map<String, dynamic> message) {
-      print('onLaunch: $message');
-      return;
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        //})(onMessage: (Map<String, dynamic> message) {
+        print('onMessage: $message');
+        AndroidNotification androidNotification = message.notification?.android;
+        AppleNotification appleNotification = message.notification?.apple;
+        if (message.notification != null &&
+            (Platform.isAndroid ? androidNotification != null : appleNotification != null)) {
+          Platform.isAndroid ? showNotification(androidNotification) : showNotification(appleNotification);
+        }
+      },
+      // onResume: (Map<String, dynamic> message) {
+      //   print('onResume: $message');
+      //   return;
+      // }, onLaunch: (Map<String, dynamic> message) {
+      //   print('onLaunch: $message');
+      //   return;
+      // }
+    );
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      //Navigator.pushNamed(context, '/message', arguments: MessageArguments(message, true));
     });
-
     firebaseMessaging.getToken().then((token) {
       //print('token: $token');
       FirebaseFirestore.instance.collection('Users').doc(user.uid).update({'token': token});

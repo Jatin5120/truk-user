@@ -1,3 +1,5 @@
+import 'package:trukapp/locale/locale_keys.dart';
+
 Map<String, String> english() {
   return {
     "about": "About Us",
@@ -50,6 +52,7 @@ Map<String, String> english() {
     "materialType": "Material Type",
     "mobile": "Mobile Number",
     "more": "More",
+    "myBooking": "My Bookings",
     "myRequest": "My Requests",
     "name": "Name",
     "no": "No",
@@ -126,6 +129,8 @@ Map<String, String> english() {
     "fare": "Fare",
     "date": "Date",
     "apply": "Apply",
-    "coupon": "Coupon"
+    "coupon": "Coupon",
+    LocaleKey.gst: "GST",
+    LocaleKey.cancelled: "Canceled Booking",
   };
 }

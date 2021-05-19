@@ -142,6 +142,13 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     final pWallet = Provider.of<MyWallet>(context);
     final pUser = Provider.of<MyUser>(context);
     locale = AppLocalizations.of(context).locale;
+    String fineString = pWallet.model.amount < 0
+        ? "+" +
+            pWallet.model.amount.abs().roundToDouble().toString() +
+            "=" +
+            (double.parse(widget.quoteModel.price) + pWallet.model.amount.abs()).toString() +
+            "(Previous Cancellation Charge)"
+        : '';
     String title = AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary);
     if (!widget.onlyView) {
       title = AppLocalizations.getLocalizationValue(locale, LocaleKey.quotes);
@@ -175,21 +182,29 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                       setState(() {
                         isLoading = true;
                       });
+                      double fine = pWallet.model.amount >= 0.0 ? 0 : pWallet.model.amount.abs();
+                      print(fine);
+                      double totalPrice =
+                          isCouponApplied ? discountedPrice + fine : double.parse(widget.quoteModel.price) + fine;
                       if (payment == PaymentType.online) {
+                        if (pWallet.model.amount < 0) {
+                          await FirebaseHelper()
+                              .updateWallet(widget.quoteModel.bookingId.toString(), double.parse(fine.toString()), 1);
+                        }
                         int price = int.parse(widget.quoteModel.price);
-                        createOrder(
-                            isCouponApplied ? discountedPrice.floor() : price, pUser.user.email, pUser.user.name);
+                        createOrder(int.parse(totalPrice.toString()), pUser.user.email, pUser.user.name);
                       } else if (payment == PaymentType.trukMoney) {
                         final time = DateTime.now().millisecondsSinceEpoch;
                         await FirebaseHelper().insertPayout(
                           agent: widget.quoteModel.agent,
-                          amount: isCouponApplied ? discountedPrice : double.parse(widget.quoteModel.price),
+                          amount: totalPrice,
                           bookingId: widget.quoteModel.bookingId,
                           status: 'pending',
                           time: time,
                         );
-                        await FirebaseHelper().updateWallet(
-                            widget.quoteModel.bookingId.toString(), double.parse(widget.quoteModel.price), 0);
+
+                        await FirebaseHelper().updateWallet(widget.quoteModel.bookingId.toString(), totalPrice, 0);
+
                         paymentSuccessful(
                           context: context,
                           shipmentId: "${widget.quoteModel.bookingId}",
@@ -200,6 +215,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                           },
                         );
                       } else {
+                        if (pWallet.model.amount < 0) {
+                          await FirebaseHelper()
+                              .updateWallet(widget.quoteModel.bookingId.toString(), double.parse(fine.toString()), 1);
+                        }
                         await FirebaseHelper()
                             .updateQuoteStatus(widget.quoteModel.id, RequestStatus.accepted, paymentStatus: payment);
                         paymentSuccessful(
@@ -212,6 +231,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                           },
                         );
                       }
+
                       setState(() {
                         isLoading = false;
                       });
@@ -257,7 +277,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
                 child: Text(
-                  "${widget.onlyView ? AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus) : AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)}:  \u20B9${widget.quoteModel.price}",
+                  "${widget.onlyView ? AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus) : AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)}:  \u20B9${widget.quoteModel.price} $fineString",
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 14,
@@ -386,7 +406,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   width: 10,
                 ),
                 Text(
-                  '${m.quantity} KG',
+                  '${m.quantity} ${m.unit}',
                   style: TextStyle(fontSize: 16),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

@@ -142,7 +142,7 @@ class _TrukMoneyState extends State<TrukMoney> with SingleTickerProviderStateMix
                         height: 5,
                       ),
                       Text(
-                        '₹ ${pWallet.isLoading ? 0 : pWallet.myWallet.amount ?? 0}',
+                        '₹ ${pWallet.isLoading ? 0 : pWallet.myWallet.amount.roundToDouble() ?? 0}',
                         style: TextStyle(color: Colors.orange, fontSize: 24),
                       ),
                     ],

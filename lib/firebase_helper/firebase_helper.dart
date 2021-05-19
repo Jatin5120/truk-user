@@ -48,7 +48,15 @@ class FirebaseHelper {
   }
 
   Future insertUser(
-      String uid, String name, String email, String mobile, String company, String city, String state) async {
+    String uid,
+    String name,
+    String email,
+    String mobile,
+    String company,
+    String city,
+    String state, {
+    String gst = "NA",
+  }) async {
     int joiningTime = DateTime.now().millisecondsSinceEpoch;
     CollectionReference reference = FirebaseFirestore.instance.collection(userCollection);
     Map<String, dynamic> userData = {
@@ -141,7 +149,7 @@ class FirebaseHelper {
       });
     } else {
       await reference.doc(user.uid).set({
-        'amount': amount,
+        'amount': type == 1 ? amount : -amount,
         'lastUpdate': currentTimeMilli,
       });
     }

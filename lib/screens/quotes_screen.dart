@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:async/async.dart';
 import 'package:provider/provider.dart';
+import 'package:trukapp/helper/cancel_booking.dart';
 import 'package:trukapp/helper/request_status.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
@@ -250,15 +251,15 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
   }
 
   Widget getStatusWidget(String id, String status, QuoteModel quoteModel) {
-    if (status == RequestStatus.accepted) {
-      return Container(
-        child: Text(
-          AppLocalizations.getLocalizationValue(locale, LocaleKey.accept).toUpperCase(),
-          style: TextStyle(color: Colors.green),
-        ),
-        padding: const EdgeInsets.all(5),
-      );
-    }
+    // if (status == RequestStatus.accepted) {
+    //   return Container(
+    //     child: Text(
+    //       AppLocalizations.getLocalizationValue(locale, LocaleKey.accept).toUpperCase(),
+    //       style: TextStyle(color: Colors.green),
+    //     ),
+    //     padding: const EdgeInsets.all(5),
+    //   );
+    // }
     if (status == RequestStatus.rejected) {
       return Container(
         child: Text(
@@ -279,28 +280,36 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
     }
     return Row(
       children: [
-        Container(
-          height: 30,
-          child: RaisedButton(
-            color: Colors.green,
-            onPressed: isStatusUpdating
-                ? null
-                : () async {
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => QuoteSummaryScreen(quoteModel: quoteModel),
-                        ));
-                  },
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            child: Center(
-              child: Text(
-                AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
-                style: TextStyle(color: Colors.white, fontSize: 12),
+        status == RequestStatus.accepted
+            ? Container(
+                child: Text(
+                  AppLocalizations.getLocalizationValue(locale, LocaleKey.accept).toUpperCase(),
+                  style: TextStyle(color: Colors.green),
+                ),
+                padding: const EdgeInsets.all(5),
+              )
+            : Container(
+                height: 30,
+                child: RaisedButton(
+                  color: Colors.green,
+                  onPressed: isStatusUpdating
+                      ? null
+                      : () async {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => QuoteSummaryScreen(quoteModel: quoteModel),
+                              ));
+                        },
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
         SizedBox(
           width: 5,
         ),
@@ -311,20 +320,37 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
               onPressed: isStatusUpdating
                   ? null
                   : () async {
-                      showConfirmationDialog(
-                        context: context,
-                        title: AppLocalizations.getLocalizationValue(locale, LocaleKey.reject),
-                        subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.rejectConfirm),
-                        onTap: () async {
-                          await FirebaseHelper().updateQuoteStatus(id, RequestStatus.rejected);
-                        },
-                      );
+                      if (status == RequestStatus.accepted) {
+                        reasonDialog(
+                            context: context,
+                            title: "Specify Reason",
+                            onTap: (reason) {
+                              CancelBooking cancelBooking = CancelBooking(
+                                  collectionName: FirebaseHelper.quoteCollection,
+                                  docId: id,
+                                  status: RequestStatus.accepted);
+                              cancelBooking.cancelBooking(reason,
+                                  agent: quoteModel.agent,
+                                  bookingId: quoteModel.bookingId.toString(),
+                                  price: double.parse(quoteModel.price));
+                            });
+                      } else {
+                        showConfirmationDialog(
+                          context: context,
+                          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.reject),
+                          subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.rejectConfirm),
+                          onTap: () async {
+                            await FirebaseHelper().updateQuoteStatus(id, RequestStatus.rejected);
+                          },
+                        );
+                      }
                     },
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               child: Center(
                 child: Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.reject),
-                  style: TextStyle(color: Colors.black, fontSize: 12),
+                  AppLocalizations.getLocalizationValue(
+                      locale, status == RequestStatus.accepted ? LocaleKey.cancel : LocaleKey.reject),
+                  style: TextStyle(color: Colors.red, fontSize: 12),
                 ),
               ),
             ),
@@ -335,6 +361,5 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

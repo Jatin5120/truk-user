@@ -39,7 +39,7 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
                     selectedIndex = index;
                   }
                 }
-                print(selectedIndex);
+
                 return Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 5),
                   child: ListTile(
@@ -54,6 +54,7 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
                       selectedIndex = index;
 
                       setState(() {});
+                      Navigator.pop(context);
                     },
                     title: Card(
                       shadowColor: selectedIndex == index ? primaryColor : Colors.grey,

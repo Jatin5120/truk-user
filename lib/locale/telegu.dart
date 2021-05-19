@@ -1,3 +1,5 @@
+import 'package:trukapp/locale/locale_keys.dart';
+
 Map<String, String> telugu() {
   return {
     "about": "మా గురించి",
@@ -49,6 +51,7 @@ Map<String, String> telugu() {
     "materialType": "మెటీరియల్ రకం",
     "mobile": "మొబైల్ సంఖ్య",
     "more": "మరింత",
+    "myBooking": "నా బుకింగ్స్",
     "myRequest": "నా అభ్యర్థన",
     "name": "పేరు",
     "no": "లేదు",
@@ -130,5 +133,7 @@ Map<String, String> telugu() {
     "apply": "వర్తించు",
     "coupon": "కూపన్",
     "cancel": "దాన్ని రద్దు చేయండి",
+    LocaleKey.gst: "జీఎస్టీ",
+    LocaleKey.cancelled: "రద్దు చేసిన బుకింగ్",
   };
 }

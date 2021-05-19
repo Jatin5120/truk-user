@@ -27,9 +27,9 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
 
   bool isLoading = true;
   final Permission _permission = Permission.location;
-  PermissionStatus _permissionStatus = PermissionStatus.undetermined;
+  PermissionStatus _permissionStatus = PermissionStatus.denied;
   GoogleMapController mapController;
-  places.Mode _mode = places.Mode.overlay;
+  places.Mode _mode = places.Mode.fullscreen;
   LatLng myLatLng;
   Map<String, Marker> myMarker = {};
   GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
@@ -146,16 +146,21 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
   Future setLocationText(int type) async {
     LatLng latLng = myMarker[type == 0 ? 'source' : 'destination'].position;
     final coordinates = Coordinates(latLng.latitude, latLng.longitude);
-    var address = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    String street = address.first.featureName;
-    String area = address.first.subLocality;
-    String pincode = address.first.postalCode;
-    String city = address.first.subAdminArea;
-    String state = address.first.adminArea;
-    if (type == 0) {
-      _sourceTextController.text = '$street, $area, $city, $pincode';
-    } else {
-      _destinationTextController.text = '$street, $area, $city, $pincode';
+    try {
+      var address = await Geocoder.google(kGoogleApiKey).findAddressesFromCoordinates(coordinates);
+      String street = address.first.featureName;
+      String area = address.first.subLocality;
+      String pincode = address.first.postalCode;
+      String city = address.first.subAdminArea;
+      String state = address.first.adminArea;
+      if (type == 0) {
+        _sourceTextController.text = '$street, $area, $city, $pincode';
+      } else {
+        _destinationTextController.text = '$street, $area, $city, $pincode';
+      }
+    } catch (e) {
+      print(e);
+      //setLocationText(type);
     }
 
     //setState(() {});
@@ -244,6 +249,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                           context: context,
                           apiKey: kGoogleApiKey,
                           mode: _mode, // Mode.fullscreen
+                          logo: Text(""),
                           language: locale.languageCode,
                           components: [
                             Component(Component.country, 'in'),
@@ -297,6 +303,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                           apiKey: kGoogleApiKey,
                           mode: _mode, // Mode.fullscreen
                           language: locale.languageCode,
+                          logo: Text(""),
                           components: [
                             Component(Component.country, 'in'),
                           ],

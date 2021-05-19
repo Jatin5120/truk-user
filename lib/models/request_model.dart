@@ -97,20 +97,21 @@ class RequestModel {
     if (map == null) return null;
 
     return RequestModel(
-        uid: map['uid'],
-        mobile: map['mobile'],
-        source: stringToLatlng(map['source']),
-        destination: stringToLatlng(map['destination']),
-        materials: List<MaterialModel>.from(map['materials']?.map((x) => MaterialModel.fromMap(x))),
-        truk: map['truk'],
-        pickupDate: map['pickupDate'],
-        bookingId: map['bookingId'],
-        bookingDate: map['bookingDate'],
-        insured: map['insured'],
-        load: map['load'],
-        mandate: map['mandate'],
-        status: map['status'],
-        paymentStatus: map['paymentStatus'] ?? PaymentType.cod);
+      uid: map['uid'],
+      mobile: map['mobile'],
+      source: stringToLatlng(map['source']),
+      destination: stringToLatlng(map['destination']),
+      materials: List<MaterialModel>.from(map['materials']?.map((x) => MaterialModel.fromMap(x))),
+      truk: map['truk'],
+      pickupDate: map['pickupDate'],
+      bookingId: map['bookingId'],
+      bookingDate: map['bookingDate'],
+      insured: map['insured'],
+      load: map['load'],
+      mandate: map['mandate'],
+      status: map['status'],
+      paymentStatus: map['paymentStatus'] ?? PaymentType.cod,
+    );
   }
 
   factory RequestModel.fromSnapshot(QueryDocumentSnapshot map) {

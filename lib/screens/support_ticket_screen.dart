@@ -80,7 +80,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
       child: Card(
         elevation: 3.5,
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(08.0),
           child: Row(
             children: [
               CircleAvatar(
@@ -105,77 +105,76 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 ),
               ),
               SizedBox(
-                width: 5,
+                width: 2,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      chattingListModel.userModel.name.toUpperCase(),
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        FutureBuilder<String>(
-                          future: Helper().setLocationText(chattingListModel.quoteModel.source),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return Text('Address...');
-                            }
-                            return Text(
-                              snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3],
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            );
-                          },
-                        ),
-                        Text("-"),
-                        FutureBuilder<String>(
-                          future: Helper().setLocationText(chattingListModel.quoteModel.destination),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return Text('Address...');
-                            }
-                            return Text(
-                              snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3],
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            );
-                          },
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Flexible(
-                fit: FlexFit.tight,
-                flex: 1,
+              Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(right: 5),
+                  padding: const EdgeInsets.only(left: 5.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FittedBox(
-                        child: Text(
-                          chattingListModel.quoteModel.pickupDate,
-                          style: TextStyle(fontSize: 12),
-                        ),
+                      Text(
+                        chattingListModel.userModel.name.toUpperCase(),
+                        style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
-                      Text(
-                        chattingListModel.quoteModel.trukName,
-                        style: TextStyle(color: primaryColor, fontSize: 12),
+                      Row(
+                        children: [
+                          // FutureBuilder<String>(
+                          //   future: Helper().setLocationText(chattingListModel.quoteModel.source),
+                          //   builder: (context, snapshot) {
+                          //     if (!snapshot.hasData) {
+                          //       return Text('Address...');
+                          //     }
+                          //     return Text(
+                          //       snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3],
+                          //       overflow: TextOverflow.ellipsis,
+                          //       maxLines: 1,
+                          //       textWidthBasis: TextWidthBasis.parent,
+                          //     );
+                          //   },
+                          // ),
+                          // Text("-"),
+                          FutureBuilder<String>(
+                            future: Helper().setLocationText(chattingListModel.quoteModel.destination),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Text('Address...');
+                              }
+                              return Text(
+                                "Dest -" + snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3],
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              );
+                            },
+                          ),
+                        ],
                       )
                     ],
                   ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    FittedBox(
+                      child: Text(
+                        chattingListModel.quoteModel.pickupDate,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      chattingListModel.quoteModel.trukName,
+                      style: TextStyle(color: primaryColor, fontSize: 12),
+                    )
+                  ],
                 ),
               ),
             ],

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
 import '../utils/constants.dart';
@@ -201,7 +202,8 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
         );
 }
 
-void reasonDialog({BuildContext context, String title, Function onTap}) {
+void reasonDialog({BuildContext context, String title, Function(String) onTap}) {
+  final TextEditingController textEditingController = TextEditingController();
   final locale = AppLocalizations.of(context).locale;
   Platform.isAndroid
       ? showDialog(
@@ -211,14 +213,19 @@ void reasonDialog({BuildContext context, String title, Function onTap}) {
             content: TextFormField(
               keyboardType: TextInputType.multiline,
               minLines: null,
+              controller: textEditingController,
               maxLines: 3,
               decoration: InputDecoration(border: OutlineInputBorder()),
             ),
             actions: [
               FlatButton(
                 onPressed: () {
+                  if (textEditingController.text.trim().isEmpty) {
+                    Fluttertoast.showToast(msg: "Please specify reason");
+                    return;
+                  }
                   Navigator.pop(context);
-                  onTap();
+                  onTap(textEditingController.text.trim());
                 },
                 child: Center(
                   child: Text(
@@ -248,6 +255,7 @@ void reasonDialog({BuildContext context, String title, Function onTap}) {
               title: Text('$title'),
               content: TextFormField(
                 keyboardType: TextInputType.multiline,
+                controller: textEditingController,
                 minLines: null,
                 maxLines: null,
                 expands: true,
@@ -255,8 +263,12 @@ void reasonDialog({BuildContext context, String title, Function onTap}) {
               actions: [
                 FlatButton(
                   onPressed: () {
+                    if (textEditingController.text.trim().isEmpty) {
+                      Fluttertoast.showToast(msg: "Please specify reason");
+                      return;
+                    }
                     Navigator.pop(context);
-                    onTap();
+                    onTap(textEditingController.text.trim());
                   },
                   child: Center(
                     child: Text(

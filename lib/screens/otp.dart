@@ -102,7 +102,7 @@ class _OTPState extends State<OTP> {
       setState(() {
         isLoading = false;
       });
-      return;
+      return null;
     });
     try {
       User user = _results.user;

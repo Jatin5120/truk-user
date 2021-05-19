@@ -22,9 +22,11 @@ class _MoreAboutState extends State<MoreAbout> {
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _gstController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  String radioValue = "Individual";
 
   @override
   void initState() {
@@ -68,9 +70,10 @@ class _MoreAboutState extends State<MoreAbout> {
                   String name = _nameController.text.trim();
                   String city = _cityController.text.trim();
                   String state = _stateController.text.trim();
+                  String gst = _gstController.text.isEmpty ? "NA" : _gstController.text;
                   String company =
                       _companyNameController.text.trim().isEmpty ? 'Individual' : _companyNameController.text.trim();
-                  await FirebaseHelper().insertUser(uid, name, email, mobile, company, city, state);
+                  await FirebaseHelper().insertUser(uid, name, email, mobile, company, city, state, gst: gst);
                   setState(() {
                     isLoading = false;
                   });
@@ -123,6 +126,46 @@ class _MoreAboutState extends State<MoreAbout> {
                   SizedBox(
                     height: 10,
                   ),
+                  Container(
+                    height: 50,
+                    width: width,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: RadioListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            title: Text("Individual"),
+                            value: "Individual",
+                            groupValue: radioValue,
+                            onChanged: (b) {
+                              setState(() {
+                                _companyNameController.text = "Individual";
+                                radioValue = b;
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            title: Text("Company"),
+                            value: "Company",
+                            groupValue: radioValue,
+                            onChanged: (b) {
+                              _companyNameController.text = "";
+                              setState(() {
+                                radioValue = b;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   TextFormField(
                     controller: _nameController,
                     validator: (value) {
@@ -154,17 +197,36 @@ class _MoreAboutState extends State<MoreAbout> {
                   ),
                   TextFormField(
                     controller: _companyNameController,
-                    // validator: (value) {
-                    //   if (value.isEmpty) {
-                    //     return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
-                    //   }
-                    //   return null;
-                    // },
+                    readOnly: radioValue == "Individual",
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.company),
                       border: OutlineInputBorder(),
                     ),
                   ),
+                  if (radioValue == "Company")
+                    SizedBox(
+                      height: 15,
+                    ),
+                  if (radioValue == "Company")
+                    TextFormField(
+                      controller: _gstController,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.gst),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
                   SizedBox(
                     height: 15,
                   ),

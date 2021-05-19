@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/screens/cancelled_booking.dart';
+import 'package:trukapp/screens/my_request_screen.dart';
+import 'package:trukapp/screens/support_screen.dart';
 import 'package:trukapp/widgets/widgets.dart';
 import '../models/user_model.dart';
 import '../screens/edit.dart';
-import '../screens/payments.dart';
 import '../screens/promotions.dart';
 import '../screens/quotes_screen.dart';
 import '../sessionmanagement/session_manager.dart';
@@ -105,21 +107,36 @@ class DrawerMenu extends StatelessWidget {
                 builder: (context) => QuotesScreen(),
               ));
             }),
-        // myListTile(
-        //   title: AppLocalizations.getLocalizationValue(locale, LocaleKey.payments),
-        //   leading: Icon(
-        //     Icons.payments,
-        //     color: Colors.black,
-        //   ),
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //     Navigator.of(context).push(
-        //       CupertinoPageRoute(
-        //         builder: (context) => Payment(),
-        //       ),
-        //     );
-        //   },
-        // ),
+        myListTile(
+          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.myBooking),
+          leading: Icon(
+            Icons.add_road,
+            color: Colors.black,
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (context) => MyRequestScreen(),
+              ),
+            );
+          },
+        ),
+        myListTile(
+          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.cancelled),
+          leading: Icon(
+            Icons.close,
+            color: Colors.black,
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (context) => CancelledBookings(),
+              ),
+            );
+          },
+        ),
         myListTile(
           title: AppLocalizations.getLocalizationValue(locale, LocaleKey.trukMoney),
           leading: Icon(
@@ -164,6 +181,25 @@ class DrawerMenu extends StatelessWidget {
                 builder: (context) => Promotion(),
               ));
             }),
+        myListTile(
+          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Icon(
+              Icons.contact_support,
+              color: Colors.black,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => SupportScreen(),
+              ),
+            );
+          },
+        ),
         myListTile(
             title: AppLocalizations.getLocalizationValue(locale, LocaleKey.settings),
             leading: Icon(
