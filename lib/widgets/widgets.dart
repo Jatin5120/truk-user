@@ -133,7 +133,12 @@ void paymentSuccessful({String shipmentId, BuildContext context, bool isPayment 
         );
 }
 
-void showConfirmationDialog({BuildContext context, String title, String subTitle, Function onTap}) {
+void showConfirmationDialog({BuildContext context, String title, String subTitle, Function onTap, Function onNoTap}) {
+  if (onNoTap == null) {
+    onNoTap = () {
+      Navigator.pop(context);
+    };
+  }
   final locale = AppLocalizations.of(context).locale;
   Platform.isAndroid
       ? showDialog(
@@ -188,7 +193,7 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
                   ),
                 ),
                 FlatButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: onNoTap,
                   child: Center(
                     child: Text(
                       AppLocalizations.getLocalizationValue(locale, LocaleKey.no),

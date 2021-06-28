@@ -100,7 +100,7 @@ class UserModel {
     );
   }
 
-  factory UserModel.fromSnapshot(DocumentSnapshot map) {
+  factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> map) {
     if (map == null) return null;
 
     return UserModel(

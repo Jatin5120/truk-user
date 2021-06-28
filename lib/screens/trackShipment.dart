@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:trukapp/helper/helper.dart';
@@ -58,31 +59,35 @@ class _TrackShipmentState extends State<TrackShipment> {
   @override
   void initState() {
     super.initState();
-    destination = myLatLng = widget.shipmentModel.destination;
-    source = widget.shipmentModel.source;
-    currentlySelectedPin = PinInformation(
-      locationName: "Start Location",
-      location: destination,
-      pinPath: "assets/driving_pin.png",
-      avatarPath: "assets/images/logo.png",
-      labelColor: Colors.blueAccent,
-    );
-    location = new Location();
-    polylinePoints = PolylinePoints();
-    String driver = widget.shipmentModel.driver;
-    CollectionReference driverWorking = FirebaseFirestore.instance.collection('DriverWorking');
-    final stream = driverWorking.doc(driver).snapshots();
+    try {
+      destination = myLatLng = widget.shipmentModel.destination;
+      source = widget.shipmentModel.source;
+      currentlySelectedPin = PinInformation(
+        locationName: "Start Location",
+        location: destination,
+        pinPath: "assets/driving_pin.png",
+        avatarPath: "assets/images/logo.png",
+        labelColor: Colors.blueAccent,
+      );
+      location = new Location();
+      polylinePoints = PolylinePoints();
+      String driver = widget.shipmentModel.driver;
+      CollectionReference driverWorking = FirebaseFirestore.instance.collection('DriverWorking');
+      final stream = driverWorking.doc(driver).snapshots();
 
-    streamSubscription = stream.listen((event) {
-      List l = event.get('l');
-      LatLng currentPos = LatLng(l[0], l[1]);
-      currentLocation = LocationData.fromMap({"latitude": currentPos.latitude, "longitude": currentPos.longitude});
-      updatePinOnMap();
-    });
-    // set custom marker pins
-    setSourceAndDestinationIcons();
-    // set the initial location
-    setInitialLocation();
+      streamSubscription = stream.listen((event) {
+        List l = event.get('l');
+        LatLng currentPos = LatLng(l[0], l[1]);
+        currentLocation = LocationData.fromMap({"latitude": currentPos.latitude, "longitude": currentPos.longitude});
+        updatePinOnMap();
+      });
+      // set custom marker pins
+      setSourceAndDestinationIcons();
+      // set the initial location
+      setInitialLocation();
+    } catch (e) {
+      Navigator.pop(context);
+    }
     //setState(() {});
   }
 
@@ -113,6 +118,7 @@ class _TrackShipmentState extends State<TrackShipment> {
   void showPinsOnMap() {
     // get a LatLng for the source location
     // from the LocationData currentLocation object
+    //updatePinOnMap();
     var pinPosition = LatLng(currentLocation.latitude, currentLocation.longitude);
     // get a LatLng out of the LocationData object
     var destPosition = LatLng(destinationLocation.latitude, destinationLocation.longitude);
@@ -285,7 +291,12 @@ class _TrackShipmentState extends State<TrackShipment> {
                       _controller.complete(controller);
                       // my map has completed being created;
                       // i'm ready to show the pins on the map
-                      showPinsOnMap();
+                      try {
+                        showPinsOnMap();
+                      } catch (e) {
+                        Fluttertoast.showToast(msg: "Error in tracking");
+                        Navigator.pop(context);
+                      }
                     },
                     onTap: (ltln) {
                       pinPillPosition = -100;

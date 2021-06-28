@@ -9,7 +9,9 @@ import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/models/material_model.dart';
 import 'package:trukapp/models/quote_model.dart';
+import 'package:trukapp/models/request_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
+import 'package:trukapp/screens/matDetails.dart';
 import 'package:trukapp/screens/quote_summary_screen.dart';
 import 'package:trukapp/screens/trackShipment.dart';
 import 'package:trukapp/widgets/widgets.dart';
@@ -80,10 +82,10 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
     locale = AppLocalizations.of(context).locale;
     QuoteModel quoteModel = QuoteModel.fromMap(widget.model.toMap());
     double weight = 0;
+
     for (MaterialModel val in widget.model.materials) {
       weight += val.quantity;
     }
-    print(widget.model.status);
 
     return Card(
       elevation: 8,
@@ -307,7 +309,35 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        RequestModel r = RequestModel(
+                          uid: widget.model.uid,
+                          id: widget.model.id,
+                          mobile: widget.model.mobile,
+                          source: widget.model.source,
+                          destination: widget.model.destination,
+                          materials: widget.model.materials,
+                          truk: "openTruk",
+                          pickupDate: widget.model.pickupDate,
+                          bookingId: widget.model.bookingId,
+                          bookingDate: widget.model.bookingDate,
+                          insured: widget.model.insured,
+                          load: LocaleKey.fullTruk,
+                          mandate: widget.model.mandate,
+                          status: widget.model.status,
+                          paymentStatus: widget.model.paymentStatus,
+                        );
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => MaterialDetails(
+                                destination: widget.model.destination,
+                                isUpdate: false,
+                                source: widget.model.source,
+                                prevQuote: r,
+                              ),
+                            ));
+                      },
                       child: Container(
                         height: 40.0,
                         decoration: BoxDecoration(

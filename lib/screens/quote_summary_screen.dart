@@ -124,6 +124,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     Helper().setLocationText(widget.quoteModel.source).then((value) => setState(() => sourceAddress = value));
     Helper().setLocationText(widget.quoteModel.destination).then((value) => setState(() => destinationAddress = value));
+
     super.initState();
   }
 
@@ -146,7 +147,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
         ? "+" +
             pWallet.model.amount.abs().roundToDouble().toString() +
             "=" +
-            (double.parse(widget.quoteModel.price) + pWallet.model.amount.abs()).toString() +
+            (double.parse(widget.quoteModel.price) + pWallet.model.amount.abs()).roundToDouble().toString() +
             "(Previous Cancellation Charge)"
         : '';
     String title = AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary);
@@ -280,7 +281,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   "${widget.onlyView ? AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus) : AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)}:  \u20B9${widget.quoteModel.price} $fineString",
                   style: TextStyle(
                     fontFamily: 'Roboto',
-                    fontSize: 14,
+                    fontSize: 16,
                     color: const Color(0xff76b448),
                     fontWeight: FontWeight.w500,
                     height: 2.142857142857143,
@@ -288,6 +289,20 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   textAlign: TextAlign.left,
                 ),
               ),
+              if (widget.quoteModel.advance > 0.0 && payment == PaymentType.cod)
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+                  child: Text(
+                    "Advance payment required of \u20b9${widget.quoteModel.advance}",
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 16,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
               if (!widget.onlyView && payment != null && payment != PaymentType.cod) buildCouponWidget(),
               if (!widget.onlyView)
                 Padding(

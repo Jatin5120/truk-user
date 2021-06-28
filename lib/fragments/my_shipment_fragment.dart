@@ -111,6 +111,7 @@ class _MyShipmentState extends State<MyShipment> {
               String docID = isFilter ? filteredList[index].id : shipments[index].id;
 
               bool isCollapsed = true;
+              print(model.load);
               return ExpandableCardContainer(
                 docID: docID,
                 model: model,

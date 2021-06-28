@@ -62,7 +62,7 @@ class NotificationModel {
       isDriver: map['isDriver'],
     );
   }
-  factory NotificationModel.fromSnap(QueryDocumentSnapshot snap) {
+  factory NotificationModel.fromSnap(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
     if (snap == null) return null;
 
     return NotificationModel(

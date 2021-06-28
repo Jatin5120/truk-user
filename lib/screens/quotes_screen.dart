@@ -2,17 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:async/async.dart';
 import 'package:provider/provider.dart';
-import 'package:trukapp/helper/cancel_booking.dart';
-import 'package:trukapp/helper/request_status.dart';
-import 'package:trukapp/locale/app_localization.dart';
-import 'package:trukapp/locale/locale_keys.dart';
-import 'package:trukapp/models/chatting_list_model.dart';
-import 'package:trukapp/models/user_model.dart';
-import 'package:trukapp/screens/quote_summary_screen.dart';
-import 'package:trukapp/screens/support.dart';
-import 'package:trukapp/widgets/widgets.dart';
+import '../helper/cancel_booking.dart';
+import '../helper/request_status.dart';
+import '../locale/app_localization.dart';
+import '../locale/locale_keys.dart';
+import '../models/chatting_list_model.dart';
+import '../models/user_model.dart';
+import '../screens/quote_summary_screen.dart';
+import '../screens/support.dart';
+import '../widgets/widgets.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../helper/helper.dart';
 import '../models/material_model.dart';
@@ -209,39 +208,40 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                 SizedBox(
                   height: 5,
                 ),
-                Container(
-                  height: 30,
-                  child: RaisedButton(
-                    color: Colors.blue,
-                    onPressed: () async {
-                      CollectionReference reference =
-                          FirebaseFirestore.instance.collection(FirebaseHelper.fleetOwnerCollection);
+                if (model.status != RequestStatus.cancelled)
+                  Container(
+                    height: 30,
+                    child: RaisedButton(
+                      color: Colors.blue,
+                      onPressed: () async {
+                        CollectionReference reference =
+                            FirebaseFirestore.instance.collection(FirebaseHelper.fleetOwnerCollection);
 
-                      final d = await reference.doc(model.agent).get();
-                      UserModel agent = UserModel.fromSnapshot(d);
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => Support(
-                            chatListModel: ChattingListModel(
-                              id: '',
-                              quoteModel: model,
-                              userModel: agent,
-                              time: DateTime.now().millisecondsSinceEpoch,
+                        final d = await reference.doc(model.agent).get();
+                        UserModel agent = UserModel.fromSnapshot(d);
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Support(
+                              chatListModel: ChattingListModel(
+                                id: '',
+                                quoteModel: model,
+                                userModel: agent,
+                                time: DateTime.now().millisecondsSinceEpoch,
+                              ),
                             ),
                           ),
+                        );
+                      },
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                        child: Text(
+                          AppLocalizations.getLocalizationValue(locale, LocaleKey.chat),
+                          style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
-                      );
-                    },
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                      child: Text(
-                        AppLocalizations.getLocalizationValue(locale, LocaleKey.chat),
-                        style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ],
@@ -274,6 +274,15 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
         child: Text(
           'Assinged'.toUpperCase(),
           style: TextStyle(color: Colors.green),
+        ),
+        padding: const EdgeInsets.all(5),
+      );
+    }
+    if (status == RequestStatus.cancelled) {
+      return Container(
+        child: Text(
+          'Cancelled'.toUpperCase(),
+          style: TextStyle(color: Colors.red),
         ),
         padding: const EdgeInsets.all(5),
       );

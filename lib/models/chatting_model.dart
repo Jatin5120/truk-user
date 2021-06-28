@@ -25,17 +25,18 @@ class ChattingModel {
     this.isVendor = false,
   });
 
-  factory ChattingModel.fromSnap(QueryDocumentSnapshot snap) {
+  factory ChattingModel.fromSnap(QueryDocumentSnapshot<Map<String, dynamic>> snap) {
     if (snap == null) return null;
 
     return ChattingModel(
-        sender: snap.get('sender'),
-        receiver: snap.get('receiver'),
-        message: snap.get('message'),
-        time: snap.get('time'),
-        isSeen: snap.get('isSeen'),
-        bookingId: snap.get('bookingId'),
-        isVendor: snap.data().containsKey('isVendor') ? snap.get('isVendor') : false);
+      sender: snap.get('sender'),
+      receiver: snap.get('receiver'),
+      message: snap.get('message'),
+      time: snap.get('time'),
+      isSeen: snap.get('isSeen'),
+      bookingId: snap.get('bookingId'),
+      isVendor: snap.data().containsKey('isVendor') ? snap.get('isVendor') : false,
+    );
   }
 
   ChattingModel copyWith({

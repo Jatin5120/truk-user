@@ -52,9 +52,10 @@ class _MaterialDetailsState extends State<MaterialDetails> {
     if (widget.prevQuote != null) {
       RequestModel q = widget.prevQuote;
       materials = q.materials;
-      trukTypeValue = q.truk;
-      mandateTypeValue = q.mandate;
-      loadTypeValue = q.load;
+      print(q.load);
+      trukTypeValue = "openTruk";
+      mandateTypeValue = "lease";
+      loadTypeValue = "fullTruk";
       pickupDate = q.pickupDate;
       this.s = q.source;
       this.d = q.destination;
@@ -377,9 +378,12 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                         }
                         String materialName = _materialController.text.trim();
                         double quantity = double.parse(_quantityController.text.trim());
-                        double length = double.parse(_lengthController.text.trim());
-                        double width = double.parse(_widthController.text.trim());
-                        double height = double.parse(_heightController.text.trim());
+                        double length =
+                            _lengthController.text.trim().isEmpty ? 0.0 : double.parse(_lengthController.text.trim());
+                        double width =
+                            _widthController.text.trim().isEmpty ? 0.0 : double.parse(_widthController.text.trim());
+                        double height =
+                            _heightController.text.trim().isEmpty ? 0.0 : double.parse(_heightController.text.trim());
                         MaterialModel model = MaterialModel(
                           height: height,
                           length: length,

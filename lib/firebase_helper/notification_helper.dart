@@ -24,7 +24,7 @@ class NotificationHelper {
         AppleNotification appleNotification = message.notification?.apple;
         if (message.notification != null &&
             (Platform.isAndroid ? androidNotification != null : appleNotification != null)) {
-          Platform.isAndroid ? showNotification(androidNotification) : showNotification(appleNotification);
+          Platform.isAndroid ? showNotification(message.notification) : showNotification(message.notification);
         }
       },
       // onResume: (Map<String, dynamic> message) {
@@ -55,7 +55,7 @@ class NotificationHelper {
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  void showNotification(message) async {
+  void showNotification(RemoteNotification message) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       Platform.isAndroid ? 'com.augmentik.trukapp' : 'com.augmentik.trukappios',
       'TruK',
@@ -68,13 +68,12 @@ class NotificationHelper {
     var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
     var platformChannelSpecifics =
         NotificationDetails(iOS: iOSPlatformChannelSpecifics, android: androidPlatformChannelSpecifics);
-
+    print(message.body);
     await flutterLocalNotificationsPlugin.show(
       0,
-      message['title'].toString(),
-      message['body'].toString(),
+      message.title,
+      message.body,
       platformChannelSpecifics,
-      payload: json.encode(message),
     );
   }
 }

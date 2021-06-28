@@ -118,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _pageController.dispose();
     streamSubscription.cancel();
+
     super.dispose();
   }
 

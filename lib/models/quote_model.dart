@@ -27,26 +27,27 @@ class QuoteModel {
   String trukName;
   String agent;
   String paymentStatus;
-  QuoteModel({
-    this.uid,
-    this.mobile,
-    this.source,
-    this.destination,
-    this.materials,
-    this.truk,
-    this.pickupDate,
-    this.bookingId,
-    this.bookingDate,
-    this.insured,
-    this.load,
-    this.mandate,
-    this.price,
-    this.agent,
-    this.id,
-    this.paymentStatus,
-    this.status = RequestStatus.pending,
-    this.trukName = 'Eicher',
-  });
+  double advance;
+  QuoteModel(
+      {this.uid,
+      this.mobile,
+      this.source,
+      this.destination,
+      this.materials,
+      this.truk,
+      this.pickupDate,
+      this.bookingId,
+      this.bookingDate,
+      this.insured,
+      this.load,
+      this.mandate,
+      this.price,
+      this.agent,
+      this.id,
+      this.paymentStatus,
+      this.status = RequestStatus.pending,
+      this.trukName = 'Eicher',
+      this.advance = 0.0});
 
   QuoteModel copyWith({
     String uid,
@@ -67,6 +68,7 @@ class QuoteModel {
     String price,
     String agent,
     String id,
+    double advance,
   }) {
     return QuoteModel(
       uid: uid ?? this.uid,
@@ -87,6 +89,7 @@ class QuoteModel {
       price: price ?? this.price,
       agent: agent ?? this.agent,
       paymentStatus: paymentStatus ?? this.paymentStatus,
+      advance: advance ?? this.advance,
     );
   }
 
@@ -108,7 +111,8 @@ class QuoteModel {
       'status': status ?? RequestStatus.pending,
       'trukName': trukName,
       'agent': agent ?? 'na',
-      'paymentStatus': paymentStatus ?? PaymentType.pending,
+      'paymentStatus': paymentStatus ?? PaymentType.cod,
+      'advance': advance ?? 0.0,
     };
   }
 
@@ -116,26 +120,28 @@ class QuoteModel {
     if (map == null) return null;
 
     return QuoteModel(
-        uid: map['uid'],
-        mobile: map['mobile'],
-        source: Helper.stringToLatlng(map['source']),
-        destination: Helper.stringToLatlng(map['destination']),
-        materials: List<MaterialModel>.from(map['materials']?.map((x) => MaterialModel.fromMap(x))),
-        truk: map['truk'],
-        pickupDate: map['pickupDate'],
-        bookingId: map['bookingId'],
-        bookingDate: map['bookingDate'],
-        insured: map['insured'],
-        load: map['load'],
-        mandate: map['mandate'],
-        price: map['price'],
-        trukName: map['trukName'],
-        status: map['status'] ?? RequestStatus.pending,
-        agent: map['agent'] ?? 'na',
-        paymentStatus: map['paymentStatus'] ?? PaymentType.pending);
+      uid: map['uid'],
+      mobile: map['mobile'],
+      source: Helper.stringToLatlng(map['source']),
+      destination: Helper.stringToLatlng(map['destination']),
+      materials: List<MaterialModel>.from(map['materials']?.map((x) => MaterialModel.fromMap(x))),
+      truk: map['truk'],
+      pickupDate: map['pickupDate'],
+      bookingId: map['bookingId'],
+      bookingDate: map['bookingDate'],
+      insured: map['insured'],
+      load: map['load'],
+      mandate: map['mandate'],
+      price: map['price'],
+      trukName: map['trukName'],
+      status: map['status'] ?? RequestStatus.pending,
+      agent: map['agent'] ?? 'na',
+      paymentStatus: map['paymentStatus'] ?? PaymentType.cod,
+      advance: map['advance'] ?? 0.0,
+    );
   }
 
-  factory QuoteModel.fromSnapshot(QueryDocumentSnapshot map) {
+  factory QuoteModel.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> map) {
     if (map == null) return null;
 
     return QuoteModel(
@@ -156,7 +162,8 @@ class QuoteModel {
       trukName: map.get('trukName'),
       status: map.get('status'),
       agent: map.get('agent') ?? 'na',
-      paymentStatus: map.data().containsKey('paymentStatus') ? map.get('paymentStatus') : PaymentType.pending,
+      paymentStatus: map.data().containsKey('paymentStatus') ? map.get('paymentStatus') : PaymentType.cod,
+      advance: map.data().containsKey('advance') ? double.parse(map.get('advance').toString()) : 0.0,
     );
   }
 }

@@ -114,7 +114,7 @@ class RequestModel {
     );
   }
 
-  factory RequestModel.fromSnapshot(QueryDocumentSnapshot map) {
+  factory RequestModel.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> map) {
     if (map == null) return null;
 
     return RequestModel(

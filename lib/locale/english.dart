@@ -131,6 +131,6 @@ Map<String, String> english() {
     "apply": "Apply",
     "coupon": "Coupon",
     LocaleKey.gst: "GST",
-    LocaleKey.cancelled: "Canceled Booking",
+    LocaleKey.cancelled: "Cancelled Booking",
   };
 }
