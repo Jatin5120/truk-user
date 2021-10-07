@@ -422,6 +422,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           unit: unitType,
                         );
                         materials.add(model);
+                        FocusScope.of(context).unfocus();
                         materialType = null;
                         setState(() {});
                       }
@@ -463,6 +464,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: InkWell(
                     onTap: () {
+                      FocusScope.of(context).unfocus();
                       DatePicker.showDateTimePicker(
                         context,
                         showTitleActions: true,
@@ -532,6 +534,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                         );
                       }).toList(),
                       onChanged: (_) {
+                        FocusScope.of(context).unfocus();
                         mandateTypeValue = _;
                         print(_);
                         setState(() {});
@@ -564,6 +567,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                         );
                       }).toList(),
                       onChanged: (_) {
+                        FocusScope.of(context).unfocus();
                         trukTypeValue = _;
                         print(_);
                         setState(() {});
