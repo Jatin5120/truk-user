@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/screens/tcPage.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../screens/home.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +19,20 @@ class MoreAbout extends StatefulWidget {
 class _MoreAboutState extends State<MoreAbout> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   User user;
+
+  bool isTC = false;
+  Color getColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return primaryColor;
+    }
+    return primaryColor;
+  }
+
   double get height => MediaQuery.of(context).size.height;
   double get width => MediaQuery.of(context).size.width;
   final TextEditingController _nameController = TextEditingController();
@@ -63,17 +81,21 @@ class _MoreAboutState extends State<MoreAbout> {
                 setState(() {
                   isLoading = true;
                 });
-                if (user != null) {
+                if (user != null && isTC) {
                   String uid = user.uid;
                   String mobile = user.phoneNumber;
                   String email = _emailController.text.trim();
                   String name = _nameController.text.trim();
                   String city = _cityController.text.trim();
                   String state = _stateController.text.trim();
-                  String gst = _gstController.text.isEmpty ? "NA" : _gstController.text;
-                  String company =
-                      _companyNameController.text.trim().isEmpty ? 'Individual' : _companyNameController.text.trim();
-                  await FirebaseHelper().insertUser(uid, name, email, mobile, company, city, state, gst: gst);
+                  String gst =
+                      _gstController.text.isEmpty ? "NA" : _gstController.text;
+                  String company = _companyNameController.text.trim().isEmpty
+                      ? 'Individual'
+                      : _companyNameController.text.trim();
+                  await FirebaseHelper().insertUser(
+                      uid, name, email, mobile, company, city, state,
+                      gst: gst);
                   setState(() {
                     isLoading = false;
                   });
@@ -82,7 +104,17 @@ class _MoreAboutState extends State<MoreAbout> {
                         builder: (context) => HomeScreen(),
                       ),
                       (b) => false);
-                } else {}
+                } else {
+                  if (user == null) {
+                    Fluttertoast.showToast(msg: 'Please fill all the fields');
+                  } else if (!isTC) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    Fluttertoast.showToast(
+                        msg: 'Please Accept terms and conditions');
+                  }
+                }
               }
             },
             child: isLoading
@@ -90,7 +122,8 @@ class _MoreAboutState extends State<MoreAbout> {
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   )
                 : Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.continueText),
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
           ),
@@ -120,7 +153,8 @@ class _MoreAboutState extends State<MoreAbout> {
                     height: 40,
                   ),
                   Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.registerTitle),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.registerTitle),
                     style: TextStyle(fontSize: 18),
                   ),
                   SizedBox(
@@ -170,12 +204,14 @@ class _MoreAboutState extends State<MoreAbout> {
                     controller: _nameController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.name),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.name),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -186,9 +222,11 @@ class _MoreAboutState extends State<MoreAbout> {
                     controller: _emailController,
                     validator: (input) => input.isValidEmail()
                         ? null
-                        : AppLocalizations.getLocalizationValue(locale, LocaleKey.invalidEmail),
+                        : AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.invalidEmail),
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.email),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.email),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -198,14 +236,17 @@ class _MoreAboutState extends State<MoreAbout> {
                   TextFormField(
                     controller: _companyNameController,
                     readOnly: radioValue == "Individual",
+                    enabled: radioValue != "Individual",
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.company),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.company),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -218,12 +259,14 @@ class _MoreAboutState extends State<MoreAbout> {
                       controller: _gstController,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                          return AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.requiredText);
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.gst),
+                        labelText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.gst),
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -234,12 +277,14 @@ class _MoreAboutState extends State<MoreAbout> {
                     controller: _cityController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.city),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.city),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -249,14 +294,62 @@ class _MoreAboutState extends State<MoreAbout> {
                   TextFormField(
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     controller: _stateController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.state),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.state),
                       border: OutlineInputBorder(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 16),
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            checkColor: Colors.white,
+                            fillColor:
+                                MaterialStateProperty.resolveWith(getColor),
+                            value: isTC,
+                            onChanged: (bool value) {
+                              setState(() {
+                                isTC = value;
+                              });
+                            }),
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: AppLocalizations.getLocalizationValue(
+                                      locale, LocaleKey.accept),
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text:
+                                      " ${AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceText2)}",
+                                  style: TextStyle(
+                                      color: primaryColor,
+                                      decoration: TextDecoration.underline),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) => TCPage(),
+                                        ),
+                                      );
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(

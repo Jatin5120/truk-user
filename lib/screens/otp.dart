@@ -164,135 +164,139 @@ class _OTPState extends State<OTP> {
       body: Form(
         key: _formKey,
         child: SafeArea(
-          child: Container(
-            height: height,
-            width: width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  alignment: Alignment.center,
-                  height: 60,
-                  child: Image(
-                    image: AssetImage('assets/images/logo.png'),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.enterOtp),
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: [
-                      Text(
-                        phoneNumber,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      SizedBox(width: 10),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          AppLocalizations.getLocalizationValue(locale, LocaleKey.edit),
-                          style: TextStyle(fontSize: 18, color: Colors.blue),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: TextFormField(
-                    maxLength: 6,
-                    controller: _otpController,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
-                      }
-                      if (value.trim().length < 6) {
-                        return '*Invalid OTP';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.enterOtp),
-                      counterText: "",
-                      border: OutlineInputBorder(),
+          child: SingleChildScrollView(
+            child: Container(
+              height: height,
+              width: width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    alignment: Alignment.center,
+                    height: 60,
+                    child: Image(
+                      image: AssetImage('assets/images/logo.png'),
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          "00:${secondsRemaining < 10 ? '0${secondsRemaining.toString()}' : '${secondsRemaining.toString()}'}",
+                  SizedBox(
+                    height: height * 0.15,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.enterOtp),
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: [
+                        Text(
+                          phoneNumber,
                           style: TextStyle(fontSize: 18),
                         ),
-                      ),
-                      secondsRemaining == 0
-                          ? Container(
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
-                                  ));
-                                },
-                                child: Text(
-                                  'Resend OTP',
-                                  style: TextStyle(fontSize: 18, color: Colors.blue),
-                                ),
-                              ),
-                            )
-                          : Container()
-                    ],
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                  height: 65,
-                  width: width,
-                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                  child: RaisedButton(
-                    color: primaryColor,
-                    onPressed: isLoading
-                        ? () {}
-                        : () {
-                            if (_formKey.currentState.validate()) {
-                              _signInWithPhoneNumber();
-                            }
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
                           },
-                    child: isLoading
-                        ? CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          )
-                        : Text(
-                            AppLocalizations.getLocalizationValue(locale, LocaleKey.verifyNow),
-                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          child: Text(
+                            AppLocalizations.getLocalizationValue(locale, LocaleKey.edit),
+                            style: TextStyle(fontSize: 18, color: Colors.blue),
                           ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: TextFormField(
+                      maxLength: 6,
+                      controller: _otpController,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        }
+                        if (value.trim().length < 6) {
+                          return '*Invalid OTP';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.enterOtp),
+                        counterText: "",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            "00:${secondsRemaining < 10 ? '0${secondsRemaining.toString()}' : '${secondsRemaining.toString()}'}",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        secondsRemaining == 0
+                            ? Container(
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                      builder: (context) => HomeScreen(),
+                                    ));
+                                  },
+                                  child: Text(
+                                    'Resend OTP',
+                                    style: TextStyle(fontSize: 18, color: Colors.blue),
+                                  ),
+                                ),
+                              )
+                            : Container()
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.30,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                    height: 65,
+                    width: width,
+                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    child: RaisedButton(
+                      color: primaryColor,
+                      onPressed: isLoading
+                          ? () {}
+                          : () {
+                              if (_formKey.currentState.validate()) {
+                                _signInWithPhoneNumber();
+                              }
+                            },
+                      child: isLoading
+                          ? CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            )
+                          : Text(
+                              AppLocalizations.getLocalizationValue(locale, LocaleKey.verifyNow),
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -319,9 +323,9 @@ class _OTPState extends State<OTP> {
                   UserModel userModel = await FirebaseHelper().getCurrentUser(uid: user.uid);
                   if (userModel == null) {
                     //new user
-                    Navigator.pushReplacement(
+                    Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (_) => MoreAbout()),
+                      MaterialPageRoute(builder: (_) => MoreAbout()),(b)=> false,
                     );
                   } else {
                     //existing user

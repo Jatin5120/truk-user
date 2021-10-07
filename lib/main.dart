@@ -44,7 +44,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: primaryColor));
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: primaryColor));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -86,10 +87,11 @@ class _MyAppState extends State<MyApp> {
               locale: snapshot.locale,
               theme: ThemeData(
                 appBarTheme: AppBarTheme(
-                  textTheme: TextTheme(headline6: TextStyle(color: Colors.black, fontSize: 20)),
+                  textTheme: TextTheme(
+                      headline6: TextStyle(color: Colors.black, fontSize: 20)),
                   iconTheme: IconThemeData(color: Colors.black),
                   color: Colors.white,
-                  elevation: 8.0,
+                  elevation: 0,
                 ),
               ),
               debugShowCheckedModeBanner: false,

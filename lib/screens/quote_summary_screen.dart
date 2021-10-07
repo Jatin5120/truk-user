@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,6 +45,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
   bool isCouponApplied = false;
   double discountedPrice = 0;
   String coupon = "";
+
+  var advance=0.0;
 
   createOrder(int amount, String email, String name) async {
     setState(() {
@@ -115,7 +118,15 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     });
     print(response.walletName);
   }
-
+  getAdvance () async {
+    await FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection).where('bookingId',isEqualTo: widget.quoteModel.bookingId).get().then((value){
+      for(var d in value.docs){
+        setState(() {
+          advance=d.get('advance');
+        });
+      }
+    });
+  }
   @override
   void initState() {
     _razorpay = Razorpay();
@@ -124,7 +135,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     Helper().setLocationText(widget.quoteModel.source).then((value) => setState(() => sourceAddress = value));
     Helper().setLocationText(widget.quoteModel.destination).then((value) => setState(() => destinationAddress = value));
-
+    getAdvance();
     super.initState();
   }
 
@@ -193,7 +204,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                               .updateWallet(widget.quoteModel.bookingId.toString(), double.parse(fine.toString()), 1);
                         }
                         int price = int.parse(widget.quoteModel.price);
-                        createOrder(int.parse(totalPrice.toString()), pUser.user.email, pUser.user.name);
+                        createOrder(totalPrice.toInt(), pUser.user.email, pUser.user.name);
                       } else if (payment == PaymentType.trukMoney) {
                         final time = DateTime.now().millisecondsSinceEpoch;
                         await FirebaseHelper().insertPayout(
@@ -279,6 +290,20 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
                 child: Text(
                   "${widget.onlyView ? AppLocalizations.getLocalizationValue(locale, widget.quoteModel.paymentStatus) : AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)}:  \u20B9${widget.quoteModel.price} $fineString",
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 16,
+                    color: const Color(0xff76b448),
+                    fontWeight: FontWeight.w500,
+                    height: 2.142857142857143,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+                child: Text(
+                  "Advance: $advance",
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 16,

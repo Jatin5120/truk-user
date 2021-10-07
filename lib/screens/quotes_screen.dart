@@ -260,6 +260,16 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
     //     padding: const EdgeInsets.all(5),
     //   );
     // }
+    bool ss=true;
+    FirebaseFirestore.instance.collection(FirebaseHelper.shipmentCollection).where('bookingId',isEqualTo: quoteModel.bookingId).get().then((value){
+      for(var d in value.docs){
+        if(d.get('status')==RequestStatus.started){
+          setState(() {
+            ss=false;
+          });
+        }
+      }
+    });
     if (status == RequestStatus.rejected) {
       return Container(
         child: Text(
@@ -322,44 +332,61 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
         SizedBox(
           width: 5,
         ),
-        Expanded(
-          child: Container(
-            height: 30,
-            child: FlatButton(
-              onPressed: isStatusUpdating
-                  ? null
-                  : () async {
-                      if (status == RequestStatus.accepted) {
-                        reasonDialog(
+        Visibility(
+          visible: ss,
+          child: Expanded(
+            child: Container(
+              height: 30,
+              child: FlatButton(
+                onPressed: isStatusUpdating
+                    ? null
+                    : () async {
+                        if (status == RequestStatus.accepted) {
+                          reasonDialog(
+                              context: context,
+                              title: "Specify Reason",
+                              onTap: (reason) async {
+                                CancelBooking cancelBooking = CancelBooking(
+                                    collectionName: FirebaseHelper.quoteCollection,
+                                    docId: id,
+                                    status: RequestStatus.accepted);
+                                cancelBooking.cancelBooking(reason,
+                                    agent: quoteModel.agent,
+                                    bookingId: quoteModel.bookingId.toString(),
+                                    price: double.parse(quoteModel.price));
+                                await FirebaseFirestore.instance.collection('Truk').where('trukNumber',isEqualTo: quoteModel.truk).get().then((value) {
+                                  for(var d in value.docs){
+                                    d.reference.update({
+                                      'available': true
+                                    });
+                                  }
+                                });
+                              });
+                        } else {
+                          showConfirmationDialog(
                             context: context,
-                            title: "Specify Reason",
-                            onTap: (reason) {
-                              CancelBooking cancelBooking = CancelBooking(
-                                  collectionName: FirebaseHelper.quoteCollection,
-                                  docId: id,
-                                  status: RequestStatus.accepted);
-                              cancelBooking.cancelBooking(reason,
-                                  agent: quoteModel.agent,
-                                  bookingId: quoteModel.bookingId.toString(),
-                                  price: double.parse(quoteModel.price));
-                            });
-                      } else {
-                        showConfirmationDialog(
-                          context: context,
-                          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.reject),
-                          subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.rejectConfirm),
-                          onTap: () async {
-                            await FirebaseHelper().updateQuoteStatus(id, RequestStatus.rejected);
-                          },
-                        );
-                      }
-                    },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              child: Center(
-                child: Text(
-                  AppLocalizations.getLocalizationValue(
-                      locale, status == RequestStatus.accepted ? LocaleKey.cancel : LocaleKey.reject),
-                  style: TextStyle(color: Colors.red, fontSize: 12),
+                            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.reject),
+                            subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.rejectConfirm),
+                            onTap: () async {
+                              await FirebaseHelper().updateQuoteStatus(id, RequestStatus.rejected);
+                              await FirebaseFirestore.instance.collection('Truks').where('trukNumber',isEqualTo: quoteModel.truk).get().then((value) {
+                                for(var data in value.docs){
+                                  data.reference.update({
+                                    'available': true
+                                  });
+                                }
+                              });
+                            },
+                          );
+                        }
+                      },
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, status == RequestStatus.accepted ? LocaleKey.cancel : LocaleKey.reject),
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
                 ),
               ),
             ),

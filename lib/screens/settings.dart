@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/models/user_model.dart';
+import 'package:trukapp/screens/about.dart';
 import 'package:trukapp/screens/change_language_screen.dart';
+import 'package:trukapp/screens/tcPage.dart';
 import 'package:trukapp/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -91,7 +93,13 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) {
+                    return AboutUs();
+                  },
+                ));
+              },
               leading: Icon(
                 Icons.info,
                 color: Colors.black,
@@ -108,7 +116,13 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) {
+                    return TCPage();
+                  },
+                ));
+              },
               leading: Icon(
                 Icons.library_books,
                 color: Colors.black,

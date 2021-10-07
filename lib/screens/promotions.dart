@@ -205,28 +205,28 @@ class _PromotionState extends State<Promotion> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      String d = await FlutterShareMe().shareToWhatsApp(
-                        msg:
-                            'Look this awesome transportation app\n\nCheck out Truk App https://play.google.com/store/apps/details?id=$packageName',
-                      );
-                      if (d.contains('false')) {
-                        Fluttertoast.showToast(msg: 'App isn\'t installed');
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: primaryColor,
-                      ),
-                      child: Image.asset(
-                        'assets/images/whatsapp.png',
-                        height: 50,
-                        width: 50,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () async {
+                  //     String d = await FlutterShareMe().shareToWhatsApp(
+                  //       msg:
+                  //           'Look this awesome transportation app\n\nCheck out Truk App https://play.google.com/store/apps/details?id=$packageName',
+                  //     );
+                  //     if (d.contains('false')) {
+                  //       Fluttertoast.showToast(msg: 'App isn\'t installed');
+                  //     }
+                  //   },
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(50),
+                  //       color: primaryColor,
+                  //     ),
+                  //     child: Image.asset(
+                  //       'assets/images/whatsapp.png',
+                  //       height: 50,
+                  //       width: 50,
+                  //     ),
+                  //   ),
+                  // ),
                   // GestureDetector(
                   //   onTap: () async {
                   //     String d = await FlutterShareMe().shareToFacebook(

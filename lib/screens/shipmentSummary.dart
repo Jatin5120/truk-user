@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/screens/tcPage.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../helper/helper.dart';
 
@@ -166,7 +168,12 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                               style: TextStyle(color: primaryColor, decoration: TextDecoration.underline),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  print('hi');
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) => TCPage(),
+                                    ),
+                                  );
                                 },
                             ),
                           ],

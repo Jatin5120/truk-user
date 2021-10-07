@@ -19,6 +19,7 @@ class LocaleKey {
   static const String dropLocation = "dropLocation";
   static const String edit = "edit";
   static const String editProfile = "editProfile";
+  static const String dropDate = "dropDate";
   static const String email = "email";
   static const String enterAmount = "enterAmount";
   static const String enterDrop = "enterDrop";
@@ -129,4 +130,6 @@ class LocaleKey {
   static const String cancel = "cancel";
   static const String gst = "gst";
   static const String cancelled = "cancelled";
+  static const String TC = "TC";
+  static const String about_text = "about_text";
 }

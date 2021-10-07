@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/screens/My_booking_screen.dart';
+import 'package:trukapp/screens/about.dart';
 import 'package:trukapp/screens/cancelled_booking.dart';
 import 'package:trukapp/screens/my_request_screen.dart';
 import 'package:trukapp/screens/support_screen.dart';
@@ -117,7 +119,7 @@ class DrawerMenu extends StatelessWidget {
             Navigator.pop(context);
             Navigator.of(context).push(
               CupertinoPageRoute(
-                builder: (context) => MyRequestScreen(),
+                builder: (context) => MyBookingScreen(),
               ),
             );
           },
@@ -196,6 +198,25 @@ class DrawerMenu extends StatelessWidget {
               context,
               CupertinoPageRoute(
                 builder: (context) => SupportScreen(),
+              ),
+            );
+          },
+        ),
+        myListTile(
+          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.about),
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Icon(
+              Icons.info_outlined,
+              color: Colors.black,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => AboutUs(),
               ),
             );
           },

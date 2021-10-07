@@ -17,7 +17,12 @@ class MaterialDetails extends StatefulWidget {
   final RequestModel prevQuote;
   final bool isUpdate;
 
-  const MaterialDetails({Key key, this.source, this.destination, this.prevQuote, this.isUpdate = false})
+  const MaterialDetails(
+      {Key key,
+      this.source,
+      this.destination,
+      this.prevQuote,
+      this.isUpdate = false})
       : super(key: key);
 
   @override
@@ -69,7 +74,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.materialDetails)),
+        title: Text(AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.materialDetails)),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
@@ -77,8 +83,10 @@ class _MaterialDetailsState extends State<MaterialDetails> {
           height: 60,
           width: deviceHeight,
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-          child: RaisedButton(
-            color: primaryColor,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: primaryColor,
+            ),
             onPressed: () async {
               if (loadTypeValue == null || loadTypeValue.isEmpty) {
                 Fluttertoast.showToast(msg: 'Please select load type');
@@ -118,7 +126,10 @@ class _MaterialDetailsState extends State<MaterialDetails> {
             },
             child: Text(
               AppLocalizations.getLocalizationValue(
-                  locale, widget.isUpdate ? LocaleKey.update : LocaleKey.continueBooking),
+                  locale,
+                  widget.isUpdate
+                      ? LocaleKey.update
+                      : LocaleKey.continueBooking),
               style: TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
@@ -151,7 +162,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.selectLoadType)),
+                      hint: Text(AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.selectLoadType)),
                       value: loadTypeValue,
                       items: Constants(locale).loadType.map((value) {
                         return DropdownMenuItem<String>(
@@ -167,7 +179,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Container(
                     padding: const EdgeInsets.only(left: 10),
                     decoration: BoxDecoration(
@@ -180,7 +193,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.materialType)),
+                      hint: Text(AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.materialType)),
                       value: materialType,
                       items: materialTypes.map((String value) {
                         return DropdownMenuItem<String>(
@@ -202,14 +216,16 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     controller: _materialController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.materialName),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.materialName),
                     ),
                   ),
                 ),
@@ -226,7 +242,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           textInputAction: TextInputAction.next,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                              return AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.requiredText);
                             }
                             if (int.parse(value) <= 0) {
                               return '*Invalid';
@@ -235,7 +252,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           },
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity),
+                            labelText: AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.quantity),
                           ),
                         ),
                       ),
@@ -258,7 +276,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                             setState(() => unitType = string);
                             print(unitType);
                           },
-                          items: ["KG", "Litres", "Tons"].map((e) {
+                          items: ["KG", "Tons"].map((e) {
                             return DropdownMenuItem<String>(
                               child: Text(e),
                               value: e,
@@ -275,7 +293,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 Container(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.loadDimensions),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.loadDimensions),
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
@@ -303,7 +322,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                             controller: _lengthController,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.length),
+                              labelText: AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.length),
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -328,7 +348,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                             controller: _widthController,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.width),
+                              labelText: AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.width),
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -353,7 +374,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                             keyboardType: TextInputType.number,
                             controller: _heightController,
                             decoration: InputDecoration(
-                              labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.height),
+                              labelText: AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.height),
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -373,22 +395,28 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                       if (_formKey.currentState.validate()) {
                         if (materialType == null) {
                           Fluttertoast.showToast(
-                              msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.materialType));
+                              msg: AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.materialType));
                           return;
                         }
                         String materialName = _materialController.text.trim();
-                        double quantity = double.parse(_quantityController.text.trim());
-                        double length =
-                            _lengthController.text.trim().isEmpty ? 0.0 : double.parse(_lengthController.text.trim());
-                        double width =
-                            _widthController.text.trim().isEmpty ? 0.0 : double.parse(_widthController.text.trim());
-                        double height =
-                            _heightController.text.trim().isEmpty ? 0.0 : double.parse(_heightController.text.trim());
+                        double quantity =
+                            double.parse(_quantityController.text.trim());
+                        double length = _lengthController.text.trim().isEmpty
+                            ? 0.0
+                            : double.parse(_lengthController.text.trim());
+                        double width = _widthController.text.trim().isEmpty
+                            ? 0.0
+                            : double.parse(_widthController.text.trim());
+                        double height = _heightController.text.trim().isEmpty
+                            ? 0.0
+                            : double.parse(_heightController.text.trim());
                         MaterialModel model = MaterialModel(
                           height: height,
                           length: length,
                           materialName: materialName,
-                          quantity: quantity,
+                          quantity:
+                              unitType == 'Tons' ? quantity * 1000 : quantity,
                           width: width,
                           materialType: materialType,
                           unit: unitType,
@@ -407,7 +435,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.yourMaterial),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.yourMaterial),
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                 ),
@@ -425,7 +454,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupDate),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.pickupDate),
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                 ),
@@ -441,7 +471,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           print('change $date');
                         },
                         onConfirm: (date) {
-                          DateFormat formatter = DateFormat("dd/MM/yyyy hh:mm aa");
+                          DateFormat formatter =
+                              DateFormat("dd/MM/yyyy hh:mm aa");
                           pickupDate = formatter.format(date);
                           _pickupDateController.text = pickupDate;
                           //print(date);
@@ -491,7 +522,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.selectMandateType)),
+                      hint: Text(AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.selectMandateType)),
                       value: mandateTypeValue,
                       items: Constants(locale).mandateType.map((value) {
                         return DropdownMenuItem<String>(
@@ -508,7 +540,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Container(
                     padding: const EdgeInsets.only(left: 10),
                     decoration: BoxDecoration(
@@ -521,7 +554,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.selectTrukType)),
+                      hint: Text(AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.selectTrukType)),
                       value: trukTypeValue,
                       items: Constants(locale).trukType.map((value) {
                         return DropdownMenuItem<String>(
@@ -551,7 +585,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
   Widget buildMaterialCart() {
     return materials.length <= 0
         ? Center(
-            child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noMaterial)),
+            child: Text(AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.noMaterial)),
           )
         : ListView.builder(
             physics: BouncingScrollPhysics(),
@@ -583,7 +618,10 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           child: Center(
                             child: Text(
                               "${model.materialName[0].toUpperCase()}",
-                              style: TextStyle(fontFamily: "Forte", fontSize: 25, color: Colors.white),
+                              style: TextStyle(
+                                  fontFamily: "Forte",
+                                  fontSize: 25,
+                                  color: Colors.white),
                             ),
                           ),
                         ),

@@ -19,7 +19,8 @@ class HomeMapFragment extends StatefulWidget {
   _HomeMapFragmentState createState() => _HomeMapFragmentState();
 }
 
-class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAliveClientMixin {
+class _HomeMapFragmentState extends State<HomeMapFragment>
+    with AutomaticKeepAliveClientMixin {
   double get height => MediaQuery.of(context).size.height;
   double get width => MediaQuery.of(context).size.width;
   final _sourceTextController = TextEditingController();
@@ -45,14 +46,15 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
         if (_permissionStatus != PermissionStatus.granted) {
           await requestPermission(_permission);
         }
-        if (_permissionStatus == PermissionStatus.granted) _getLocation(context);
+        if (_permissionStatus == PermissionStatus.granted)
+          _getLocation(context);
       }
     });
   }
 
   @override
   void dispose() {
-    mapController.dispose();
+    mapController?.dispose();
     _sourceTextController.dispose();
     _destinationTextController.dispose();
     _places.dispose();
@@ -77,13 +79,16 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
           builder: (BuildContext _) {
             locale = AppLocalizations.of(_).locale;
             return AlertDialog(
-              title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.gpsDisabled)),
-              content: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.gpsDisableMsg)),
+              title: Text(AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.gpsDisabled)),
+              content: Text(AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.gpsDisableMsg)),
               actions: <Widget>[
-                FlatButton(
+                ElevatedButton(
                   child: Text('OK'),
                   onPressed: () {
-                    final intent = AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+                    final intent = AndroidIntent(
+                        action: 'android.settings.LOCATION_SOURCE_SETTINGS');
 
                     intent.launch();
                     Navigator.of(_, rootNavigator: true).pop();
@@ -107,13 +112,17 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
   _getLocation(context) async {
     bool s = await _checkGps() ?? false;
     if (!s) {
-      Fluttertoast.showToast(msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.gpsDisableError));
+      Fluttertoast.showToast(
+          msg: AppLocalizations.getLocalizationValue(
+              locale, LocaleKey.gpsDisableError));
       return;
     }
     setState(() {
       isLoading = true;
     });
-    Position pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    print("Loading");
+    Position pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
     final lat = pos.latitude;
     final lng = pos.longitude;
     if (pos != null) {
@@ -141,25 +150,33 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
       _permissionStatus = status;
       print(_permissionStatus);
     });
+    _getLocation(context);
   }
 
   Future setLocationText(int type) async {
     LatLng latLng = myMarker[type == 0 ? 'source' : 'destination'].position;
+    print("LatLang --> $latLng");
     final coordinates = Coordinates(latLng.latitude, latLng.longitude);
     try {
-      var address = await Geocoder.google(kGoogleApiKey).findAddressesFromCoordinates(coordinates);
+      print("Coordinates --> $coordinates");
+      var address =
+          await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      // var address = await Geocoder.google(kGoogleApiKey)
+      //     .findAddressesFromCoordinates(coordinates);
+      print(address);
       String street = address.first.featureName;
       String area = address.first.subLocality;
       String pincode = address.first.postalCode;
       String city = address.first.subAdminArea;
       String state = address.first.adminArea;
+      // print("Address --> $street, $area, $city, $pincode");
       if (type == 0) {
         _sourceTextController.text = '$street, $area, $city, $pincode';
       } else {
         _destinationTextController.text = '$street, $area, $city, $pincode';
       }
     } catch (e) {
-      print(e);
+      print("Error --> $e");
       //setLocationText(type);
     }
 
@@ -169,7 +186,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
-    locale = AppLocalizations.of(context).locale;
+    // setLocationText(0);
+    final Locale locale = AppLocalizations.of(context).locale;
     return Container(
       height: height,
       width: width,
@@ -180,7 +198,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.gettingLocation)),
+                      Text(AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.gettingLocation)),
                       SizedBox(height: 10),
                       CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
@@ -209,7 +228,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                       myMarker['source'] = Marker(
                         markerId: MarkerId('source'),
                         position: latlng,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueGreen),
                         infoWindow: InfoWindow(title: 'Source'),
                       );
                       await setLocationText(0);
@@ -217,7 +237,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                       myMarker['destination'] = Marker(
                         markerId: MarkerId('destination'),
                         position: latlng,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRed),
                         infoWindow: InfoWindow(title: 'destination'),
                       );
                       await setLocationText(1);
@@ -226,7 +247,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                       myMarker['source'] = Marker(
                         markerId: MarkerId('source'),
                         position: latlng,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueGreen),
                         infoWindow: InfoWindow(title: 'Source'),
                       );
                       await setLocationText(0);
@@ -247,41 +269,49 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                       onTap: () async {
                         Prediction p = await places.PlacesAutocomplete.show(
                           context: context,
+                          types: [],
+                          strictbounds: false,
                           apiKey: kGoogleApiKey,
                           mode: _mode, // Mode.fullscreen
-                          logo: Text(""),
                           language: locale.languageCode,
+                          radius: 100000,
                           components: [
                             Component(Component.country, 'in'),
                           ],
                         );
+                        print("place --> $p");
                         if (p == null) {
                           return;
                         }
                         if (p != null) {
                           _sourceTextController.text = p.description;
-                          PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
+                          PlacesDetailsResponse detail =
+                              await _places.getDetailsByPlaceId(p.placeId);
                           double lat = detail.result.geometry.location.lat;
                           double lng = detail.result.geometry.location.lng;
                           myMarker['source'] = Marker(
                             markerId: MarkerId('source'),
                             position: LatLng(lat, lng),
-                            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                            icon: BitmapDescriptor.defaultMarkerWithHue(
+                                BitmapDescriptor.hueGreen),
                             infoWindow: InfoWindow(title: 'Source'),
                           );
-                          CameraUpdate c = CameraUpdate.newLatLngZoom(LatLng(lat, lng), 16);
+                          CameraUpdate c =
+                              CameraUpdate.newLatLngZoom(LatLng(lat, lng), 16);
                           mapController.animateCamera(c);
                           setState(() {});
                         }
                       },
                       controller: _sourceTextController,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 10, top: 15),
+                        contentPadding:
+                            const EdgeInsets.only(left: 10, top: 15),
                         prefixIcon: Icon(
                           Icons.map,
                         ),
                         alignLabelWithHint: false,
-                        hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.enterPickup),
+                        hintText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.enterPickup),
                         border: InputBorder.none,
                       ),
                     ),
@@ -301,6 +331,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                         Prediction p = await places.PlacesAutocomplete.show(
                           context: context,
                           apiKey: kGoogleApiKey,
+                          types: [],
+                          strictbounds: false,
                           mode: _mode, // Mode.fullscreen
                           language: locale.languageCode,
                           logo: Text(""),
@@ -312,28 +344,34 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
                           return;
                         }
                         if (p != null) {
+                          print('hi');
                           _destinationTextController.text = p.description;
-                          PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
+                          PlacesDetailsResponse detail =
+                              await _places.getDetailsByPlaceId(p.placeId);
                           double lat = detail.result.geometry.location.lat;
                           double lng = detail.result.geometry.location.lng;
                           myMarker['destination'] = Marker(
                             markerId: MarkerId('destination'),
                             position: LatLng(lat, lng),
-                            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                            icon: BitmapDescriptor.defaultMarkerWithHue(
+                                BitmapDescriptor.hueRed),
                             infoWindow: InfoWindow(title: 'Destination'),
                           );
-                          CameraUpdate c = CameraUpdate.newLatLngZoom(LatLng(lat, lng), 16);
+                          CameraUpdate c =
+                              CameraUpdate.newLatLngZoom(LatLng(lat, lng), 16);
                           mapController.animateCamera(c);
                           setState(() {});
                         }
                       },
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 10, top: 15),
+                        contentPadding:
+                            const EdgeInsets.only(left: 10, top: 15),
                         prefixIcon: Icon(
                           Icons.pin_drop,
                         ),
                         alignLabelWithHint: false,
-                        hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.enterDrop),
+                        hintText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.enterDrop),
                         border: InputBorder.none,
                       ),
                     ),
@@ -342,41 +380,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
               ],
             ),
           ),
-          Positioned(
-            bottom: 20,
-            child: Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-              height: 65,
-              width: width,
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-              child: RaisedButton(
-                visualDensity: VisualDensity.comfortable,
-                color: primaryColor,
-                onPressed: () {
-                  //BlocProvider.of<LanguageBloc>(context)..add(LanguageSelected(Language(SharedPref.en)));
-                  bool isSourceEmpty = myMarker['source'] == null;
-                  bool isDestinationEmpty = myMarker['destination'] == null;
-                  if (isSourceEmpty || isDestinationEmpty) {
-                    Fluttertoast.showToast(msg: 'Please give source and destination of shipment');
-                    return;
-                  }
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => MaterialDetails(
-                        source: myMarker['source'].position,
-                        destination: myMarker['destination'].position,
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.continueBooking),
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-            ),
-          )
+          _ContinueButton(width: width, myMarker: myMarker),
         ],
       ),
     );
@@ -384,4 +388,59 @@ class _HomeMapFragmentState extends State<HomeMapFragment> with AutomaticKeepAli
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class _ContinueButton extends StatelessWidget {
+  const _ContinueButton({
+    Key key,
+    @required this.width,
+    @required this.myMarker,
+  }) : super(key: key);
+
+  final double width;
+  final Map<String, Marker> myMarker;
+
+  @override
+  Widget build(BuildContext context) {
+    final Locale locale = AppLocalizations.of(context).locale;
+    return Positioned(
+      bottom: 20,
+      child: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        height: 65,
+        width: width,
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: primaryColor,
+            visualDensity: VisualDensity.comfortable,
+          ),
+          onPressed: () {
+            //BlocProvider.of<LanguageBloc>(context)..add(LanguageSelected(Language(SharedPref.en)));
+            bool isSourceEmpty = myMarker['source'] == null;
+            bool isDestinationEmpty = myMarker['destination'] == null;
+            if (isSourceEmpty || isDestinationEmpty) {
+              Fluttertoast.showToast(
+                  msg: 'Please give source and destination of shipment');
+              return;
+            }
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => MaterialDetails(
+                  source: myMarker['source'].position,
+                  destination: myMarker['destination'].position,
+                ),
+              ),
+            );
+          },
+          child: Text(
+            AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.continueBooking),
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
 }

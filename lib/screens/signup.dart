@@ -53,7 +53,8 @@ class SignupState extends State<Signup> {
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.enterMobile),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.enterMobile),
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                 ),
@@ -82,7 +83,8 @@ class SignupState extends State<Signup> {
                         image: image,
                       ),
                       counterText: "",
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.mobile),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.mobile),
                       hintText: 'e.g., 1234567890',
                       border: OutlineInputBorder(),
                     ),
@@ -96,8 +98,11 @@ class SignupState extends State<Signup> {
                   height: 65,
                   width: size.width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                  child: RaisedButton(
-                    color: primaryColor,
+                  child: ElevatedButton(
+                    // color: primaryColor,
+                    style: ElevatedButton.styleFrom(
+                      primary: primaryColor,
+                    ),
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         Navigator.of(context).push(
@@ -110,7 +115,8 @@ class SignupState extends State<Signup> {
                       }
                     },
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.generateOtp),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.generateOtp),
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),

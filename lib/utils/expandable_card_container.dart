@@ -13,6 +13,7 @@ import 'package:trukapp/models/request_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
 import 'package:trukapp/screens/matDetails.dart';
 import 'package:trukapp/screens/quote_summary_screen.dart';
+import 'package:trukapp/screens/track.dart';
 import 'package:trukapp/screens/trackShipment.dart';
 import 'package:trukapp/widgets/widgets.dart';
 
@@ -96,6 +97,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: Column(
@@ -109,17 +111,18 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                             height: 50,
                           ),
                         ),
-                        Text(
-                          "${AppLocalizations.getLocalizationValue(locale, LocaleKey.order)}: ${widget.model.bookingId}",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
-                        ),
                       ],
                     ),
                   ),
+                  SizedBox(width: 15.0,),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                      "${AppLocalizations.getLocalizationValue(locale, LocaleKey.order)}: ${widget.model.bookingId}",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
+                    ),
                       Text(
                         "${AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity)}: $weight KG",
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -240,9 +243,8 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                                       Navigator.push(
                                         context,
                                         CupertinoPageRoute(
-                                          builder: (context) => TrackShipment(
+                                          builder: (context) => TrackNew(
                                             shipmentModel: widget.model,
-                                            weight: weight.toString(),
                                           ),
                                         ),
                                       );

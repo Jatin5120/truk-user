@@ -12,7 +12,7 @@ void paymentSuccessful({String shipmentId, BuildContext context, bool isPayment 
   Platform.isAndroid
       ? showDialog(
           context: context,
-          barrierDismissible: true,
+          barrierDismissible: false,
           builder: (context) {
             return AlertDialog(
               content: Column(
@@ -45,10 +45,13 @@ void paymentSuccessful({String shipmentId, BuildContext context, bool isPayment 
                   ),
                   shipmentId == null
                       ? Container()
-                      : Text(
-                          '${AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentId)}: $shipmentId',
-                          style: TextStyle(fontSize: 18),
-                        )
+                      : Padding(
+                        padding: const EdgeInsets.only(left:40.0),
+                        child: Text(
+                            '${AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentId)}: $shipmentId',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                      )
                 ],
               ),
               actions: [
