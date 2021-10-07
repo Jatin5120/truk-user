@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -273,6 +275,12 @@ class _HomeMapFragmentState extends State<HomeMapFragment>
                           strictbounds: false,
                           apiKey: kGoogleApiKey,
                           mode: _mode, // Mode.fullscreen
+                          onError: (PlacesAutocompleteResponse response) {
+                            Fluttertoast.showToast(msg: response.errorMessage);
+                            print(
+                                'Error Predictions --> ${response.predictions}');
+                            log(response.errorMessage);
+                          },
                           language: locale.languageCode,
                           radius: 100000,
                           components: [
@@ -306,9 +314,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment>
                       decoration: InputDecoration(
                         contentPadding:
                             const EdgeInsets.only(left: 10, top: 15),
-                        prefixIcon: Icon(
-                          Icons.map,
-                        ),
+                        prefixIcon: Icon(Icons.map),
                         alignLabelWithHint: false,
                         hintText: AppLocalizations.getLocalizationValue(
                             locale, LocaleKey.enterPickup),
@@ -334,6 +340,12 @@ class _HomeMapFragmentState extends State<HomeMapFragment>
                           types: [],
                           strictbounds: false,
                           mode: _mode, // Mode.fullscreen
+                          onError: (PlacesAutocompleteResponse response) {
+                            Fluttertoast.showToast(msg: response.errorMessage);
+                            print(
+                                'Error Predictions --> ${response.predictions}');
+                            log(response.errorMessage);
+                          },
                           language: locale.languageCode,
                           logo: Text(""),
                           components: [

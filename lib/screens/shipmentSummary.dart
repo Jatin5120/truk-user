@@ -48,15 +48,21 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
   @override
   void initState() {
     super.initState();
-    Helper().setLocationText(widget.source).then((value) => setState(() => sourceAddress = value));
-    Helper().setLocationText(widget.destination).then((value) => setState(() => destinationAddress = value));
+    Helper()
+        .setLocationText(widget.source)
+        .then((value) => setState(() => sourceAddress = value));
+    Helper()
+        .setLocationText(widget.destination)
+        .then((value) => setState(() => destinationAddress = value));
   }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final EdgeInsetsGeometry padding = EdgeInsets.only(left: 16, right: 16, top: 20);
-    final TextStyle style = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+    final EdgeInsetsGeometry padding =
+        EdgeInsets.only(left: 16, right: 16, top: 20);
+    final TextStyle style =
+        TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
     locale = AppLocalizations.of(context).locale;
     return LoadingOverlay(
       isLoading: isLoading,
@@ -64,7 +70,8 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
-          title: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.shipmentSummary)),
+          title: Text(AppLocalizations.getLocalizationValue(
+              this.locale, LocaleKey.shipmentSummary)),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Container(
@@ -72,12 +79,15 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
             height: 60,
             width: size.width,
             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: RaisedButton(
-              color: primaryColor,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+              ),
               onPressed: () async {
                 if (isInsured == null) {
                   Fluttertoast.showToast(
-                      msg: AppLocalizations.getLocalizationValue(this.locale, LocaleKey.selectInsurance));
+                      msg: AppLocalizations.getLocalizationValue(
+                          this.locale, LocaleKey.selectInsurance));
                   return;
                 }
 
@@ -113,7 +123,8 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                 );
               },
               child: Text(
-                AppLocalizations.getLocalizationValue(this.locale, LocaleKey.requestButton),
+                AppLocalizations.getLocalizationValue(
+                    this.locale, LocaleKey.requestButton),
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
@@ -124,19 +135,27 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
             children: [
               Container(
                 padding: padding,
-                child:
-                    Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.shipmentDetails), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        this.locale, LocaleKey.shipmentDetails),
+                    style: style),
               ),
               buildMaterialContainer(size),
               buildTypes(size),
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.pickupLocation), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        this.locale, LocaleKey.pickupLocation),
+                    style: style),
               ),
               createLocationBlock(size, 0),
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.dropLocation), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        this.locale, LocaleKey.dropLocation),
+                    style: style),
               ),
               createLocationBlock(size, 1),
               SizedBox(
@@ -160,12 +179,17 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insuranceText1),
+                              text: AppLocalizations.getLocalizationValue(
+                                  this.locale, LocaleKey.insuranceText1),
                               style: TextStyle(color: Colors.black),
                             ),
                             TextSpan(
-                              text: " ${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insuranceText2)}",
-                              style: TextStyle(color: primaryColor, decoration: TextDecoration.underline),
+                              text:
+                                  "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insuranceText2)}",
+                              style: TextStyle(
+                                color: primaryColor,
+                                decoration: TextDecoration.underline,
+                              ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   Navigator.push(
@@ -197,7 +221,8 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                       },
                     ),
                     Expanded(
-                      child: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.no)),
+                      child: Text(AppLocalizations.getLocalizationValue(
+                          this.locale, LocaleKey.no)),
                     ),
                   ],
                 ),
@@ -270,23 +295,35 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
       child: Column(
         children: [
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
-              AppLocalizations.getLocalizationValue(this.locale,
-                  widget.mandateType.toLowerCase().contains('ondemand') ? LocaleKey.onDemand : LocaleKey.lease)),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.mandateType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.mandateType.toLowerCase().contains('ondemand')
+                      ? LocaleKey.onDemand
+                      : LocaleKey.lease)),
           SizedBox(
             height: 10,
           ),
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
-              AppLocalizations.getLocalizationValue(this.locale,
-                  widget.loadType.toLowerCase().contains('partial') ? LocaleKey.partialTruk : LocaleKey.fullTruk)),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.loadType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.loadType.toLowerCase().contains('partial')
+                      ? LocaleKey.partialTruk
+                      : LocaleKey.fullTruk)),
           SizedBox(
             height: 10,
           ),
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
-              AppLocalizations.getLocalizationValue(this.locale,
-                  widget.trukType.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.trukType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.trukType.toLowerCase().contains('closed')
+                      ? LocaleKey.closedTruk
+                      : LocaleKey.openTruk)),
         ],
       ),
     );
