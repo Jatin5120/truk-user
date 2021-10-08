@@ -432,6 +432,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                       style: TextStyle(color: Colors.blue, fontSize: 16),
                     ),
                   ),
+
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
