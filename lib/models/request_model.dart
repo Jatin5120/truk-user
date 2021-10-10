@@ -21,6 +21,8 @@ class RequestModel {
   String mandate;
   String paymentStatus;
   String status;
+  String destinationString;
+  String sourceString;
   RequestModel({
     this.uid,
     this.id,
@@ -37,6 +39,8 @@ class RequestModel {
     this.mandate,
     this.status,
     this.paymentStatus,
+    this.destinationString,
+    this.sourceString
   });
 
   RequestModel copyWith({
@@ -54,6 +58,8 @@ class RequestModel {
     String mandate,
     String status,
     String id,
+    String destinationString,
+    String sourceString,
   }) {
     return RequestModel(
       uid: uid ?? this.uid,
@@ -71,6 +77,8 @@ class RequestModel {
       mandate: mandate ?? this.mandate,
       status: status ?? this.status,
       paymentStatus: paymentStatus ?? this.paymentStatus,
+      destinationString: destinationString ?? this.destinationString,
+      sourceString: sourceString ?? this.sourceString,
     );
   }
 
@@ -90,6 +98,8 @@ class RequestModel {
       'mandate': mandate,
       'status': status ?? RequestStatus.pending,
       'paymentStatus': paymentStatus ?? PaymentType.cod,
+      'destinationString': destinationString,
+      'sourceString': sourceString,
     };
   }
 
@@ -101,7 +111,8 @@ class RequestModel {
       mobile: map['mobile'],
       source: stringToLatlng(map['source']),
       destination: stringToLatlng(map['destination']),
-      materials: List<MaterialModel>.from(map['materials']?.map((x) => MaterialModel.fromMap(x))),
+      materials: List<MaterialModel>.from(
+          map['materials']?.map((x) => MaterialModel.fromMap(x))),
       truk: map['truk'],
       pickupDate: map['pickupDate'],
       bookingId: map['bookingId'],
@@ -111,29 +122,43 @@ class RequestModel {
       mandate: map['mandate'],
       status: map['status'],
       paymentStatus: map['paymentStatus'] ?? PaymentType.cod,
+      destinationString: map['destinationString'],
+      sourceString:  map['sourceString'],
+
     );
   }
 
-  factory RequestModel.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> map) {
+  factory RequestModel.fromSnapshot(QueryDocumentSnapshot map) {
     if (map == null) return null;
 
     return RequestModel(
-        id: map.id,
-        uid: map.get('uid'),
-        mobile: map.get('mobile'),
-        source: stringToLatlng(map.get('source')),
-        destination: stringToLatlng(map.get('destination')),
-        materials: List<MaterialModel>.from(map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
-        truk: map.get('truk'),
-        pickupDate: map.get('pickupDate'),
-        bookingId: map.get('bookingId'),
-        bookingDate: map.get('bookingDate'),
-        insured: map.get('insured'),
-        load: map.get('load'),
-        mandate: map.get('mandate'),
-        status: map.data().containsKey('status') ? map.get('status') : RequestStatus.pending,
-        paymentStatus: map.data().containsKey('paymentStatus') ? map.get('paymentStatus') : PaymentType.cod);
+      id: map.id,
+      uid: map.get('uid'),
+      mobile: map.get('mobile'),
+      source: stringToLatlng(map.get('source')),
+      destination: stringToLatlng(map.get('destination')),
+      materials: List<MaterialModel>.from(
+          map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
+      truk: map.get('truk'),
+      pickupDate: map.get('pickupDate'),
+      bookingId: map.get('bookingId'),
+      bookingDate: map.get('bookingDate'),
+      insured: map.get('insured'),
+      load: map.get('load'),
+      mandate: map.get('mandate'),
+      status: (map.data() as Map<String, dynamic>).containsKey('status')
+          ? map.get('status')
+          : RequestStatus.pending,
+      paymentStatus:
+      (map.data() as Map<String, dynamic>).containsKey('paymentStatus')
+          ? map.get('paymentStatus')
+          : PaymentType.cod,
+      destinationString: map.get('destinationString'),
+      sourceString: map.get('sourceString'),
+
+    );
   }
+
   static LatLng stringToLatlng(String coordindates) {
     List<String> splitted = coordindates.split(',');
     return LatLng(double.parse(splitted[0]), double.parse(splitted[1]));

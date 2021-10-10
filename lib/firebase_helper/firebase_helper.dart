@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:trukapp/helper/helper.dart';
 import 'package:trukapp/helper/payment_type.dart';
 import 'package:trukapp/models/coupon_model.dart';
 import 'package:trukapp/models/notification_model.dart';
@@ -98,11 +99,14 @@ class FirebaseHelper {
     String phoneNumber = user.phoneNumber;
     String uid = user.uid;
     final int bookingDate = DateTime.now().millisecondsSinceEpoch;
-    CollectionReference reference = FirebaseFirestore.instance.collection("Request");
+    CollectionReference reference = FirebaseFirestore.instance.collection(requestCollection);
     List<Map<String, dynamic>> materialMap = [];
     for (MaterialModel m in materials) {
       materialMap.add(m.toMap());
     }
+    var sourceString = await Helper().setLocationText(source);
+    var destinationString = await Helper().setLocationText(destination);
+
     await reference.add({
       'bookingId': bookingDate,
       'uid': uid,
@@ -116,6 +120,8 @@ class FirebaseHelper {
       'mandate': mandateType,
       'load': loadType,
       'truk': trukType,
+      'sourceString': sourceString,
+    'destinationString': destinationString
     });
     return bookingDate.toString();
   }
