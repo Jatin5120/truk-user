@@ -5,9 +5,13 @@ import 'package:trukapp/utils/constants.dart';
 
 class TCPage extends StatelessWidget {
   Locale locale;
+  String data ;
+
+  TCPage({this.data});
 
   @override
   Widget build(BuildContext context) {
+    print(data);
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
@@ -25,8 +29,8 @@ class TCPage extends StatelessWidget {
             child: Container(
                 child: RichText(
               text: TextSpan(
-                text:
-                    "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.TC)}",
+                text: data == null?
+                    "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.TC)}" : data,
                 style: TextStyle(color: Colors.black),
               ),
             )),

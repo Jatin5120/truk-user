@@ -30,6 +30,7 @@ class FirebaseHelper {
   static const String payoutCollection = "PendingPayout";
   static const String couponCollection = "Coupons";
   static const String couponUsageCollection = "CouponUsage";
+  static const String insuranceCollection = "Insurance";
 
   static FirebaseAuth _auth = FirebaseAuth.instance;
   User user = _auth.currentUser;
@@ -191,6 +192,12 @@ class FirebaseHelper {
 
     StreamSubscription s = stream.listen((element) {});
     return s;
+  }
+
+  Future<String> getInsurance() async{
+    final ref = await FirebaseFirestore.instance.collection(FirebaseHelper.insuranceCollection).get();
+    var data = ref.docs[0]['insurance'];
+    return data;
   }
 
   Future seenNotification(List<NotificationModel> notifications) async {

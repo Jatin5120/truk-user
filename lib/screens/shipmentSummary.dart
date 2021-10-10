@@ -42,7 +42,9 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
   bool isLoading = false;
   String sourceAddress = '';
   String destinationAddress = '';
-  bool isInsured;
+  // bool isInsured;
+  bool isCompanyInsured = false;
+  bool isAppInsured = false;
   Locale locale;
 
   @override
@@ -84,43 +86,48 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                 primary: primaryColor,
               ),
               onPressed: () async {
-                if (isInsured == null) {
+                if (isCompanyInsured == false) {
                   Fluttertoast.showToast(
                       msg: AppLocalizations.getLocalizationValue(
                           this.locale, LocaleKey.selectInsurance));
                   return;
+                } else if (isAppInsured == false) {
+                  Fluttertoast.showToast(
+                      msg: AppLocalizations.getLocalizationValue(
+                          this.locale, LocaleKey.selectInsurance));
+                  return;
+                } else {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  String id = await FirebaseHelper().insertRequest(
+                    pickupDate: widget.pickupDate,
+                    materials: widget.materials,
+                    source: widget.source,
+                    destination: widget.destination,
+                    trukType: widget.trukType,
+                    loadType: widget.loadType,
+                    mandateType: widget.mandateType,
+                    isInsured: isCompanyInsured,
+                  );
+                  setState(() {
+                    isLoading = false;
+                  });
+                  paymentSuccessful(
+                    context: context,
+                    shipmentId: "$id",
+                    isPayment: false,
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    },
+                  );
                 }
-
-                setState(() {
-                  isLoading = true;
-                });
-                String id = await FirebaseHelper().insertRequest(
-                  pickupDate: widget.pickupDate,
-                  materials: widget.materials,
-                  source: widget.source,
-                  destination: widget.destination,
-                  trukType: widget.trukType,
-                  loadType: widget.loadType,
-                  mandateType: widget.mandateType,
-                  isInsured: isInsured,
-                );
-                setState(() {
-                  isLoading = false;
-                });
-                paymentSuccessful(
-                  context: context,
-                  shipmentId: "$id",
-                  isPayment: false,
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  },
-                );
               },
               child: Text(
                 AppLocalizations.getLocalizationValue(
@@ -161,75 +168,68 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
               SizedBox(
                 height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 16),
-                child: Row(
-                  children: [
-                    Radio(
-                      value: true,
-                      groupValue: isInsured,
-                      onChanged: (b) {
-                        setState(() {
-                          isInsured = b;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: AppLocalizations.getLocalizationValue(
-                                  this.locale, LocaleKey.insuranceText1),
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            TextSpan(
-                              text:
-                                  "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insuranceText2)}",
-                              style: TextStyle(
-                                color: primaryColor,
-                                decoration: TextDecoration.underline,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                      builder: (context) => TCPage(),
-                                    ),
-                                  );
-                                },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              termsCheckbox(isCompanyInsured, (newValue) {
+                setState(() {
+                  isCompanyInsured = newValue;
+                });
+              }),
+              SizedBox(
+                height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 16),
-                child: Row(
-                  children: [
-                    Radio(
-                      value: false,
-                      groupValue: isInsured,
-                      onChanged: (b) {
-                        setState(() {
-                          isInsured = b;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: Text(AppLocalizations.getLocalizationValue(
-                          this.locale, LocaleKey.no)),
-                    ),
-                  ],
-                ),
-              ),
+              termsCheckbox(isAppInsured, (newValue) {
+                setState(() {
+                  isAppInsured = newValue;
+                });
+              }, FirebaseHelper().getInsurance()),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget termsCheckbox(bool istrue, Function onchange,
+      [Future<String> insuranceData]) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 16),
+      child: Row(
+        children: [
+          Checkbox(
+              activeColor: primaryColor, value: istrue, onChanged: onchange),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: AppLocalizations.getLocalizationValue(
+                        this.locale, LocaleKey.insuranceText1),
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  TextSpan(
+                    text:
+                        "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insuranceText2)}",
+                    style: TextStyle(
+                      color: primaryColor,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        var insurance = await insuranceData;
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => TCPage(
+                              data: insurance,
+                            ),
+                          ),
+                        );
+                      },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
