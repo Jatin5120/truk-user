@@ -336,11 +336,12 @@ class _MoreAboutState extends State<MoreAbout> {
                                       color: primaryColor,
                                       decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
+                                    ..onTap = () async{
+                                      var insurance = await FirebaseHelper().getCompanyInsurance() ;
                                       Navigator.push(
                                         context,
                                         CupertinoPageRoute(
-                                          builder: (context) => TCPage(),
+                                          builder: (context) => TCPage(data: insurance,),
                                         ),
                                       );
                                     },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/utils/constants.dart';
@@ -22,21 +23,23 @@ class TCPage extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: SafeArea(
+      body:
+      data == null ? SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
+            child:Container(
                 child: RichText(
               text: TextSpan(
-                text: data == null?
-                    "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.TC)}" : data,
+                text:
+                    "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.TC)}",
                 style: TextStyle(color: Colors.black),
               ),
-            )),
+            )) ,
           ),
         ),
-      ),
+      ) :
+      Markdown(data: data,),
     );
   }
 }

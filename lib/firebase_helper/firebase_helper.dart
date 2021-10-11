@@ -194,9 +194,15 @@ class FirebaseHelper {
     return s;
   }
 
-  Future<String> getInsurance() async{
-    final ref = await FirebaseFirestore.instance.collection(FirebaseHelper.insuranceCollection).get();
-    var data = ref.docs[0]['insurance'];
+  Future<String> getCommonInsurance() async{
+    final ref = await FirebaseFirestore.instance.collection(FirebaseHelper.insuranceCollection).doc('common').get();
+    var data = ref.get('insurance');
+    return data;
+  }
+
+  Future<String> getCompanyInsurance() async{
+    final ref = await FirebaseFirestore.instance.collection(FirebaseHelper.insuranceCollection).doc('truk_company').get();
+    var data = ref.get('insurance');
     return data;
   }
 

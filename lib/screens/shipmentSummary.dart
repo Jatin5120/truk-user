@@ -42,9 +42,9 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
   bool isLoading = false;
   String sourceAddress = '';
   String destinationAddress = '';
-  // bool isInsured;
-  bool isCompanyInsured = false;
-  bool isAppInsured = false;
+  bool isInsured = false;
+  // bool isCompanyInsured = false;
+  // bool isAppInsured = false;
   Locale locale;
 
   @override
@@ -86,12 +86,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                 primary: primaryColor,
               ),
               onPressed: () async {
-                if (isCompanyInsured == false) {
-                  Fluttertoast.showToast(
-                      msg: AppLocalizations.getLocalizationValue(
-                          this.locale, LocaleKey.selectInsurance));
-                  return;
-                } else if (isAppInsured == false) {
+                if (isInsured == false) {
                   Fluttertoast.showToast(
                       msg: AppLocalizations.getLocalizationValue(
                           this.locale, LocaleKey.selectInsurance));
@@ -108,7 +103,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                     trukType: widget.trukType,
                     loadType: widget.loadType,
                     mandateType: widget.mandateType,
-                    isInsured: isCompanyInsured,
+                    isInsured: isInsured,
                   );
                   setState(() {
                     isLoading = false;
@@ -168,19 +163,19 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
               SizedBox(
                 height: 20,
               ),
-              termsCheckbox(isCompanyInsured, (newValue) {
+              // termsCheckbox(isCompanyInsured, (newValue) {
+              //   setState(() {
+              //     isCompanyInsured = newValue;
+              //   });
+              // }),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              termsCheckbox(isInsured, (newValue) {
                 setState(() {
-                  isCompanyInsured = newValue;
+                  isInsured = newValue;
                 });
-              }),
-              SizedBox(
-                height: 20,
-              ),
-              termsCheckbox(isAppInsured, (newValue) {
-                setState(() {
-                  isAppInsured = newValue;
-                });
-              }, FirebaseHelper().getInsurance()),
+              }, FirebaseHelper().getCommonInsurance()),
             ],
           ),
         ),
