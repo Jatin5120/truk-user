@@ -10,6 +10,7 @@ import 'package:trukapp/models/request_model.dart';
 import '../models/material_model.dart';
 import '../screens/shipmentSummary.dart';
 import '../utils/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MaterialDetails extends StatefulWidget {
   final LatLng source;
@@ -261,7 +262,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     Padding(
                       padding: const EdgeInsets.only(right: 20),
                       child: Container(
-                        padding: const EdgeInsets.only(left: 5),
+                        padding: const EdgeInsets.only(left: 5,top: 5,bottom: 5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
@@ -623,10 +624,11 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           child: Center(
                             child: Text(
                               "${model.materialName[0].toUpperCase()}",
-                              style: TextStyle(
-                                  fontFamily: "Forte",
-                                  fontSize: 25,
-                                  color: Colors.white),
+                              style: GoogleFonts.roboto(color: Colors.white,fontSize: 25),
+                              // style: TextStyle(
+                              //     fontFamily: "Forte",
+                              //     fontSize: 25,
+                              //     color: Colors.white),
                             ),
                           ),
                         ),
