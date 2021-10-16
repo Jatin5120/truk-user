@@ -293,6 +293,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                                   price: double.parse(widget.model.price),
                                 );
                               },
+                              price: widget.model.price
                             );
                           },
                           child: Container(

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
@@ -210,58 +211,66 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
         );
 }
 
-void reasonDialog({BuildContext context, String title, Function(String) onTap}) {
+void reasonDialog({BuildContext context, String title, Function(String) onTap,String price}) {
   final TextEditingController textEditingController = TextEditingController();
   final locale = AppLocalizations.of(context).locale;
   Platform.isAndroid
       ? showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: Text('$title'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("Note: The driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
-                style: TextStyle(color: Colors.red,fontSize: 12),),
-                SizedBox(height: 10,),
-                TextFormField(
-                  keyboardType: TextInputType.multiline,
-                  minLines: null,
-                  controller: textEditingController,
-                  maxLines: 3,
-                  decoration: InputDecoration(border: OutlineInputBorder()),
+          builder: (context) {
+            var cancellationCharges = double.parse(price) * 0.1;
+            cancellationCharges = cancellationCharges > 1000 ? 1000 : cancellationCharges;
+            return AlertDialog(
+              title: Text('$title'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if(price != null)
+                    ...[
+                      Text("Note: The driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
+                        style: TextStyle(color: Colors.red,fontSize: 12),),
+                      Text("Charges :- $cancellationCharges",style: TextStyle(color: Colors.red,fontSize: 12,fontWeight: FontWeight.bold),),
+                      SizedBox(height: 10,),
+                    ],
+                  TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    minLines: null,
+                    controller: textEditingController,
+                    maxLines: 3,
+                    decoration: InputDecoration(border: OutlineInputBorder()),
+                  ),
+                ],
+              ),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    if (textEditingController.text.trim().isEmpty) {
+                      Fluttertoast.showToast(msg: "Please specify reason");
+                      return;
+                    }
+                    Navigator.pop(context);
+                    onTap(textEditingController.text.trim());
+                  },
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+                RaisedButton(
+                  color: primaryColor,
+                  onPressed: () => Navigator.pop(context),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(locale, LocaleKey.cancel),
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
               ],
-            ),
-            actions: [
-              FlatButton(
-                onPressed: () {
-                  if (textEditingController.text.trim().isEmpty) {
-                    Fluttertoast.showToast(msg: "Please specify reason");
-                    return;
-                  }
-                  Navigator.pop(context);
-                  onTap(textEditingController.text.trim());
-                },
-                child: Center(
-                  child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-              ),
-              RaisedButton(
-                color: primaryColor,
-                onPressed: () => Navigator.pop(context),
-                child: Center(
-                  child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.cancel),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         )
       : showCupertinoDialog(
           context: context,
