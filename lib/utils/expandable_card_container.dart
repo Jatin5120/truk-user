@@ -190,6 +190,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                               builder: (context) => QuoteSummaryScreen(
                                 quoteModel: quoteModel,
                                 onlyView: true,
+                                id : widget.docID,
                               ),
                             ),
                           );

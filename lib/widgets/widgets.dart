@@ -218,12 +218,20 @@ void reasonDialog({BuildContext context, String title, Function(String) onTap}) 
           context: context,
           builder: (context) => AlertDialog(
             title: Text('$title'),
-            content: TextFormField(
-              keyboardType: TextInputType.multiline,
-              minLines: null,
-              controller: textEditingController,
-              maxLines: 3,
-              decoration: InputDecoration(border: OutlineInputBorder()),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Note: The driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
+                style: TextStyle(color: Colors.red,fontSize: 12),),
+                SizedBox(height: 10,),
+                TextFormField(
+                  keyboardType: TextInputType.multiline,
+                  minLines: null,
+                  controller: textEditingController,
+                  maxLines: 3,
+                  decoration: InputDecoration(border: OutlineInputBorder()),
+                ),
+              ],
             ),
             actions: [
               FlatButton(

@@ -31,6 +31,7 @@ class FirebaseHelper {
   static const String couponCollection = "Coupons";
   static const String couponUsageCollection = "CouponUsage";
   static const String insuranceCollection = "Insurance";
+  static const String invoiceCollection = "invoice";
 
   static FirebaseAuth _auth = FirebaseAuth.instance;
   User user = _auth.currentUser;

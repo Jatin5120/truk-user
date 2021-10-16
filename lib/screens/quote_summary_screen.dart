@@ -15,6 +15,7 @@ import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/models/wallet_model.dart';
 import 'package:trukapp/widgets/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../helper/helper.dart';
 import '../models/material_model.dart';
 import '../utils/constants.dart';
@@ -22,9 +23,11 @@ import '../utils/constants.dart';
 class QuoteSummaryScreen extends StatefulWidget {
   final QuoteModel quoteModel;
   final bool onlyView;
+  final String id;
   const QuoteSummaryScreen({
     Key key,
     @required this.quoteModel,
+    this.id,
     this.onlyView = false,
   }) : super(key: key);
 
@@ -127,6 +130,17 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       }
     });
   }
+
+
+  Future<String> getInvoice() async{
+    String Invoice;
+   final data = await FirebaseFirestore.instance.collection(FirebaseHelper.invoiceCollection).where('id',isEqualTo: widget.id).get();
+     data.docs.forEach((element) {
+     Invoice =  element.get('invoice');
+   });
+   return Invoice;
+  }
+
   @override
   void initState() {
     _razorpay = Razorpay();
@@ -174,7 +188,33 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
           title: Text(title),
         ),
         bottomNavigationBar: widget.onlyView
-            ? Container(
+            ?
+        widget.quoteModel.status == RequestStatus.completed?
+        BottomAppBar(
+          child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            height: 60,
+            width: size.width,
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+            child: RaisedButton(
+              color: primaryColor,
+              onPressed: () async {
+                String invoice = await getInvoice();
+                if (await canLaunch(invoice)) {
+                  await launch(invoice);
+                } else {
+                  throw 'Could not launch $invoice';
+                }
+              },
+              child: Text(
+                'Invoice',
+                // AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+          ),
+        )
+            :Container(
                 height: 1,
               )
             : BottomAppBar(
