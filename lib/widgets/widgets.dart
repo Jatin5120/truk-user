@@ -229,6 +229,7 @@ void reasonDialog({BuildContext context, String title, Function(String) onTap,St
                     ...[
                       Text("Note: The driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
                         style: TextStyle(color: Colors.red,fontSize: 12),),
+                      SizedBox(height: 10,),
                       Text("Charges :- $cancellationCharges",style: TextStyle(color: Colors.red,fontSize: 12,fontWeight: FontWeight.bold),),
                       SizedBox(height: 10,),
                     ],

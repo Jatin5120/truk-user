@@ -22,6 +22,9 @@ class _TrackNewState extends State<TrackNew> {
   List<dynamic> timing=[];
   Locale locale;
   bool isLoading = true;
+
+  List locationHistory = [];
+
   getData() async {
     String s = await Helper().setLocationText(widget.shipmentModel.source);
     String d = await Helper().setLocationText(widget.shipmentModel.destination);
@@ -38,6 +41,7 @@ class _TrackNewState extends State<TrackNew> {
         setState(() {
           positions.add(p);
           timing.add(d['time']);
+          locationHistory.add(Locations(position: p,time: d['time']));
         });
       }
     });
@@ -156,10 +160,51 @@ class _TrackNewState extends State<TrackNew> {
                   ],
                 ),
               ),
+            ),
+            Padding(padding: EdgeInsets.all(8.0),
+              child:Text('Location History',style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold),)
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: locationHistory.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(padding: EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      color: Colors.grey[300],
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Row(
+                          children: [
+                            Text('Time :- '),
+                            Text('${locationHistory[index].time}')
+                          ],
+                        ),
+                          SizedBox(height: 10,),
+                          Row(
+                            children: [
+                              Text('Address :- '),
+                              Text('${locationHistory[index].position}')
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },),
             )
           ],
         ),
       ),
     );
   }
+}
+
+
+class Locations{
+  String position;
+  String time;
+  Locations({this.position,this.time});
 }

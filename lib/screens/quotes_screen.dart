@@ -250,7 +250,7 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
     );
   }
 
-  Widget getStatusWidget(String id, String status, QuoteModel quoteModel) {
+  Widget   getStatusWidget(String id, String status, QuoteModel quoteModel) {
     // if (status == RequestStatus.accepted) {
     //   return Container(
     //     child: Text(

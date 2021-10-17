@@ -31,7 +31,7 @@ class ShipmentModel {
   String agent;
   String driver;
   String paymentStatus;
-  double commission;
+  String commission;
   String amountPaid;
   String ewaybill;
 
