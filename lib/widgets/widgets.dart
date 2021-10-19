@@ -231,6 +231,116 @@ void showConfirmationDialog(
         );
 }
 
+<<<<<<< HEAD
+=======
+// void reasonDialog({BuildContext context, String title, Function(String) onTap,String price}) {
+//   final TextEditingController textEditingController = TextEditingController();
+//   final locale = AppLocalizations.of(context).locale;
+//   Platform.isAndroid
+//       ? showDialog(
+//           context: context,
+//           builder: (context) {
+//             var cancellationCharges = double.parse(price) * 0.1;
+//             cancellationCharges = cancellationCharges > 1000 ? 1000 : cancellationCharges;
+//             return AlertDialog(
+//               title: Text('$title'),
+//               content: Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: [
+//                   if(price != null)
+//                     ...[
+//                       Text("Note: The driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
+//                         style: TextStyle(color: Colors.red,fontSize: 12),),
+//                       SizedBox(height: 10,),
+//                       Text("Charges :- $cancellationCharges",style: TextStyle(color: Colors.red,fontSize: 12,fontWeight: FontWeight.bold),),
+//                       SizedBox(height: 10,),
+//                     ],
+//                   TextFormField(
+//                     keyboardType: TextInputType.multiline,
+//                     minLines: null,
+//                     controller: textEditingController,
+//                     maxLines: 3,
+//                     decoration: InputDecoration(border: OutlineInputBorder()),
+//                   ),
+//                 ],
+//               ),
+//               actions: [
+//                 FlatButton(
+//                   onPressed: () {
+//                     if (textEditingController.text.trim().isEmpty) {
+//                       Fluttertoast.showToast(msg: "Please specify reason");
+//                       return;
+//                     }
+//                     Navigator.pop(context);
+//                     onTap(textEditingController.text.trim());
+//                   },
+//                   child: Center(
+//                     child: Text(
+//                       AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
+//                       style: TextStyle(color: Colors.red),
+//                     ),
+//                   ),
+//                 ),
+//                 RaisedButton(
+//                   color: primaryColor,
+//                   onPressed: () => Navigator.pop(context),
+//                   child: Center(
+//                     child: Text(
+//                       AppLocalizations.getLocalizationValue(locale, LocaleKey.cancel),
+//                       style: TextStyle(color: Colors.white),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             );
+//           },
+//         )
+//       : showCupertinoDialog(
+//           context: context,
+//           builder: (context) => Material(
+//             color: Colors.transparent,
+//             child: CupertinoAlertDialog(
+//               title: Text('$title'),
+//               content: TextFormField(
+//                 keyboardType: TextInputType.multiline,
+//                 controller: textEditingController,
+//                 minLines: null,
+//                 maxLines: null,
+//                 expands: true,
+//               ),
+//               actions: [
+//                 FlatButton(
+//                   onPressed: () {
+//                     if (textEditingController.text.trim().isEmpty) {
+//                       Fluttertoast.showToast(msg: "Please specify reason");
+//                       return;
+//                     }
+//                     Navigator.pop(context);
+//                     onTap(textEditingController.text.trim());
+//                   },
+//                   child: Center(
+//                     child: Text(
+//                       AppLocalizations.getLocalizationValue(locale, LocaleKey.yes),
+//                       style: TextStyle(color: primaryColor),
+//                     ),
+//                   ),
+//                 ),
+//                 FlatButton(
+//                   onPressed: () => Navigator.pop(context),
+//                   child: Center(
+//                     child: Text(
+//                       AppLocalizations.getLocalizationValue(locale, LocaleKey.no),
+//                       style: TextStyle(color: Colors.black),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         );
+// }
+
+>>>>>>> 392a0e7b99e79e2efc10ec0973552f546ef3e449
 void reasonDialog({
   BuildContext context,
   String title,
@@ -276,6 +386,7 @@ void reasonDialog({
   ];
 
   Widget getContent() {
+<<<<<<< HEAD
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -298,11 +409,39 @@ void reasonDialog({
         ],
         ReasonRadioButtons(textEditingController),
       ],
+=======
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (price != null) ...[
+            Text(
+              "Note: The driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
+              style: TextStyle(color: Colors.red, fontSize: 12),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Charges :- $cancellationCharges",
+              style: TextStyle(
+                  color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+          ReasonRadioButtons(textEditingController),
+        ],
+      ),
+>>>>>>> 392a0e7b99e79e2efc10ec0973552f546ef3e449
     );
   }
 
   Platform.isAndroid
       ? showDialog(
+<<<<<<< HEAD
           context: context,
           builder: (context) {
             return AlertDialog(
@@ -320,9 +459,96 @@ void reasonDialog({
               title: Text('$title'),
               content: getContent(),
               actions: actions,
+=======
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('$title'),
+        content: getContent(),
+        actions: actions,
+      );
+    },
+  )
+      : showCupertinoDialog(
+    context: context,
+    builder: (context) => Material(
+      color: Colors.transparent,
+      child: CupertinoAlertDialog(
+        title: Text('$title'),
+        content: getContent(),
+        actions: actions,
+      ),
+    ),
+  );
+}
+
+class ReasonRadioButtons extends StatefulWidget {
+  const ReasonRadioButtons(this.textEditingController, {Key key})
+      : super(key: key);
+
+  final TextEditingController textEditingController;
+
+  @override
+  _ReasonRadioButtonsState createState() => _ReasonRadioButtonsState();
+}
+
+class _ReasonRadioButtonsState extends State<ReasonRadioButtons> {
+  static String value1 = 'Got a better offer';
+  static String value2 = 'Last moment changes';
+  static String value3 = 'Other';
+
+  String radioGroupValue = value1;
+
+  void changeValue(String value) {
+    setState(() {
+      radioGroupValue = value;
+      widget.textEditingController.text = value;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.textEditingController.text = value1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        RadioListTile<String>(
+          value: value1,
+          groupValue: radioGroupValue,
+          onChanged: (value) => changeValue(value),
+          title: Text(value1),
+        ),
+        RadioListTile<String>(
+          value: value2,
+          groupValue: radioGroupValue,
+          onChanged: (value) => changeValue(value),
+          title: Text(value2),
+        ),
+        RadioListTile<String>(
+          value: value3,
+          groupValue: radioGroupValue,
+          onChanged: (value) => changeValue(value),
+          title: Text(value3),
+        ),
+        if (radioGroupValue == value3) ...[
+          TextFormField(
+            keyboardType: TextInputType.multiline,
+            minLines: null,
+            controller: widget.textEditingController,
+            maxLines: 3,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+>>>>>>> 392a0e7b99e79e2efc10ec0973552f546ef3e449
             ),
           ),
-        );
+        ],
+      ],
+    );
+  }
 }
 
 class ReasonRadioButtons extends StatefulWidget {

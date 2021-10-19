@@ -395,7 +395,9 @@ class _QuotesScreenState extends State<QuotesScreen>
                                     d.reference.update({'available': true});
                                   }
                                 });
-                              });
+                              },
+                          price: '0'
+                          );
                         } else {
                           showConfirmationDialog(
                             context: context,

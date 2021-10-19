@@ -37,6 +37,13 @@ class Helper {
     DateFormat formatter = DateFormat(isToday ? "hh:mm a" : "dd MMM, yyyy hh:mm a");
     return formatter.format(date);
   }
+
+ static String formateDate(String date){
+     var removeSpace = date.split(' ');
+     return removeSpace.first+', ' + removeSpace.last.split('.').first.substring(0,5);
+ //    return DateFormat('yyyy-MM-dd HH:mm').parse(date).toString();
+  }
+
 }
 
 class Debouncer {
@@ -56,3 +63,5 @@ class Debouncer {
   @override
   String toString() => 'Debouncer(milliseconds: $milliseconds, action: $action, _timer: $_timer)';
 }
+
+

@@ -6,6 +6,7 @@ import 'package:trukapp/helper/helper.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
 import 'package:trukapp/models/shipment_model.dart';
+import 'package:trukapp/utils/constants.dart';
 class TrackNew extends StatefulWidget {
   final ShipmentModel shipmentModel;
   TrackNew({
@@ -47,11 +48,12 @@ class _TrackNewState extends State<TrackNew> {
     });
     setState(() {
       isLoading=false;
+      locationHistory = locationHistory.reversed.toList();
     });
+
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
   }
@@ -64,138 +66,136 @@ class _TrackNewState extends State<TrackNew> {
       appBar: AppBar(
         title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.trackShipment)),
       ),
-      body: isLoading?Center(child: CircularProgressIndicator()):Container(
-        height: size.height,
-        width: size.width,
-        child: Column(
-          children: [
-            Padding(padding: EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.grey[300],
+      body: isLoading?Center(child: CircularProgressIndicator()):SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          height: size.height,
+          width: size.width,
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  // color: Colors.grey[300],
+                  border: Border.all(color: primaryColor,width: 2),
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                padding: EdgeInsets.all(16),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Source:"
-                      ),
+                    Text(
+                        "Source:"
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          source
-                      ),
+                    SizedBox(height: 8,),
+                    Text(
+                        source
                     ),
                   ],
                 ),
               ),
-            ),
-            Padding(padding: EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.grey[300],
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                    border: Border.all(color: primaryColor,width: 2),
+                    borderRadius: BorderRadius.circular(12)
+                ),
+                padding: EdgeInsets.all(16),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Destination:"
-                      ),
+                    Text(
+                        "Destination:"
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          dest
-                      ),
+                    SizedBox(height: 8,),
+                    Text(
+                        dest
                     ),
                   ],
                 ),
               ),
-            ),
-            Padding(padding: EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.grey[300],
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  // color: Colors.grey[300],
+                    color: primaryColor.withOpacity(0.15),
+                    //   border: Border.all(color: primaryColor,width: 2),
+                    borderRadius: BorderRadius.circular(12)
+                ),
+                padding: EdgeInsets.all(16),              width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        "Last Location:"
+                    ),
+                    SizedBox(height: 8,),
+                    Text(
+                        positions.isNotEmpty?positions[positions.length-1]:"No Location Update Available"
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  // color: Colors.grey[300],
+                    color: primaryColor.withOpacity(0.15),
+                    //   border: Border.all(color: primaryColor,width: 2),
+                    borderRadius: BorderRadius.circular(12)
+                ),
+                padding: EdgeInsets.all(16),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Last Location:"
-                      ),
+                    Text(
+                        "Last Update on:"
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          positions.isNotEmpty?positions[positions.length-1]:"No Location Update Available"
-                      ),
+                    SizedBox(height: 8,),
+                    Text(
+                        timing.isNotEmpty? Helper.formateDate(timing[timing.length-1])  :"No Update Available"
+                        // timing.isNotEmpty?(timing[timing.length-1]).toString():"No Update Available"
                     ),
                   ],
                 ),
               ),
-            ),
-            Padding(padding: EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.grey[300],
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Last Update on:"
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          timing.isNotEmpty?(timing[timing.length-1]).toString():"No Update Available"
-                      ),
-                    ),
-                  ],
-                ),
+              Padding(padding: EdgeInsets.all(8.0),
+                child:Text('Location History',style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold),)
               ),
-            ),
-            Padding(padding: EdgeInsets.all(8.0),
-              child:Text('Location History',style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold),)
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: locationHistory.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(padding: EdgeInsets.all(8.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      color: Colors.grey[300],
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: locationHistory.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                        // color: Colors.grey[300],
+                          color: primaryColor.withOpacity(0.15),
+                            border: Border.all(color: primaryColor,width: 2),
+                          borderRadius: BorderRadius.circular(12)
+                      ),
+                      padding: EdgeInsets.all(16),
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        Row(
-                          children: [
-                            Text('Time :- '),
-                            Text('${locationHistory[index].time}')
-                          ],
-                        ),
+                        Text('${Helper.formateDate(locationHistory[index].time)}'),
                           SizedBox(height: 10,),
-                          Row(
-                            children: [
-                              Text('Address :- '),
-                              Text('${locationHistory[index].position}')
-                            ],
-                          )
+                          Text('${locationHistory[index].position}',overflow: TextOverflow.ellipsis,)
                         ],
                       ),
-                    ),
-                  );
-                },),
-            )
-          ],
+                    );
+                  },),
+              )
+            ],
+          ),
         ),
       ),
     );
