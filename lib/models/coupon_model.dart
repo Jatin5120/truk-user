@@ -6,7 +6,7 @@ class CouponModel {
   String description;
   String name;
   int discountPercent;
-  int expiry;
+  String expiry;
   List<int> pincode;
   int minimum;
   CouponModel({

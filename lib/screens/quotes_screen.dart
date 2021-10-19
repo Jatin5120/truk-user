@@ -361,7 +361,9 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                                     });
                                   }
                                 });
-                              });
+                              },
+                          price: '0'
+                          );
                         } else {
                           showConfirmationDialog(
                             context: context,

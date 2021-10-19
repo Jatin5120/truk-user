@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
 import 'package:trukapp/firebase_helper/firebase_helper.dart';
@@ -82,7 +83,10 @@ class _PromotionState extends State<Promotion> {
                       itemBuilder: (context, index) {
                         CouponModel cM = CouponModel.fromSnap(snapshot.data.docs[index]);
                         print(cM.code);
-                        return buildCoupons(cM);
+                        DateTime expiryDate = DateFormat('dd-MM-yyyy hh:mm:ss').parse(cM.expiry);
+                        if(expiryDate.isAfter(DateTime.now())){
+                          return buildCoupons(cM);
+                        }
                       },
                     ),
                   );
