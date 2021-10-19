@@ -25,7 +25,8 @@ class QuotesScreen extends StatefulWidget {
   _QuotesScreenState createState() => _QuotesScreenState();
 }
 
-class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClientMixin {
+class _QuotesScreenState extends State<QuotesScreen>
+    with AutomaticKeepAliveClientMixin {
   final User user = FirebaseAuth.instance.currentUser;
   bool isStatusUpdating = false;
   Locale locale;
@@ -63,7 +64,8 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
               padding: const EdgeInsets.only(right: 8.0, left: 3),
               child: Center(
                 child: Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.requestButton),
+                  AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.requestButton),
                   style: TextStyle(color: primaryColor, fontSize: 17),
                 ),
               ),
@@ -77,7 +79,8 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
         padding: const EdgeInsets.all(20),
         child: pQuotes.quotes.length <= 0
             ? NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noQuotesRequested),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noQuotesRequested),
               )
             : SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
@@ -97,18 +100,23 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                           setState(() {
                             filteredList = pQuotes.quotes
                                 .where((element) =>
-                                    element.bookingId.toString().contains(string.trim().toLowerCase()) ||
-                                    element.price.contains(string.toLowerCase()) ||
-                                    element.pickupDate.contains(string.toLowerCase()))
+                                    element.bookingId.toString().contains(
+                                        string.trim().toLowerCase()) ||
+                                    element.price
+                                        .contains(string.toLowerCase()) ||
+                                    element.pickupDate
+                                        .contains(string.toLowerCase()))
                                 .toList();
                             isFilter = true;
                           });
                         }
                       },
                       decoration: InputDecoration(
-                        hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.searchHint),
+                        hintText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.searchHint),
                         border: OutlineInputBorder(),
-                        labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.search),
+                        labelText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.search),
                       ),
                     ),
                     SizedBox(
@@ -117,10 +125,16 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                     ListView.builder(
                       shrinkWrap: true,
                       physics: BouncingScrollPhysics(),
-                      itemCount: isFilter ? filteredList.length : pQuotes.quotes.length,
+                      itemCount: isFilter
+                          ? filteredList.length
+                          : pQuotes.quotes.length,
                       itemBuilder: (context, index) {
-                        QuoteModel model = isFilter ? filteredList[index] : pQuotes.quotes[index];
-                        String docID = isFilter ? filteredList[index].id : pQuotes.quotes[index].id;
+                        QuoteModel model = isFilter
+                            ? filteredList[index]
+                            : pQuotes.quotes[index];
+                        String docID = isFilter
+                            ? filteredList[index].id
+                            : pQuotes.quotes[index].id;
                         // if (model.status == RequestStatus.assigned) {
                         //   return Container();
                         // }
@@ -196,7 +210,10 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                 ),
                 Text(
                   "${model.truk}",
-                  style: TextStyle(fontSize: 13, color: Colors.orange, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.orange,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 5,
@@ -214,8 +231,9 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                     child: RaisedButton(
                       color: Colors.blue,
                       onPressed: () async {
-                        CollectionReference reference =
-                            FirebaseFirestore.instance.collection(FirebaseHelper.fleetOwnerCollection);
+                        CollectionReference reference = FirebaseFirestore
+                            .instance
+                            .collection(FirebaseHelper.fleetOwnerCollection);
 
                         final d = await reference.doc(model.agent).get();
                         UserModel agent = UserModel.fromSnapshot(d);
@@ -233,10 +251,12 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                           ),
                         );
                       },
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
                       child: Center(
                         child: Text(
-                          AppLocalizations.getLocalizationValue(locale, LocaleKey.chat),
+                          AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.chat),
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ),
@@ -250,7 +270,7 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
     );
   }
 
-  Widget   getStatusWidget(String id, String status, QuoteModel quoteModel) {
+  Widget getStatusWidget(String id, String status, QuoteModel quoteModel) {
     // if (status == RequestStatus.accepted) {
     //   return Container(
     //     child: Text(
@@ -260,12 +280,16 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
     //     padding: const EdgeInsets.all(5),
     //   );
     // }
-    bool ss=true;
-    FirebaseFirestore.instance.collection(FirebaseHelper.shipmentCollection).where('bookingId',isEqualTo: quoteModel.bookingId).get().then((value){
-      for(var d in value.docs){
-        if(d.get('status')==RequestStatus.started){
+    bool ss = true;
+    FirebaseFirestore.instance
+        .collection(FirebaseHelper.shipmentCollection)
+        .where('bookingId', isEqualTo: quoteModel.bookingId)
+        .get()
+        .then((value) {
+      for (var d in value.docs) {
+        if (d.get('status') == RequestStatus.started) {
           setState(() {
-            ss=false;
+            ss = false;
           });
         }
       }
@@ -273,7 +297,8 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
     if (status == RequestStatus.rejected) {
       return Container(
         child: Text(
-          AppLocalizations.getLocalizationValue(locale, LocaleKey.reject).toUpperCase(),
+          AppLocalizations.getLocalizationValue(locale, LocaleKey.reject)
+              .toUpperCase(),
           style: TextStyle(color: Colors.red),
         ),
         padding: const EdgeInsets.all(5),
@@ -302,7 +327,9 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
         status == RequestStatus.accepted
             ? Container(
                 child: Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.accept).toUpperCase(),
+                  AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.accept)
+                      .toUpperCase(),
                   style: TextStyle(color: Colors.green),
                 ),
                 padding: const EdgeInsets.all(5),
@@ -317,13 +344,16 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                           Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                builder: (context) => QuoteSummaryScreen(quoteModel: quoteModel),
+                                builder: (context) =>
+                                    QuoteSummaryScreen(quoteModel: quoteModel),
                               ));
                         },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
                   child: Center(
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.accept),
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
@@ -347,44 +377,58 @@ class _QuotesScreenState extends State<QuotesScreen> with AutomaticKeepAliveClie
                               title: "Specify Reason",
                               onTap: (reason) async {
                                 CancelBooking cancelBooking = CancelBooking(
-                                    collectionName: FirebaseHelper.quoteCollection,
+                                    collectionName:
+                                        FirebaseHelper.quoteCollection,
                                     docId: id,
                                     status: RequestStatus.accepted);
                                 cancelBooking.cancelBooking(reason,
                                     agent: quoteModel.agent,
                                     bookingId: quoteModel.bookingId.toString(),
                                     price: double.parse(quoteModel.price));
-                                await FirebaseFirestore.instance.collection('Truk').where('trukNumber',isEqualTo: quoteModel.truk).get().then((value) {
-                                  for(var d in value.docs){
-                                    d.reference.update({
-                                      'available': true
-                                    });
+                                await FirebaseFirestore.instance
+                                    .collection('Truk')
+                                    .where('trukNumber',
+                                        isEqualTo: quoteModel.truk)
+                                    .get()
+                                    .then((value) {
+                                  for (var d in value.docs) {
+                                    d.reference.update({'available': true});
                                   }
                                 });
                               });
                         } else {
                           showConfirmationDialog(
                             context: context,
-                            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.reject),
-                            subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.rejectConfirm),
+                            title: AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.reject),
+                            subTitle: AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.rejectConfirm),
                             onTap: () async {
-                              await FirebaseHelper().updateQuoteStatus(id, RequestStatus.rejected);
-                              await FirebaseFirestore.instance.collection('Truks').where('trukNumber',isEqualTo: quoteModel.truk).get().then((value) {
-                                for(var data in value.docs){
-                                  data.reference.update({
-                                    'available': true
-                                  });
+                              await FirebaseHelper().updateQuoteStatus(
+                                  id, RequestStatus.rejected);
+                              await FirebaseFirestore.instance
+                                  .collection('Truks')
+                                  .where('trukNumber',
+                                      isEqualTo: quoteModel.truk)
+                                  .get()
+                                  .then((value) {
+                                for (var data in value.docs) {
+                                  data.reference.update({'available': true});
                                 }
                               });
                             },
                           );
                         }
                       },
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
                 child: Center(
                   child: Text(
                     AppLocalizations.getLocalizationValue(
-                        locale, status == RequestStatus.accepted ? LocaleKey.cancel : LocaleKey.reject),
+                        locale,
+                        status == RequestStatus.accepted
+                            ? LocaleKey.cancel
+                            : LocaleKey.reject),
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
