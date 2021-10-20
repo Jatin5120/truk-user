@@ -52,5 +52,7 @@ class CancelBooking {
       await bookingRef.doc(docId).update({'status': 'cancelled'});
     }
     return Future.value(true);
+
+
   }
 }
