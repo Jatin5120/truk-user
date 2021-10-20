@@ -34,6 +34,7 @@ class ShipmentModel {
   String commission;
   String amountPaid;
   String ewaybill;
+  String driverId;
 
   ShipmentModel({
     @required this.uid,
@@ -58,6 +59,7 @@ class ShipmentModel {
     @required this.commission,
     this.amountPaid,
     @required this.ewaybill,
+    @required this.driverId,
   });
 
   ShipmentModel copyWith({
@@ -83,6 +85,7 @@ class ShipmentModel {
     double commission,
     String amountPaid,
     String ewaybill,
+    String driverId,
   }) {
     return ShipmentModel(
       uid: uid ?? this.uid,
@@ -107,6 +110,7 @@ class ShipmentModel {
       commission: commission ?? this.commission,
       amountPaid: amountPaid ?? this.amountPaid,
       ewaybill: ewaybill ?? this.ewaybill,
+        driverId: driverId?? this.driverId
     );
   }
 
@@ -134,6 +138,7 @@ class ShipmentModel {
       'commission': commission,
       'amountPaid': amountPaid,
       'ewaybill': ewaybill,
+      'driverId':driverId
     };
   }
 
@@ -162,6 +167,7 @@ class ShipmentModel {
       commission: map['commission'],
       amountPaid: map['amountPaid'],
       ewaybill: map['ewaybill'],
+        driverId: map['driverId']
     );
   }
 
@@ -193,7 +199,9 @@ class ShipmentModel {
         ewaybill: (map.data() as Map<String, dynamic>).containsKey('ewaybill')
             ? map.get('ewaybill')
             : "NA",
-        amountPaid: map.get('amountPaid'));
+        amountPaid: map.get('amountPaid'),
+        driverId: map.get('driverId')
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -203,7 +211,7 @@ class ShipmentModel {
 
   @override
   String toString() {
-    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill)';
+    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId)';
   }
 
   @override
@@ -232,7 +240,8 @@ class ShipmentModel {
         other.paymentStatus == paymentStatus &&
         other.commission == commission &&
         other.amountPaid == amountPaid &&
-        other.ewaybill == ewaybill;
+        other.ewaybill == ewaybill &&
+    other.driverId == driverId;
   }
 
   @override
@@ -258,7 +267,8 @@ class ShipmentModel {
         paymentStatus.hashCode ^
         commission.hashCode ^
         amountPaid.hashCode ^
-        ewaybill.hashCode;
+        ewaybill.hashCode ^
+    driverId.hashCode;
   }
 }
 
