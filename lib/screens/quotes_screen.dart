@@ -32,6 +32,7 @@ class _QuotesScreenState extends State<QuotesScreen>
   Locale locale;
   List<QuoteModel> filteredList = [];
   bool isFilter = false;
+  var _radioValue = 'all';
 
   @override
   Widget build(BuildContext context) {
@@ -89,35 +90,60 @@ class _QuotesScreenState extends State<QuotesScreen>
                     SizedBox(
                       height: 10,
                     ),
-                    TextFormField(
-                      onChanged: (string) {
-                        if (string.trim().length <= 0 || string.isEmpty) {
-                          setState(() {
-                            isFilter = false;
-                            filteredList = [];
-                          });
-                        } else {
-                          setState(() {
-                            filteredList = pQuotes.quotes
-                                .where((element) =>
-                                    element.bookingId.toString().contains(
-                                        string.trim().toLowerCase()) ||
-                                    element.price
-                                        .contains(string.toLowerCase()) ||
-                                    element.pickupDate
-                                        .contains(string.toLowerCase()))
-                                .toList();
-                            isFilter = true;
-                          });
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.getLocalizationValue(
-                            locale, LocaleKey.searchHint),
-                        border: OutlineInputBorder(),
-                        labelText: AppLocalizations.getLocalizationValue(
-                            locale, LocaleKey.search),
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            onChanged: (string) {
+                              if (string.trim().length <= 0 || string.isEmpty) {
+                                setState(() {
+                                  isFilter = false;
+                                  filteredList = [];
+                                });
+                              } else {
+                                setState(() {
+                                  filteredList = pQuotes.quotes
+                                      .where((element) =>
+                                          element.bookingId.toString().contains(
+                                              string.trim().toLowerCase()) ||
+                                          element.price
+                                              .contains(string.toLowerCase()) ||
+                                          element.pickupDate
+                                              .contains(string.toLowerCase()))
+                                      .toList();
+                                  isFilter = true;
+                                });
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.searchHint),
+                              border: OutlineInputBorder(),
+                              labelText: AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.search),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.arrow_upward_outlined),
+                            onPressed: () {
+                              setState(() {
+                                filteredList = [];
+                                filteredList = pQuotes.quotes;
+                                filteredList.sort((a,b) => int.parse(b.price).compareTo(int.parse(a.price)));
+                              });
+                            }),
+                        IconButton(
+                            icon: Icon(Icons.arrow_downward),
+                            onPressed: () {
+                              setState(() {
+                                filteredList = [];
+                                filteredList = pQuotes.quotes;
+                                filteredList.sort((a,b) => int.parse(a.price).compareTo(int.parse(b.price)));
+                              });
+                            }),
+
+                      ],
                     ),
                     SizedBox(
                       height: 10,

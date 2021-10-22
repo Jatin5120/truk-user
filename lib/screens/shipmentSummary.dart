@@ -86,12 +86,12 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                 primary: primaryColor,
               ),
               onPressed: () async {
-                if (isInsured == false) {
-                  Fluttertoast.showToast(
-                      msg: AppLocalizations.getLocalizationValue(
-                          this.locale, LocaleKey.selectInsurance));
-                  return;
-                } else {
+                // if (isInsured == false) {
+                //   Fluttertoast.showToast(
+                //       msg: AppLocalizations.getLocalizationValue(
+                //           this.locale, LocaleKey.selectInsurance));
+                //   return;
+                // } else {
                   setState(() {
                     isLoading = true;
                   });
@@ -122,7 +122,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                       );
                     },
                   );
-                }
+                // }
               },
               child: Text(
                 AppLocalizations.getLocalizationValue(
