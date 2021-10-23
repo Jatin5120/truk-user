@@ -92,36 +92,36 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                 //           this.locale, LocaleKey.selectInsurance));
                 //   return;
                 // } else {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  String id = await FirebaseHelper().insertRequest(
-                    pickupDate: widget.pickupDate,
-                    materials: widget.materials,
-                    source: widget.source,
-                    destination: widget.destination,
-                    trukType: widget.trukType,
-                    loadType: widget.loadType,
-                    mandateType: widget.mandateType,
-                    isInsured: isInsured,
-                  );
-                  setState(() {
-                    isLoading = false;
-                  });
-                  paymentSuccessful(
-                    context: context,
-                    shipmentId: "$id",
-                    isPayment: false,
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen(),
-                        ),
-                        (route) => false,
-                      );
-                    },
-                  );
+                setState(() {
+                  isLoading = true;
+                });
+                String id = await FirebaseHelper().insertRequest(
+                  pickupDate: widget.pickupDate,
+                  materials: widget.materials,
+                  source: widget.source,
+                  destination: widget.destination,
+                  trukType: widget.trukType,
+                  loadType: widget.loadType,
+                  mandateType: widget.mandateType,
+                  isInsured: isInsured,
+                );
+                setState(() {
+                  isLoading = false;
+                });
+                paymentSuccessful(
+                  context: context,
+                  shipmentId: "$id",
+                  isPayment: false,
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  },
+                );
                 // }
               },
               child: Text(
@@ -306,8 +306,8 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
               AppLocalizations.getLocalizationValue(
                   this.locale,
                   widget.loadType.toLowerCase().contains('partial')
-                      ? LocaleKey.partialTruk
-                      : LocaleKey.fullTruk)),
+                      ? LocaleKey.partialLoad
+                      : LocaleKey.fullLoad)),
           SizedBox(
             height: 10,
           ),

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class CancelModel {
+class CancelModal {
   final String bookingId;
   final String uid;
   final String cancelledby;
@@ -11,7 +11,7 @@ class CancelModel {
   final double amount;
   final String reason;
   final int time;
-  CancelModel({
+  CancelModal({
     @required this.bookingId,
     @required this.uid,
     @required this.cancelledby,
@@ -21,7 +21,7 @@ class CancelModel {
     @required this.time,
   });
 
-  CancelModel copyWith({
+  CancelModal copyWith({
     String bookingId,
     String uid,
     String cancelledby,
@@ -30,7 +30,7 @@ class CancelModel {
     String reason,
     int time,
   }) {
-    return CancelModel(
+    return CancelModal(
       bookingId: bookingId ?? this.bookingId,
       uid: uid ?? this.uid,
       cancelledby: cancelledby ?? this.cancelledby,
@@ -53,8 +53,8 @@ class CancelModel {
     };
   }
 
-  factory CancelModel.fromMap(Map<String, dynamic> map) {
-    return CancelModel(
+  factory CancelModal.fromMap(Map<String, dynamic> map) {
+    return CancelModal(
       bookingId: map['bookingId'],
       uid: map['uid'],
       cancelledby: map['cancelledby'],
@@ -64,8 +64,8 @@ class CancelModel {
       time: map['time'],
     );
   }
-  factory CancelModel.fromSnap(QueryDocumentSnapshot map) {
-    return CancelModel(
+  factory CancelModal.fromSnap(QueryDocumentSnapshot map) {
+    return CancelModal(
       bookingId: map.get('bookingId'),
       uid: map.get('uid'),
       cancelledby: map.get('cancelledby'),
@@ -78,7 +78,8 @@ class CancelModel {
 
   String toJson() => json.encode(toMap());
 
-  factory CancelModel.fromJson(String source) => CancelModel.fromMap(json.decode(source));
+  factory CancelModal.fromJson(String source) =>
+      CancelModal.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -89,7 +90,7 @@ class CancelModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is CancelModel &&
+    return other is CancelModal &&
         other.bookingId == bookingId &&
         other.uid == uid &&
         other.cancelledby == cancelledby &&

@@ -349,7 +349,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                           bookingId: widget.model.bookingId,
                           bookingDate: widget.model.bookingDate,
                           insured: widget.model.insured,
-                          load: LocaleKey.fullTruk,
+                          load: LocaleKey.fullLoad,
                           mandate: widget.model.mandate,
                           status: widget.model.status,
                           paymentStatus: widget.model.paymentStatus,

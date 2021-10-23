@@ -18,45 +18,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   double get width => MediaQuery.of(context).size.width;
   double get height => MediaQuery.of(context).size.height;
   final User user = FirebaseAuth.instance.currentUser;
-  Widget notificationWidget({String time, String notification}) {
-    return Container(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '$time',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Expanded(
-            flex: 0,
-            child: Card(
-              margin: EdgeInsets.zero,
-              elevation: 0.2,
-              child: Container(
-                padding: EdgeInsets.only(bottom: 10, left: 5, top: 5),
-                width: width,
-                child: Text(
-                  '$notification',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                  overflow: TextOverflow.visible,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          )
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +26,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.notification)),
+        title: Text(AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.notification)),
       ),
       body: Container(
         height: size.height,
         width: size.width,
-        margin: const EdgeInsets.only(top: 30),
+        // margin: const EdgeInsets.only(top: 30),
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection(FirebaseHelper.notificationCollection)
@@ -87,30 +49,45 @@ class _NotificationScreenState extends State<NotificationScreen> {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
+                child: Text(
+                  AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.noData),
+                ),
               );
             }
 
-            List<NotificationModel> n = [];
+            List<NotificationModel> notifications = [];
             for (QueryDocumentSnapshot s in snapshot.data.docs) {
-              NotificationModel notificationModel = NotificationModel.fromSnap(s);
-              if (!notificationModel.isVendor) n.add(NotificationModel.fromSnap(s));
+              NotificationModel notificationModel =
+                  NotificationModel.fromSnap(s);
+              if (!notificationModel.isVendor)
+                notifications.add(notificationModel);
             }
-            if (n.length <= 0) {
+            if (notifications.length <= 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noNotification),
+                text: AppLocalizations.getLocalizationValue(
+                  locale,
+                  LocaleKey.noNotification,
+                ),
               );
             }
-            FirebaseHelper().seenNotification(n);
-            int count = snapshot.data.docs.length;
+            FirebaseHelper().seenNotification(notifications);
+            print(snapshot.data.docs.length);
             return ListView.builder(
-              itemCount: count,
+              itemCount: snapshot.data.docs.length + 1,
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
-                NotificationModel notificationModel = NotificationModel.fromSnap(snapshot.data.docs[index]);
-                if (notificationModel.isDriver) {
-                  return Container();
+                //This condition is to add small box at the end of the list
+                if (snapshot.data.docs.length == index) {
+                  return SizedBox(height: 40);
                 }
-                return notificationWidget(
+                NotificationModel notificationModel =
+                    NotificationModel.fromSnap(snapshot.data.docs[index]);
+                if (notificationModel.isDriver) {
+                  return SizedBox.shrink();
+                }
+
+                return _NotificationCard(
                   notification: notificationModel.message,
                   time: Helper().getFormattedDate(
                     notificationModel.time,
@@ -119,6 +96,55 @@ class _NotificationScreenState extends State<NotificationScreen> {
               },
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _NotificationCard extends StatelessWidget {
+  const _NotificationCard({
+    Key key,
+    @required this.time,
+    @required this.notification,
+  }) : super(key: key);
+
+  final String time;
+  final String notification;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 8,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: Colors.white,
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 24)
+          .copyWith(bottom: 0),
+      semanticContainer: true,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              notification,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              overflow: TextOverflow.clip,
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  time,
+                  style: TextStyle(color: Colors.grey, fontSize: 13),
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );

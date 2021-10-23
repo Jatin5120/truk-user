@@ -51,20 +51,22 @@ class _CancelledBookingsState extends State<CancelledBookings> {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData)),
               );
             }
             if (snapshot.data.docs.length == 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noQuotesRequested),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noQuotesRequested),
               );
             }
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
-                CancelModel model = CancelModel.fromSnap(snapshot.data.docs[index]);
-                String id = snapshot.data.docs[index].id;
-                return buildRequestCard(model, id);
+                CancelModal model =
+                    CancelModal.fromSnap(snapshot.data.docs[index]);
+                return _CancelledBookinCard(model);
               },
             );
           },
@@ -72,46 +74,52 @@ class _CancelledBookingsState extends State<CancelledBookings> {
       ),
     );
   }
+}
 
-  Widget buildRequestCard(CancelModel model, String id) {
-    double weight = 0;
-    // for (MaterialModel val in model.materials) {
-    //   weight += val.quantity;
-    // }
-    String dt = Helper().getFormattedDate(model.time);
+class _CancelledBookinCard extends StatelessWidget {
+  const _CancelledBookinCard(this.cancelModal, {Key key}) : super(key: key);
+
+  final CancelModal cancelModal;
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       elevation: 8,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: Colors.white,
+      margin:
+          EdgeInsets.symmetric(horizontal: 8, vertical: 24).copyWith(bottom: 0),
+      semanticContainer: true,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0).copyWith(top: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "ID ${model.bookingId}",
-                  style: TextStyle(fontSize: 12),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  "Fine Amount - ${model.amount}",
-                  style: TextStyle(fontSize: 12),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  "Cancel Date - $dt",
-                  style: TextStyle(fontSize: 12),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-              ],
+            Text(
+              "ID ${cancelModal.bookingId}",
+              style: TextStyle(fontSize: 14),
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Text(
+              "Cancellation Charges - Rs ${cancelModal.amount}",
+              style: TextStyle(fontSize: 16, color: primaryColor),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                Helper().getFormattedDate(cancelModal.time),
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
             ),
           ],
         ),

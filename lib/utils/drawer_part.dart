@@ -78,10 +78,12 @@ class DrawerMenu extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).push(CupertinoPageRoute(builder: (context) => EditProfile()));
+                    Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) => EditProfile()));
                   },
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.edit),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.edit),
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: 18,
@@ -98,19 +100,8 @@ class DrawerMenu extends StatelessWidget {
           ),
         ),
         myListTile(
-            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.quotes),
-            leading: Icon(
-              Icons.request_quote,
-              color: Colors.black,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) => QuotesScreen(),
-              ));
-            }),
-        myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.myBooking),
+          title: AppLocalizations.getLocalizationValue(
+              locale, LocaleKey.myBooking),
           leading: Icon(
             Icons.add_road,
             color: Colors.black,
@@ -125,7 +116,21 @@ class DrawerMenu extends StatelessWidget {
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.cancelled),
+            title:
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.quotes),
+            leading: Icon(
+              Icons.request_quote,
+              color: Colors.black,
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => QuotesScreen(),
+              ));
+            }),
+        myListTile(
+          title: AppLocalizations.getLocalizationValue(
+              locale, LocaleKey.cancelled),
           leading: Icon(
             Icons.close,
             color: Colors.black,
@@ -140,7 +145,8 @@ class DrawerMenu extends StatelessWidget {
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.trukMoney),
+          title: AppLocalizations.getLocalizationValue(
+              locale, LocaleKey.trukMoney),
           leading: Icon(
             Icons.home_repair_service,
             color: Colors.black,
@@ -172,7 +178,8 @@ class DrawerMenu extends StatelessWidget {
           },
         ),
         myListTile(
-            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.promotions),
+            title: AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.promotions),
             leading: Icon(
               Icons.local_activity,
               color: Colors.black,
@@ -184,7 +191,8 @@ class DrawerMenu extends StatelessWidget {
               ));
             }),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
+          title:
+              AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
           leading: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: Icon(
@@ -222,7 +230,8 @@ class DrawerMenu extends StatelessWidget {
           },
         ),
         myListTile(
-            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.settings),
+            title: AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.settings),
             leading: Icon(
               Icons.settings,
               color: Colors.black,
@@ -244,18 +253,22 @@ class DrawerMenu extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.exit_to_app, color: Color.fromRGBO(255, 113, 1, 100)),
+                Icon(Icons.exit_to_app,
+                    color: Color.fromRGBO(255, 113, 1, 100)),
                 SizedBox(width: 10),
                 Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.logout),
+                  AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.logout),
                   style: TextStyle(fontSize: 20, color: primaryColor),
                 )
               ],
             ),
             onTap: () {
               showConfirmationDialog(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.logout),
-                subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.logoutConfirm),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.logout),
+                subTitle: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.logoutConfirm),
                 context: context,
                 onTap: () {
                   SharedPref().logoutUser();
@@ -278,7 +291,8 @@ class DrawerMenu extends StatelessWidget {
   Widget myListTile({String title, void Function() onTap, Widget leading}) {
     return ListTile(
       leading: leading,
-      title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+      title: Text(title,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
       onTap: onTap,
     );
   }

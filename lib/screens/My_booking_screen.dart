@@ -60,7 +60,8 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData)),
               );
             }
             print(snapshot.data.docs.length);
@@ -74,15 +75,19 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
             print(actualLength);
             if (actualLength == 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noData),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData),
               );
             }
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
-                ShipmentModel model = ShipmentModel.fromSnapshot(snapshot.data.docs[index]);
+                ShipmentModel model =
+                    ShipmentModel.fromSnapshot(snapshot.data.docs[index]);
                 String id = snapshot.data.docs[index].id;
-                return model.status != RequestStatus.completed ? buildRequestCard(model, id) : Container();
+                return model.status != RequestStatus.completed
+                    ? buildRequestCard(model, id)
+                    : Container();
               },
             );
           },
@@ -114,11 +119,13 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                       children: [
                         Text(
                           "${model.truk} $weight KG",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 12),
                         ),
                         SizedBox(height: 5),
                         FutureBuilder<String>(
-                            future: Helper().setLocationText(model.source) ?? Future.value("Location,Location,location"),
+                            future: Helper().setLocationText(model.source) ??
+                                Future.value("Location,Location,location"),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Text('Address...');
@@ -131,7 +138,8 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                             }),
                         FutureBuilder<String>(
                             future:
-                            Helper().setLocationText(model.destination) ?? Future.value("Location,Location,location"),
+                                Helper().setLocationText(model.destination) ??
+                                    Future.value("Location,Location,location"),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Text('|');
@@ -144,7 +152,8 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                             }),
                         SizedBox(height: 5),
                         Text(
-                          AppLocalizations.getLocalizationValue(this.locale, model.mandate),
+                          AppLocalizations.getLocalizationValue(
+                              this.locale, model.mandate),
                           style: TextStyle(fontSize: 12, color: Colors.orange),
                         ),
                       ],
@@ -185,11 +194,19 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                 ],
               ),
               RaisedButton(
-                color: model.status==RequestStatus.started?primaryColor:Colors.grey,
-                onPressed: (){
-                  model.status==RequestStatus.started?Navigator.push(context, MaterialPageRoute(builder: (_)=>TrackNew(shipmentModel: model))):null;
+                color: model.status == RequestStatus.started
+                    ? primaryColor
+                    : Colors.grey,
+                onPressed: () {
+                  model.status == RequestStatus.started
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => TrackNew(shipmentModel: model)))
+                      : null;
                 },
-              child: Text(AppLocalizations.getLocalizationValue(this.locale, LocaleKey.track)),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    this.locale, LocaleKey.track)),
               )
             ],
           ),
