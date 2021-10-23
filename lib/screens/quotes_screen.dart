@@ -51,28 +51,28 @@ class _QuotesScreenState extends State<QuotesScreen>
           AppLocalizations.getLocalizationValue(locale, LocaleKey.quotes),
           style: TextStyle(color: Colors.black),
         ),
-        actions: [
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => MyRequestScreen(),
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0, left: 3),
-              child: Center(
-                child: Text(
-                  AppLocalizations.getLocalizationValue(
-                      locale, LocaleKey.requestButton),
-                  style: TextStyle(color: primaryColor, fontSize: 17),
-                ),
-              ),
-            ),
-          )
-        ],
+        // actions: [
+        //   InkWell(
+        //     onTap: () {
+        //       Navigator.push(
+        //         context,
+        //         CupertinoPageRoute(
+        //           builder: (context) => MyRequestScreen(),
+        //         ),
+        //       );
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(right: 8.0, left: 3),
+        //       child: Center(
+        //         child: Text(
+        //           AppLocalizations.getLocalizationValue(
+        //               locale, LocaleKey.requestButton),
+        //           style: TextStyle(color: primaryColor, fontSize: 17),
+        //         ),
+        //       ),
+        //     ),
+        //   )
+        // ],
       ),
       body: Container(
         width: size.width,
@@ -251,7 +251,8 @@ class _QuotesScreenState extends State<QuotesScreen>
                 SizedBox(
                   height: 5,
                 ),
-                if (model.status != RequestStatus.cancelled)
+                if (model.status != RequestStatus.accepted)
+                // if (model.status != RequestStatus.cancelled)
                   Container(
                     height: 30,
                     child: RaisedButton(
