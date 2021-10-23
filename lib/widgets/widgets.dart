@@ -283,7 +283,7 @@ void reasonDialog({
         children: [
           if (price != null) ...[
             Text(
-              "Note: The driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
+              "Note: If the driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
               style: TextStyle(color: Colors.red, fontSize: 12),
             ),
             SizedBox(
