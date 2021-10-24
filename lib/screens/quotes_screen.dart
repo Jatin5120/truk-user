@@ -160,6 +160,7 @@ class _QuotesScreenState extends State<QuotesScreen>
                                       groupValue: _radioValue,
                                       onChanged: (a) {
                                               setState(() {
+
                                                 _radioValue = a;
                                                 filteredList = [];
                                                 filteredList = pQuotes.quotes;
