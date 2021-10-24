@@ -125,23 +125,104 @@ class _QuotesScreenState extends State<QuotesScreen>
                           ),
                         ),
                         IconButton(
-                            icon: Icon(Icons.arrow_upward_outlined),
+                            icon: Icon(Icons.import_export_rounded),
                             onPressed: () {
-                              setState(() {
-                                filteredList = [];
-                                filteredList = pQuotes.quotes;
-                                filteredList.sort((a,b) => int.parse(b.price).compareTo(int.parse(a.price)));
-                              });
+                              Widget dialog = AlertDialog(
+                                backgroundColor: Colors.white,
+                                elevation: 8,
+                                title: Text(
+                                  "Filter Requests",
+                                  style: TextStyle(
+                                    fontFamily: 'Maven',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    // RadioListTile(
+                                    //   activeColor: Colors.green,
+                                    //   value: 'all',
+                                    //   title: Text("All"),
+                                    //   groupValue: _radioValue,
+                                    //   onChanged: (a) {
+                                    //           setState(() {
+                                    //             filteredList = [];
+                                    //           });
+                                    //           Navigator.pop(context);
+                                    //   },
+                                    // ),
+                                    RadioListTile(
+                                      activeColor: Colors.green,
+                                      value: "Low to High",
+                                      title: Text("Low to High"),
+                                      groupValue: _radioValue,
+                                      onChanged: (a) {
+                                              setState(() {
+                                                _radioValue = a;
+                                                filteredList = [];
+                                                filteredList = pQuotes.quotes;
+                                                filteredList.sort((a,b) => int.parse(b.price).compareTo(int.parse(a.price)));
+                                              });
+                                              Navigator.pop(context);
+                                      },
+                                    ),
+                                    RadioListTile(
+                                      activeColor: Colors.green,
+                                      value: "High to Low",
+                                      title: Text("High to Low"),
+                                      groupValue: _radioValue,
+                                      onChanged: (a) {
+                                              setState(() {
+                                                _radioValue = a;
+                                                filteredList = [];
+                                                filteredList = pQuotes.quotes;
+                                                filteredList.sort((a,b) => int.parse(a.price).compareTo(int.parse(b.price)));
+                                              });
+                                              Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                              showGeneralDialog(
+                                  context: context,
+                                  pageBuilder: (context, anim1, anim2) => dialog,
+                                  barrierDismissible: true,
+                                  barrierLabel: '',
+                                  transitionBuilder:
+                                      (context, anim1, anim2, child) {
+                                    return Transform.scale(
+                                      scale: anim1.value,
+                                      origin: Offset(
+                                          MediaQuery.of(context).size.width * 0.5,
+                                          -200),
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration:
+                                  Duration(milliseconds: 400));
                             }),
-                        IconButton(
-                            icon: Icon(Icons.arrow_downward),
-                            onPressed: () {
-                              setState(() {
-                                filteredList = [];
-                                filteredList = pQuotes.quotes;
-                                filteredList.sort((a,b) => int.parse(a.price).compareTo(int.parse(b.price)));
-                              });
-                            }),
+
+                        // IconButton(
+                        //     icon: Icon(Icons.arrow_upward_outlined),
+                        //     onPressed: () {
+                        //       setState(() {
+                        //         filteredList = [];
+                        //         filteredList = pQuotes.quotes;
+                        //         filteredList.sort((a,b) => int.parse(b.price).compareTo(int.parse(a.price)));
+                        //       });
+                        //     }),
+                        // IconButton(
+                        //     icon: Icon(Icons.arrow_downward),
+                        //     onPressed: () {
+                        //       setState(() {
+                        //         filteredList = [];
+                        //         filteredList = pQuotes.quotes;
+                        //         filteredList.sort((a,b) => int.parse(a.price).compareTo(int.parse(b.price)));
+                        //       });
+                        //     }),
 
                       ],
                     ),
