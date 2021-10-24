@@ -144,15 +144,15 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
   }
 
   Future<String> getInvoice() async {
-    String Invoice;
+    String invoice;
     final data = await FirebaseFirestore.instance
         .collection(FirebaseHelper.invoiceCollection)
         .where('id', isEqualTo: widget.id)
         .get();
     data.docs.forEach((element) {
-      Invoice = element.get('invoice');
+      invoice = element.get('invoice');
     });
-    return Invoice;
+    return invoice;
   }
 
   @override
@@ -219,8 +219,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                       height: 60,
                       width: size.width,
                       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                      child: RaisedButton(
-                        color: primaryColor,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: primaryColor,
+                        ),
                         onPressed: () async {
                           String invoice = await getInvoice();
                           if (await canLaunch(invoice)) {
@@ -247,8 +249,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   height: 60,
                   width: size.width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                  child: RaisedButton(
-                    color: primaryColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: primaryColor,
+                    ),
                     onPressed: () async {
                       if (payment == null) {
                         Fluttertoast.showToast(

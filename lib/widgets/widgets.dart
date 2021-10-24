@@ -67,8 +67,10 @@ void paymentSuccessful(
                   height: 50,
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                  child: RaisedButton(
-                    color: primaryColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: primaryColor,
+                    ),
                     onPressed: onTap,
                     child: Text(
                       AppLocalizations.getLocalizationValue(

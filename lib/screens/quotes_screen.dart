@@ -157,9 +157,10 @@ class _QuotesScreenState extends State<QuotesScreen>
                                           _radioValue = a;
                                           filteredList = [];
                                           filteredList = pQuotes.quotes;
-                                          filteredList.sort((a, b) =>
-                                              int.parse(b.price).compareTo(
-                                                  int.parse(a.price)));
+                                          filteredList.sort(
+                                            (a, b) => int.parse(a.price)
+                                                .compareTo(int.parse(b.price)),
+                                          );
                                         });
                                         Navigator.pop(context);
                                       },
@@ -174,9 +175,10 @@ class _QuotesScreenState extends State<QuotesScreen>
                                           _radioValue = a;
                                           filteredList = [];
                                           filteredList = pQuotes.quotes;
-                                          filteredList.sort((a, b) =>
-                                              int.parse(a.price).compareTo(
-                                                  int.parse(b.price)));
+                                          filteredList.sort(
+                                            (a, b) => int.parse(b.price)
+                                                .compareTo(int.parse(a.price)),
+                                          );
                                         });
                                         Navigator.pop(context);
                                       },

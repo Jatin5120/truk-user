@@ -135,14 +135,12 @@ class _NotificationCard extends StatelessWidget {
               overflow: TextOverflow.clip,
             ),
             SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  time,
-                  style: TextStyle(color: Colors.grey, fontSize: 13),
-                )
-              ],
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                time,
+                style: TextStyle(color: Colors.grey, fontSize: 13),
+              ),
             ),
           ],
         ),
