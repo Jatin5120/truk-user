@@ -10,151 +10,151 @@ import '../utils/constants.dart';
 
 void paymentSuccessful(
     {String shipmentId,
-      BuildContext context,
-      bool isPayment = true,
-      Function onTap}) {
+    BuildContext context,
+    bool isPayment = true,
+    Function onTap}) {
   final locale = AppLocalizations.of(context).locale;
   Platform.isAndroid
       ? showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) {
-      return AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: isPayment ? 2 : 30,
-            ),
-            Center(
-              child: Text(
-                isPayment
-                    ? AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.paymentSuccess)
-                    : AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.bookingRequested),
-                style:
-                TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: isPayment ? 2 : 30,
+                  ),
+                  Center(
+                    child: Text(
+                      isPayment
+                          ? AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.paymentSuccess)
+                          : AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.bookingRequested),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: isPayment ? 2 : 30,
+                  ),
+                  Center(
+                    child: Image.asset(
+                      'assets/images/${isPayment ? "check_icon" : "request_success"}.png',
+                      height: isPayment ? 60 : 113,
+                      width: isPayment ? 60 : 155,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  SizedBox(
+                    height: isPayment ? 15 : 50,
+                  ),
+                  shipmentId == null
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 40.0),
+                          child: Text(
+                            '${AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentId)}: $shipmentId',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        )
+                ],
               ),
-            ),
-            SizedBox(
-              height: isPayment ? 2 : 30,
-            ),
-            Center(
-              child: Image.asset(
-                'assets/images/${isPayment ? "check_icon" : "request_success"}.png',
-                height: isPayment ? 60 : 113,
-                width: isPayment ? 60 : 155,
-                fit: BoxFit.fill,
-              ),
-            ),
-            SizedBox(
-              height: isPayment ? 15 : 50,
-            ),
-            shipmentId == null
-                ? Container()
-                : Padding(
-              padding: const EdgeInsets.only(left: 40.0),
-              child: Text(
-                '${AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentId)}: $shipmentId',
-                style: TextStyle(fontSize: 18),
-              ),
-            )
-          ],
-        ),
-        actions: [
-          Container(
-            height: 50,
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: RaisedButton(
-              color: primaryColor,
-              onPressed: onTap,
-              child: Text(
-                AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.done),
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
-            ),
-          )
-        ],
-      );
-    },
-  )
+              actions: [
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                  child: RaisedButton(
+                    color: primaryColor,
+                    onPressed: onTap,
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.done),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        )
       : showCupertinoDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (context) {
-      return Material(
-        color: Colors.transparent,
-        child: CupertinoAlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: isPayment ? 2 : 30,
-              ),
-              Center(
-                child: Text(
-                  isPayment
-                      ? AppLocalizations.getLocalizationValue(
-                      locale, LocaleKey.paymentSuccess)
-                      : AppLocalizations.getLocalizationValue(
-                      locale, LocaleKey.bookingRequested),
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+          context: context,
+          barrierDismissible: true,
+          builder: (context) {
+            return Material(
+              color: Colors.transparent,
+              child: CupertinoAlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: isPayment ? 2 : 30,
+                    ),
+                    Center(
+                      child: Text(
+                        isPayment
+                            ? AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.paymentSuccess)
+                            : AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.bookingRequested),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: isPayment ? 2 : 30,
+                    ),
+                    Center(
+                      child: Image.asset(
+                        'assets/images/${isPayment ? "check_icon" : "request_success"}.png',
+                        height: isPayment ? 60 : 113,
+                        width: isPayment ? 60 : 155,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    SizedBox(
+                      height: isPayment ? 15 : 50,
+                    ),
+                    shipmentId == null
+                        ? Container()
+                        : Text(
+                            '${AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentId)}: $shipmentId',
+                            style: TextStyle(fontSize: 18),
+                          )
+                  ],
                 ),
+                actions: [
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    child: RaisedButton(
+                      color: primaryColor,
+                      onPressed: onTap,
+                      child: Text(
+                        AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.done),
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  )
+                ],
               ),
-              SizedBox(
-                height: isPayment ? 2 : 30,
-              ),
-              Center(
-                child: Image.asset(
-                  'assets/images/${isPayment ? "check_icon" : "request_success"}.png',
-                  height: isPayment ? 60 : 113,
-                  width: isPayment ? 60 : 155,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              SizedBox(
-                height: isPayment ? 15 : 50,
-              ),
-              shipmentId == null
-                  ? Container()
-                  : Text(
-                '${AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentId)}: $shipmentId',
-                style: TextStyle(fontSize: 18),
-              )
-            ],
-          ),
-          actions: [
-            Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-              child: RaisedButton(
-                color: primaryColor,
-                onPressed: onTap,
-                child: Text(
-                  AppLocalizations.getLocalizationValue(
-                      locale, LocaleKey.done),
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    },
-  );
+            );
+          },
+        );
 }
 
 void showConfirmationDialog(
     {BuildContext context,
-      String title,
-      String subTitle,
-      Function onTap,
-      Function onNoTap}) {
+    String title,
+    String subTitle,
+    Function onTap,
+    Function onNoTap}) {
   if (onNoTap == null) {
     onNoTap = () {
       Navigator.pop(context);
@@ -163,72 +163,72 @@ void showConfirmationDialog(
   final locale = AppLocalizations.of(context).locale;
   Platform.isAndroid
       ? showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('$title'),
-      content: Text('$subTitle'),
-      actions: [
-        FlatButton(
-          onPressed: () {
-            Navigator.pop(context);
-            onTap();
-          },
-          child: Center(
-            child: Text(
-              AppLocalizations.getLocalizationValue(
-                  locale, LocaleKey.yes),
-              style: TextStyle(color: primaryColor),
-            ),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('$title'),
+            content: Text('$subTitle'),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  onTap();
+                },
+                child: Center(
+                  child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.yes),
+                    style: TextStyle(color: primaryColor),
+                  ),
+                ),
+              ),
+              RaisedButton(
+                color: primaryColor,
+                onPressed: () => Navigator.pop(context),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.getLocalizationValue(locale, LocaleKey.no),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        RaisedButton(
-          color: primaryColor,
-          onPressed: () => Navigator.pop(context),
-          child: Center(
-            child: Text(
-              AppLocalizations.getLocalizationValue(locale, LocaleKey.no),
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ],
-    ),
-  )
+        )
       : showCupertinoDialog(
-    context: context,
-    builder: (context) => Material(
-      color: Colors.transparent,
-      child: CupertinoAlertDialog(
-        title: Text('$title'),
-        content: Text('$subTitle'),
-        actions: [
-          FlatButton(
-            onPressed: () {
-              Navigator.pop(context);
-              onTap();
-            },
-            child: Center(
-              child: Text(
-                AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.yes),
-                style: TextStyle(color: primaryColor),
-              ),
+          context: context,
+          builder: (context) => Material(
+            color: Colors.transparent,
+            child: CupertinoAlertDialog(
+              title: Text('$title'),
+              content: Text('$subTitle'),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    onTap();
+                  },
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.yes),
+                      style: TextStyle(color: primaryColor),
+                    ),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: onNoTap,
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.no),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          FlatButton(
-            onPressed: onNoTap,
-            child: Center(
-              child: Text(
-                AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.no),
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
+        );
 }
 
 void reasonDialog({
@@ -285,6 +285,7 @@ void reasonDialog({
             Text(
               "Note: If the driver has been assigned to the shipment, by cancelling the shipment you'll be charged 10% of the decided shipment amount as cancellation fee.",
               style: TextStyle(color: Colors.red, fontSize: 12),
+              textAlign: TextAlign.justify,
             ),
             SizedBox(
               height: 10,
@@ -292,7 +293,7 @@ void reasonDialog({
             Text(
               "Charges :- $cancellationCharges",
               style: TextStyle(
-                  color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
+                  color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 10,
@@ -306,26 +307,26 @@ void reasonDialog({
 
   Platform.isAndroid
       ? showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('$title'),
-        content: getContent(),
-        actions: actions,
-      );
-    },
-  )
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('$title'),
+              content: getContent(),
+              actions: actions,
+            );
+          },
+        )
       : showCupertinoDialog(
-    context: context,
-    builder: (context) => Material(
-      color: Colors.transparent,
-      child: CupertinoAlertDialog(
-        title: Text('$title'),
-        content: getContent(),
-        actions: actions,
-      ),
-    ),
-  );
+          context: context,
+          builder: (context) => Material(
+            color: Colors.transparent,
+            child: CupertinoAlertDialog(
+              title: Text('$title'),
+              content: getContent(),
+              actions: actions,
+            ),
+          ),
+        );
 }
 
 class ReasonRadioButtons extends StatefulWidget {

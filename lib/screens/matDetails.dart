@@ -254,7 +254,9 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: AppLocalizations.getLocalizationValue(
-                                locale, LocaleKey.quantity),
+                              locale,
+                              LocaleKey.approxLoadWeight,
+                            ),
                           ),
                         ),
                       ),
@@ -262,7 +264,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     Padding(
                       padding: const EdgeInsets.only(right: 20),
                       child: Container(
-                        padding: const EdgeInsets.only(left: 5,top: 5,bottom: 5),
+                        padding:
+                            const EdgeInsets.only(left: 5, top: 5, bottom: 5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
@@ -388,11 +391,15 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 SizedBox(
                   height: 15,
                 ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 20),
-                  child: InkWell(
-                    onTap: () {
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    child: Text(
+                      "+ ${AppLocalizations.getLocalizationValue(locale, LocaleKey.addMaterial)}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(primary: primaryColor),
+                    onPressed: () {
                       if (_formKey.currentState.validate()) {
                         if (materialType == null) {
                           Fluttertoast.showToast(
@@ -428,12 +435,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                         setState(() {});
                       }
                     },
-                    child: Text(
-                      "+ ${AppLocalizations.getLocalizationValue(locale, LocaleKey.addMaterial)}",
-                      style: TextStyle(color: Colors.blue, fontSize: 16),
-                    ),
                   ),
-
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
@@ -624,7 +626,8 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                           child: Center(
                             child: Text(
                               "${model.materialName[0].toUpperCase()}",
-                              style: GoogleFonts.roboto(color: Colors.white,fontSize: 25),
+                              style: GoogleFonts.roboto(
+                                  color: Colors.white, fontSize: 25),
                               // style: TextStyle(
                               //     fontFamily: "Forte",
                               //     fontSize: 25,

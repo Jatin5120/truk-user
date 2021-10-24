@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,7 +57,8 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData)),
               );
             }
             print(snapshot.data.docs.length);
@@ -73,15 +72,19 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
             print(actualLength);
             if (actualLength == 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noQuotesRequested),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noQuotesRequested),
               );
             }
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
-                RequestModel model = RequestModel.fromSnapshot(snapshot.data.docs[index]);
+                RequestModel model =
+                    RequestModel.fromSnapshot(snapshot.data.docs[index]);
                 String id = snapshot.data.docs[index].id;
-                return model.status == RequestStatus.pending ? buildRequestCard(model, id) : Container();
+                return model.status == RequestStatus.pending
+                    ? buildRequestCard(model, id)
+                    : Container();
               },
             );
           },
@@ -123,8 +126,10 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
               onTap: () async {
                 await FirebaseHelper().deleteRequest(id);
               },
-              title: AppLocalizations.getLocalizationValue(locale, LocaleKey.delete),
-              subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.deleteConfirm),
+              title: AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.delete),
+              subTitle: AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.deleteConfirm),
             );
           },
         ),
@@ -142,11 +147,13 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                   children: [
                     Text(
                       "${AppLocalizations.getLocalizationValue(this.locale, model.truk)} $weight KG",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                     SizedBox(height: 5),
                     FutureBuilder<String>(
-                        future: Helper().setLocationText(model.source) ?? Future.value("Location,Location,location"),
+                        future: Helper().setLocationText(model.source) ??
+                            Future.value("Location,Location,location"),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Text('Address...');
@@ -158,8 +165,8 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                           );
                         }),
                     FutureBuilder<String>(
-                        future:
-                        Helper().setLocationText(model.destination) ?? Future.value("Location,Location,location"),
+                        future: Helper().setLocationText(model.destination) ??
+                            Future.value("Location,Location,location"),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Text('|');
@@ -172,7 +179,8 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                         }),
                     SizedBox(height: 5),
                     Text(
-                      AppLocalizations.getLocalizationValue(this.locale, model.mandate),
+                      AppLocalizations.getLocalizationValue(
+                          this.locale, model.mandate),
                       style: TextStyle(fontSize: 12, color: Colors.orange),
                     ),
                   ],
@@ -198,7 +206,8 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                     height: 5,
                   ),
                   Text(
-                    AppLocalizations.getLocalizationValue(this.locale, model.truk),
+                    AppLocalizations.getLocalizationValue(
+                        this.locale, model.truk),
                     style: TextStyle(fontSize: 12, color: Colors.orange),
                   ),
                   SizedBox(

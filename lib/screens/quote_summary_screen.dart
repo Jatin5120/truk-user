@@ -49,7 +49,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
   double discountedPrice = 0;
   String coupon = "";
 
-  var advance=0.0;
+  var advance = 0.0;
 
   createOrder(int amount, String email, String name) async {
     setState(() {
@@ -62,7 +62,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       'description': 'Quotation Payment ID - ${widget.quoteModel.bookingId}',
       'timeout': 300, // in seconds
       'currency': 'INR',
-      'prefill': {'contact': '${user.phoneNumber.substring(3)}', 'email': '$email'}
+      'prefill': {
+        'contact': '${user.phoneNumber.substring(3)}',
+        'email': '$email'
+      }
     };
     _razorpay.open(options);
   }
@@ -71,7 +74,9 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     // Do something when payment succeeds
     //double amount = double.parse(_amountController.text);
     final time = DateTime.now().millisecondsSinceEpoch;
-    await FirebaseHelper().updateQuoteStatus(widget.quoteModel.id, RequestStatus.accepted, paymentStatus: payment);
+    await FirebaseHelper().updateQuoteStatus(
+        widget.quoteModel.id, RequestStatus.accepted,
+        paymentStatus: payment);
     await FirebaseHelper().insertPayout(
       agent: widget.quoteModel.agent,
       amount: double.parse(widget.quoteModel.price),
@@ -80,8 +85,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       time: time,
     );
     if (isCouponApplied)
-      await FirebaseHelper()
-          .insertCouponUsage(quoteModel: widget.quoteModel, coupon: coupon, discountPrice: discountedPrice);
+      await FirebaseHelper().insertCouponUsage(
+          quoteModel: widget.quoteModel,
+          coupon: coupon,
+          discountPrice: discountedPrice);
     await FirebaseHelper().transaction(
       response.paymentId,
       double.parse(widget.quoteModel.price),
@@ -121,24 +128,31 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     });
     print(response.walletName);
   }
-  getAdvance () async {
-    await FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection).where('bookingId',isEqualTo: widget.quoteModel.bookingId).get().then((value){
-      for(var d in value.docs){
+
+  getAdvance() async {
+    await FirebaseFirestore.instance
+        .collection(FirebaseHelper.quoteCollection)
+        .where('bookingId', isEqualTo: widget.quoteModel.bookingId)
+        .get()
+        .then((value) {
+      for (var d in value.docs) {
         setState(() {
-          advance=d.get('advance');
+          advance = d.get('advance');
         });
       }
     });
   }
 
-
-  Future<String> getInvoice() async{
+  Future<String> getInvoice() async {
     String Invoice;
-   final data = await FirebaseFirestore.instance.collection(FirebaseHelper.invoiceCollection).where('id',isEqualTo: widget.id).get();
-     data.docs.forEach((element) {
-     Invoice =  element.get('invoice');
-   });
-   return Invoice;
+    final data = await FirebaseFirestore.instance
+        .collection(FirebaseHelper.invoiceCollection)
+        .where('id', isEqualTo: widget.id)
+        .get();
+    data.docs.forEach((element) {
+      Invoice = element.get('invoice');
+    });
+    return Invoice;
   }
 
   @override
@@ -147,8 +161,12 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    Helper().setLocationText(widget.quoteModel.source).then((value) => setState(() => sourceAddress = value));
-    Helper().setLocationText(widget.quoteModel.destination).then((value) => setState(() => destinationAddress = value));
+    Helper()
+        .setLocationText(widget.quoteModel.source)
+        .then((value) => setState(() => sourceAddress = value));
+    Helper()
+        .setLocationText(widget.quoteModel.destination)
+        .then((value) => setState(() => destinationAddress = value));
     getAdvance();
     super.initState();
   }
@@ -163,8 +181,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final EdgeInsetsGeometry padding = EdgeInsets.only(left: 16, right: 16, top: 20);
-    final TextStyle style = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+    final EdgeInsetsGeometry padding =
+        EdgeInsets.only(left: 16, right: 16, top: 20);
+    final TextStyle style =
+        TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
     final pWallet = Provider.of<MyWallet>(context);
     final pUser = Provider.of<MyUser>(context);
     locale = AppLocalizations.of(context).locale;
@@ -172,10 +192,13 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
         ? "+" +
             pWallet.model.amount.abs().roundToDouble().toString() +
             "=" +
-            (double.parse(widget.quoteModel.price) + pWallet.model.amount.abs()).roundToDouble().toString() +
+            (double.parse(widget.quoteModel.price) + pWallet.model.amount.abs())
+                .roundToDouble()
+                .toString() +
             "(Previous Cancellation Charge)"
         : '';
-    String title = AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary);
+    String title =
+        AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary);
     if (!widget.onlyView) {
       title = AppLocalizations.getLocalizationValue(locale, LocaleKey.quotes);
     }
@@ -188,38 +211,39 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
           title: Text(title),
         ),
         bottomNavigationBar: widget.onlyView
-            ?
-        widget.quoteModel.status == RequestStatus.completed?
-        BottomAppBar(
-          child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            height: 60,
-            width: size.width,
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: RaisedButton(
-              color: primaryColor,
-              onPressed: () async {
-                String invoice = await getInvoice();
-                if (await canLaunch(invoice)) {
-                  await launch(invoice);
-                } else {
-                  throw 'Could not launch $invoice';
-                }
-              },
-              child: Text(
-                'Invoice',
-                // AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
-            ),
-          ),
-        )
-            :Container(
-                height: 1,
-              )
+            ? widget.quoteModel.status == RequestStatus.completed
+                ? BottomAppBar(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
+                      height: 60,
+                      width: size.width,
+                      padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                      child: RaisedButton(
+                        color: primaryColor,
+                        onPressed: () async {
+                          String invoice = await getInvoice();
+                          if (await canLaunch(invoice)) {
+                            await launch(invoice);
+                          } else {
+                            throw 'Could not launch $invoice';
+                          }
+                        },
+                        child: Text(
+                          'Invoice',
+                          // AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(
+                    height: 1,
+                  )
             : BottomAppBar(
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   height: 60,
                   width: size.width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
@@ -227,24 +251,31 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                     color: primaryColor,
                     onPressed: () async {
                       if (payment == null) {
-                        Fluttertoast.showToast(msg: 'Please select payment type');
+                        Fluttertoast.showToast(
+                            msg: 'Please select payment type');
                         return;
                       }
 
                       setState(() {
                         isLoading = true;
                       });
-                      double fine = pWallet.model.amount >= 0.0 ? 0 : pWallet.model.amount.abs();
+                      double fine = pWallet.model.amount >= 0.0
+                          ? 0
+                          : pWallet.model.amount.abs();
                       print(fine);
-                      double totalPrice =
-                          isCouponApplied ? discountedPrice + fine : double.parse(widget.quoteModel.price) + fine;
+                      double totalPrice = isCouponApplied
+                          ? discountedPrice + fine
+                          : double.parse(widget.quoteModel.price) + fine;
                       if (payment == PaymentType.online) {
                         if (pWallet.model.amount < 0) {
-                          await FirebaseHelper()
-                              .updateWallet(widget.quoteModel.bookingId.toString(), double.parse(fine.toString()), 1);
+                          await FirebaseHelper().updateWallet(
+                              widget.quoteModel.bookingId.toString(),
+                              double.parse(fine.toString()),
+                              1);
                         }
                         int price = int.parse(widget.quoteModel.price);
-                        createOrder(totalPrice.toInt(), pUser.user.email, pUser.user.name);
+                        createOrder(totalPrice.toInt(), pUser.user.email,
+                            pUser.user.name);
                       } else if (payment == PaymentType.trukMoney) {
                         final time = DateTime.now().millisecondsSinceEpoch;
                         await FirebaseHelper().insertPayout(
@@ -255,7 +286,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                           time: time,
                         );
 
-                        await FirebaseHelper().updateWallet(widget.quoteModel.bookingId.toString(), totalPrice, 0);
+                        await FirebaseHelper().updateWallet(
+                            widget.quoteModel.bookingId.toString(),
+                            totalPrice,
+                            0);
 
                         paymentSuccessful(
                           context: context,
@@ -268,11 +302,14 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         );
                       } else {
                         if (pWallet.model.amount < 0) {
-                          await FirebaseHelper()
-                              .updateWallet(widget.quoteModel.bookingId.toString(), double.parse(fine.toString()), 1);
+                          await FirebaseHelper().updateWallet(
+                              widget.quoteModel.bookingId.toString(),
+                              double.parse(fine.toString()),
+                              1);
                         }
-                        await FirebaseHelper()
-                            .updateQuoteStatus(widget.quoteModel.id, RequestStatus.accepted, paymentStatus: payment);
+                        await FirebaseHelper().updateQuoteStatus(
+                            widget.quoteModel.id, RequestStatus.accepted,
+                            paymentStatus: payment);
                         paymentSuccessful(
                           context: context,
                           shipmentId: "${widget.quoteModel.bookingId}",
@@ -289,7 +326,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                       });
                     },
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.accept),
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
@@ -300,18 +338,27 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
             children: [
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentDetails), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.shipmentDetails),
+                    style: style),
               ),
               buildMaterialContainer(size),
               buildTypes(size),
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupLocation), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.pickupLocation),
+                    style: style),
               ),
               createLocationBlock(size, 0),
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.dropLocation), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.dropLocation),
+                    style: style),
               ),
               createLocationBlock(size, 1),
               SizedBox(
@@ -356,7 +403,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
               ),
               if (widget.quoteModel.advance > 0.0 && payment == PaymentType.cod)
                 Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+                  padding:
+                      const EdgeInsets.only(left: 16, right: 16, bottom: 10),
                   child: Text(
                     "Advance payment required of \u20b9${widget.quoteModel.advance}",
                     style: TextStyle(
@@ -368,7 +416,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                     textAlign: TextAlign.left,
                   ),
                 ),
-              if (!widget.onlyView && payment != null && payment != PaymentType.cod) buildCouponWidget(),
+              if (!widget.onlyView &&
+                  payment != null &&
+                  payment != PaymentType.cod)
+                buildCouponWidget(),
               if (!widget.onlyView)
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
@@ -389,7 +440,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         },
                       ),
                       Expanded(
-                        child: Text(AppLocalizations.getLocalizationValue(locale, PaymentType.cod)),
+                        child: Text(AppLocalizations.getLocalizationValue(
+                            locale, PaymentType.cod)),
                       ),
                     ],
                   ),
@@ -409,7 +461,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         },
                       ),
                       Expanded(
-                        child: Text("${AppLocalizations.getLocalizationValue(locale, PaymentType.online)}"),
+                        child: Text(
+                            "${AppLocalizations.getLocalizationValue(locale, PaymentType.online)}"),
                       ),
                     ],
                   ),
@@ -422,7 +475,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                       Radio(
                         value: PaymentType.trukMoney,
                         groupValue: payment,
-                        onChanged: double.parse(widget.quoteModel.price) > pWallet.myWallet.amount
+                        onChanged: double.parse(widget.quoteModel.price) >
+                                pWallet.myWallet.amount
                             ? null
                             : (b) {
                                 setState(() {
@@ -434,7 +488,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         child: Text(
                           "${AppLocalizations.getLocalizationValue(locale, PaymentType.trukMoney)} ${double.parse(widget.quoteModel.price) > pWallet.myWallet.amount ? '(${AppLocalizations.getLocalizationValue(locale, LocaleKey.notEnoughMoney)})' : ''}",
                           style: TextStyle(
-                            color: double.parse(widget.quoteModel.price) > pWallet.myWallet.amount
+                            color: double.parse(widget.quoteModel.price) >
+                                    pWallet.myWallet.amount
                                 ? Colors.red
                                 : Colors.black,
                           ),
@@ -511,26 +566,35 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       child: Column(
         children: [
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
-              AppLocalizations.getLocalizationValue(this.locale,
-                  widget.quoteModel.mandate.toLowerCase().contains('ondemand') ? LocaleKey.onDemand : LocaleKey.lease)),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.mandateType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.quoteModel.mandate.toLowerCase().contains('ondemand')
+                      ? LocaleKey.onDemand
+                      : LocaleKey.lease)),
           SizedBox(
             height: 10,
           ),
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.loadType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
                   widget.quoteModel.load.toLowerCase().contains('partial')
-                      ? LocaleKey.partialTruk
-                      : LocaleKey.fullTruk)),
+                      ? LocaleKey.partialLoad
+                      : LocaleKey.fullLoad)),
           SizedBox(
             height: 10,
           ),
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
-              AppLocalizations.getLocalizationValue(this.locale,
-                  widget.quoteModel.truk.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.trukType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.quoteModel.truk.toLowerCase().contains('closed')
+                      ? LocaleKey.closedTruk
+                      : LocaleKey.openTruk)),
         ],
       ),
     );
@@ -549,7 +613,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                 controller: _couponController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.coupon),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.coupon),
                 ),
               ),
             ),
@@ -605,9 +670,11 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                     coupon = c.code.toUpperCase();
                   });
                   double actualPrice = double.parse(widget.quoteModel.price);
-                  discountedPrice = actualPrice - (actualPrice * (c.discountPercent / 100));
+                  discountedPrice =
+                      actualPrice - (actualPrice * (c.discountPercent / 100));
                   Fluttertoast.showToast(
-                    msg: 'Coupon applied! You get discount of \u20B9${actualPrice * (c.discountPercent / 100)}',
+                    msg:
+                        'Coupon applied! You get discount of \u20B9${actualPrice * (c.discountPercent / 100)}',
                     gravity: ToastGravity.CENTER,
                     backgroundColor: primaryColor,
                     toastLength: Toast.LENGTH_LONG,
@@ -619,7 +686,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   height: 50,
                   child: Center(
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.apply),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.apply),
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
