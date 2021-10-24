@@ -77,7 +77,6 @@ class _QuotesScreenState extends State<QuotesScreen>
       body: Container(
         width: size.width,
         height: size.height,
-        padding: const EdgeInsets.all(20),
         child: pQuotes.quotes.length <= 0
             ? NoDataPage(
                 text: AppLocalizations.getLocalizationValue(
@@ -90,41 +89,48 @@ class _QuotesScreenState extends State<QuotesScreen>
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            onChanged: (string) {
-                              if (string.trim().length <= 0 || string.isEmpty) {
-                                setState(() {
-                                  isFilter = false;
-                                  filteredList = [];
-                                });
-                              } else {
-                                setState(() {
-                                  filteredList = pQuotes.quotes
-                                      .where((element) =>
-                                          element.bookingId.toString().contains(
-                                              string.trim().toLowerCase()) ||
-                                          element.price
-                                              .contains(string.toLowerCase()) ||
-                                          element.pickupDate
-                                              .contains(string.toLowerCase()))
-                                      .toList();
-                                  isFilter = true;
-                                });
-                              }
-                            },
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.getLocalizationValue(
-                                  locale, LocaleKey.searchHint),
-                              border: OutlineInputBorder(),
-                              labelText: AppLocalizations.getLocalizationValue(
-                                  locale, LocaleKey.search),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              onChanged: (string) {
+                                if (string.trim().length <= 0 ||
+                                    string.isEmpty) {
+                                  setState(() {
+                                    isFilter = false;
+                                    filteredList = [];
+                                  });
+                                } else {
+                                  setState(() {
+                                    filteredList = pQuotes.quotes
+                                        .where((element) =>
+                                            element.bookingId
+                                                .toString()
+                                                .contains(string
+                                                    .trim()
+                                                    .toLowerCase()) ||
+                                            element.price.contains(
+                                                string.toLowerCase()) ||
+                                            element.pickupDate
+                                                .contains(string.toLowerCase()))
+                                        .toList();
+                                    isFilter = true;
+                                  });
+                                }
+                              },
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.getLocalizationValue(
+                                    locale, LocaleKey.searchHint),
+                                border: OutlineInputBorder(),
+                                labelText:
+                                    AppLocalizations.getLocalizationValue(
+                                        locale, LocaleKey.search),
+                              ),
                             ),
                           ),
-                        ),
-                        IconButton(
+                          IconButton(
                             icon: Icon(Icons.import_export_rounded),
                             onPressed: () {
                               Widget dialog = AlertDialog(
@@ -141,91 +147,62 @@ class _QuotesScreenState extends State<QuotesScreen>
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    // RadioListTile(
-                                    //   activeColor: Colors.green,
-                                    //   value: 'all',
-                                    //   title: Text("All"),
-                                    //   groupValue: _radioValue,
-                                    //   onChanged: (a) {
-                                    //           setState(() {
-                                    //             filteredList = [];
-                                    //           });
-                                    //           Navigator.pop(context);
-                                    //   },
-                                    // ),
                                     RadioListTile(
                                       activeColor: Colors.green,
                                       value: "Low to High",
-                                      title: Text("Low to High"),
+                                      title: Text("Low to High (Fare Price)"),
                                       groupValue: _radioValue,
                                       onChanged: (a) {
-                                              setState(() {
-
-                                                _radioValue = a;
-                                                filteredList = [];
-                                                filteredList = pQuotes.quotes;
-                                                filteredList.sort((a,b) => int.parse(b.price).compareTo(int.parse(a.price)));
-                                              });
-                                              Navigator.pop(context);
+                                        setState(() {
+                                          _radioValue = a;
+                                          filteredList = [];
+                                          filteredList = pQuotes.quotes;
+                                          filteredList.sort((a, b) =>
+                                              int.parse(b.price).compareTo(
+                                                  int.parse(a.price)));
+                                        });
+                                        Navigator.pop(context);
                                       },
                                     ),
                                     RadioListTile(
                                       activeColor: Colors.green,
                                       value: "High to Low",
-                                      title: Text("High to Low"),
+                                      title: Text("High to Low (Fare Price)"),
                                       groupValue: _radioValue,
                                       onChanged: (a) {
-                                              setState(() {
-                                                _radioValue = a;
-                                                filteredList = [];
-                                                filteredList = pQuotes.quotes;
-                                                filteredList.sort((a,b) => int.parse(a.price).compareTo(int.parse(b.price)));
-                                              });
-                                              Navigator.pop(context);
+                                        setState(() {
+                                          _radioValue = a;
+                                          filteredList = [];
+                                          filteredList = pQuotes.quotes;
+                                          filteredList.sort((a, b) =>
+                                              int.parse(a.price).compareTo(
+                                                  int.parse(b.price)));
+                                        });
+                                        Navigator.pop(context);
                                       },
                                     ),
                                   ],
                                 ),
                               );
                               showGeneralDialog(
-                                  context: context,
-                                  pageBuilder: (context, anim1, anim2) => dialog,
-                                  barrierDismissible: true,
-                                  barrierLabel: '',
-                                  transitionBuilder:
-                                      (context, anim1, anim2, child) {
-                                    return Transform.scale(
-                                      scale: anim1.value,
-                                      origin: Offset(
-                                          MediaQuery.of(context).size.width * 0.5,
-                                          -200),
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration:
-                                  Duration(milliseconds: 400));
-                            }),
-
-                        // IconButton(
-                        //     icon: Icon(Icons.arrow_upward_outlined),
-                        //     onPressed: () {
-                        //       setState(() {
-                        //         filteredList = [];
-                        //         filteredList = pQuotes.quotes;
-                        //         filteredList.sort((a,b) => int.parse(b.price).compareTo(int.parse(a.price)));
-                        //       });
-                        //     }),
-                        // IconButton(
-                        //     icon: Icon(Icons.arrow_downward),
-                        //     onPressed: () {
-                        //       setState(() {
-                        //         filteredList = [];
-                        //         filteredList = pQuotes.quotes;
-                        //         filteredList.sort((a,b) => int.parse(a.price).compareTo(int.parse(b.price)));
-                        //       });
-                        //     }),
-
-                      ],
+                                context: context,
+                                pageBuilder: (context, anim1, anim2) => dialog,
+                                barrierDismissible: true,
+                                barrierLabel: '',
+                                transitionBuilder:
+                                    (context, anim1, anim2, child) {
+                                  return Transform.scale(
+                                    scale: anim1.value,
+                                    origin: Offset(size.width * 0.5, -200),
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration: Duration(milliseconds: 400),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
@@ -246,7 +223,7 @@ class _QuotesScreenState extends State<QuotesScreen>
                         // if (model.status == RequestStatus.assigned) {
                         //   return Container();
                         // }
-                        return buildQuoteBlock(model, docID);
+                        return buildQuoteBlock(model, docID, context);
                       },
                     ),
                   ],
@@ -256,130 +233,105 @@ class _QuotesScreenState extends State<QuotesScreen>
     );
   }
 
-  Card buildQuoteBlock(QuoteModel model, String docID) {
+  Card buildQuoteBlock(QuoteModel model, String docID, BuildContext context) {
     double weight = 0;
     for (MaterialModel val in model.materials) {
       weight += val.quantity;
     }
     return Card(
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 12,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${model.trukName.toUpperCase()} (${model.truk}) $weight Kg",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                  ),
-                  SizedBox(height: 5),
-                  FutureBuilder<String>(
-                      future: Helper().setLocationText(model.source),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Text('Address...');
-                        }
-                        return Text(
-                          "${snapshot.data.split(',')[2].trimLeft()}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 12),
-                        );
-                      }),
-                  FutureBuilder<String>(
-                      future: Helper().setLocationText(model.destination),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Text('|');
-                        }
-                        return Text(
-                          "|\n${snapshot.data.split(',')[2].trimLeft()}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 12),
-                        );
-                      }),
-                  SizedBox(height: 5),
-                  getStatusWidget(docID, '${model.status}', model),
-                ],
-              ),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "${model.pickupDate}",
-                  style: TextStyle(fontSize: 13),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
                 Text(
                   "${model.truk}",
                   style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  "Fare \u20B9 ${model.price}",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                if (model.status != RequestStatus.accepted)
-                // if (model.status != RequestStatus.cancelled)
-                  Container(
-                    height: 30,
-                    child: RaisedButton(
-                      color: Colors.blue,
-                      onPressed: () async {
-                        CollectionReference reference = FirebaseFirestore
-                            .instance
-                            .collection(FirebaseHelper.fleetOwnerCollection);
-
-                        final d = await reference.doc(model.agent).get();
-                        UserModel agent = UserModel.fromSnapshot(d);
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => Support(
-                              chatListModel: ChattingListModel(
-                                id: '',
-                                quoteModel: model,
-                                userModel: agent,
-                                time: DateTime.now().millisecondsSinceEpoch,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.getLocalizationValue(
-                              locale, LocaleKey.chat),
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ),
-                    ),
+                    fontSize: 16,
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "${model.trukName.toUpperCase()} $weight Kg",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "${model.pickupDate}",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ],
+                ),
               ],
             ),
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: FutureBuilder<String>(
+                      future: Helper().setLocationText(model.source),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text('Source');
+                        }
+                        return Text(
+                          "${snapshot.data.split(',')[2].trimLeft()}",
+                          style: TextStyle(fontSize: 16, color: primaryColor),
+                          textAlign: TextAlign.left,
+                        );
+                      }),
+                ),
+                Expanded(
+                  child: Icon(
+                    Icons.arrow_right_alt_rounded,
+                    color: primaryColor,
+                  ),
+                ),
+                Expanded(
+                  child: FutureBuilder<String>(
+                    future: Helper().setLocationText(model.destination),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Text('Destination');
+                      }
+                      return Text(
+                        "${snapshot.data.split(',')[2].trimLeft()}",
+                        style: TextStyle(fontSize: 16, color: primaryColor),
+                        textAlign: TextAlign.right,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              "Fare \u20B9 ${model.price}",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            getButtons(docID, '${model.status}', model, context),
           ],
         ),
       ),
     );
   }
 
-  Widget getStatusWidget(String id, String status, QuoteModel quoteModel) {
+  Widget getButtons(
+      String id, String status, QuoteModel quoteModel, BuildContext context) {
     // if (status == RequestStatus.accepted) {
     //   return Container(
     //     child: Text(
@@ -390,6 +342,7 @@ class _QuotesScreenState extends State<QuotesScreen>
     //   );
     // }
     bool ss = true;
+    final Size size = MediaQuery.of(context).size;
     FirebaseFirestore.instance
         .collection(FirebaseHelper.shipmentCollection)
         .where('bookingId', isEqualTo: quoteModel.bookingId)
@@ -432,33 +385,34 @@ class _QuotesScreenState extends State<QuotesScreen>
       );
     }
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
       children: [
-        status == RequestStatus.accepted
-            ? Container(
-                child: Text(
-                  AppLocalizations.getLocalizationValue(
-                          locale, LocaleKey.accept)
-                      .toUpperCase(),
-                  style: TextStyle(color: Colors.green),
-                ),
-                padding: const EdgeInsets.all(5),
-              )
-            : Container(
-                height: 30,
-                child: RaisedButton(
-                  color: Colors.green,
+        Expanded(
+          child: status == RequestStatus.accepted
+              ? Center(
+                  child: Text(
+                    AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.accepted)
+                        .toUpperCase(),
+                    style: TextStyle(color: Colors.green),
+                  ),
+                )
+              : ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                  ),
                   onPressed: isStatusUpdating
                       ? null
                       : () async {
                           Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) =>
-                                    QuoteSummaryScreen(quoteModel: quoteModel),
-                              ));
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) =>
+                                  QuoteSummaryScreen(quoteModel: quoteModel),
+                            ),
+                          );
                         },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
                   child: Center(
                     child: Text(
                       AppLocalizations.getLocalizationValue(
@@ -467,85 +421,123 @@ class _QuotesScreenState extends State<QuotesScreen>
                     ),
                   ),
                 ),
-              ),
-        SizedBox(
-          width: 5,
         ),
-        Visibility(
-          visible: ss,
-          child: Expanded(
-            child: Container(
-              height: 30,
-              child: FlatButton(
-                onPressed: isStatusUpdating
-                    ? null
-                    : () async {
-                        if (status == RequestStatus.accepted) {
-                          reasonDialog(
-                              context: context,
-                              title: "Specify Reason",
-                              onTap: (reason) async {
-                                CancelBooking cancelBooking = CancelBooking(
-                                    collectionName:
-                                        FirebaseHelper.quoteCollection,
-                                    docId: id,
-                                    status: RequestStatus.accepted);
-                                cancelBooking.cancelBooking(reason,
-                                    agent: quoteModel.agent,
-                                    bookingId: quoteModel.bookingId.toString(),
-                                    price: double.parse(quoteModel.price));
-                                await FirebaseFirestore.instance
-                                    .collection('Truk')
-                                    .where('trukNumber',
-                                        isEqualTo: quoteModel.truk)
-                                    .get()
-                                    .then((value) {
-                                  for (var d in value.docs) {
-                                    d.reference.update({'available': true});
-                                  }
-                                });
-                              },
-                          price: '0'
-                          );
-                        } else {
-                          showConfirmationDialog(
-                            context: context,
-                            title: AppLocalizations.getLocalizationValue(
-                                locale, LocaleKey.reject),
-                            subTitle: AppLocalizations.getLocalizationValue(
-                                locale, LocaleKey.rejectConfirm),
-                            onTap: () async {
-                              await FirebaseHelper().updateQuoteStatus(
-                                  id, RequestStatus.rejected);
-                              await FirebaseFirestore.instance
-                                  .collection('Truks')
-                                  .where('trukNumber',
-                                      isEqualTo: quoteModel.truk)
-                                  .get()
-                                  .then((value) {
-                                for (var data in value.docs) {
-                                  data.reference.update({'available': true});
+        SizedBox(width: size.width * 0.075),
+        Expanded(
+          child: Visibility(
+            visible: ss,
+            child: OutlinedButton(
+              style:
+                  OutlinedButton.styleFrom(side: BorderSide(color: Colors.red)),
+              onPressed: isStatusUpdating
+                  ? null
+                  : () async {
+                      if (status == RequestStatus.accepted) {
+                        reasonDialog(
+                          context: context,
+                          title: "Specify Reason",
+                          onTap: (reason) async {
+                            CancelBooking cancelBooking = CancelBooking(
+                              collectionName: FirebaseHelper.quoteCollection,
+                              docId: id,
+                              status: RequestStatus.accepted,
+                            );
+                            cancelBooking.cancelBooking(
+                              reason,
+                              agent: quoteModel.agent,
+                              bookingId: quoteModel.bookingId.toString(),
+                              price: double.parse(quoteModel.price),
+                            );
+                            await FirebaseFirestore.instance
+                                .collection('Truk')
+                                .where(
+                                  'trukNumber',
+                                  isEqualTo: quoteModel.truk,
+                                )
+                                .get()
+                                .then(
+                              (value) {
+                                for (var d in value.docs) {
+                                  d.reference.update({'available': true});
                                 }
-                              });
-                            },
-                          );
-                        }
-                      },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Center(
-                  child: Text(
-                    AppLocalizations.getLocalizationValue(
-                        locale,
-                        status == RequestStatus.accepted
-                            ? LocaleKey.cancel
-                            : LocaleKey.reject),
-                    style: TextStyle(color: Colors.red, fontSize: 12),
+                              },
+                            );
+                          },
+                          price: '0',
+                        );
+                      } else {
+                        showConfirmationDialog(
+                          context: context,
+                          title: AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.reject),
+                          subTitle: AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.rejectConfirm),
+                          onTap: () async {
+                            await FirebaseHelper()
+                                .updateQuoteStatus(id, RequestStatus.rejected);
+                            await FirebaseFirestore.instance
+                                .collection('Truks')
+                                .where('trukNumber', isEqualTo: quoteModel.truk)
+                                .get()
+                                .then((value) {
+                              for (var data in value.docs) {
+                                data.reference.update({'available': true});
+                              }
+                            });
+                          },
+                        );
+                      }
+                    },
+              child: Center(
+                child: Text(
+                  AppLocalizations.getLocalizationValue(
+                    locale,
+                    status == RequestStatus.accepted
+                        ? LocaleKey.cancel
+                        : LocaleKey.reject,
                   ),
+                  style: TextStyle(color: Colors.red, fontSize: 12),
                 ),
               ),
             ),
           ),
+        ),
+        SizedBox(width: size.width * 0.075),
+        Expanded(
+          child: status == RequestStatus.accepted
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                  ),
+                  onPressed: () async {
+                    CollectionReference reference = FirebaseFirestore.instance
+                        .collection(FirebaseHelper.fleetOwnerCollection);
+
+                    final d = await reference.doc(quoteModel.agent).get();
+                    UserModel agent = UserModel.fromSnapshot(d);
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => Support(
+                          chatListModel: ChattingListModel(
+                            id: '',
+                            quoteModel: quoteModel,
+                            userModel: agent,
+                            time: DateTime.now().millisecondsSinceEpoch,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.chat),
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
         )
       ],
     );

@@ -4,6 +4,7 @@ Map<String, String> english() {
   return {
     "about": "About Us",
     "accept": "Accept",
+    LocaleKey.accepted: "Accepted",
     "addMaterial": "Add Material",
     LocaleKey.approxLoadWeight: "Approx. Load Weight",
     "backAgain": "Press back again to exit",

@@ -4,6 +4,7 @@ Map<String, String> telugu() {
   return {
     "about": "మా గురించి",
     "accept": "అంగీకరించండి",
+    LocaleKey.accepted: "ఆమోదించబడిన",
     "addMaterial": "మెటీరియల్ జోడించండి",
     LocaleKey.approxLoadWeight: "సుమారు సరుకు లోడ్",
     "backAgain": "నిష్క్రమించడానికి మళ్ళీ తిరిగి నొక్కండి",

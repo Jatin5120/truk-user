@@ -4,6 +4,7 @@ Map<String, String> hindi() {
   return {
     "about": "हमारे बारे में",
     "accept": "स्वीकारें ",
+    LocaleKey.accepted: "स्वीकृत",
     "addMaterial": "सामग्री जोड़ें",
     LocaleKey.approxLoadWeight: "लगभग खेप भार",
     "backAgain": "बाहर निकलने के लिए फिर से दबाएं",

@@ -1,6 +1,7 @@
 class LocaleKey {
   static const String about = "about";
   static const String accept = "accept";
+  static const String accepted = "accepted";
   static const String addMaterial = "addMaterial";
   static const String approxLoadWeight = "approxLoadWeight";
   static const String backAgain = "backAgain";
