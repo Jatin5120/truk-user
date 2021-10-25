@@ -42,6 +42,22 @@ List<String> materialTypes = [
   "Others",
 ];
 
+const List<String> trukModels = [
+  "No Preference",
+  "Ashok Leyland DOST",
+  "Container 20 Ft.",
+  "Container 32 Ft.",
+  "EICHER 14 Ft.",
+  "EICHER 17 Ft.",
+  "EICHER 19 Ft.",
+  "Mahindra Bolero PICK UP",
+  "Tata 22 Ft.",
+  "Tata ACE",
+  "Taurus 16 T",
+  "Taurus 21 T",
+  "Taurus 25 T",
+];
+
 class Constants {
   final Locale locale;
   Constants(this.locale);

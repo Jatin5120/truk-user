@@ -2,6 +2,7 @@ import 'package:trukapp/locale/locale_keys.dart';
 
 Map<String, String> telugu() {
   return {
+    "trukModel": "ట్రక్ మోడల్",
     "about": "మా గురించి",
     "accept": "అంగీకరించండి",
     LocaleKey.accepted: "ఆమోదించబడిన",

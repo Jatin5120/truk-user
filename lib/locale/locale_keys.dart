@@ -1,4 +1,5 @@
 class LocaleKey {
+  static const String trukModel = "trukModel";
   static const String about = "about";
   static const String accept = "accept";
   static const String accepted = "accepted";

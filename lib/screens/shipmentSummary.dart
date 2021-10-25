@@ -23,6 +23,7 @@ class ShipmentSummary extends StatefulWidget {
   final String mandateType;
   final String loadType;
   final String trukType;
+  final String truckModel;
   const ShipmentSummary({
     Key key,
     @required this.materials,
@@ -32,6 +33,7 @@ class ShipmentSummary extends StatefulWidget {
     @required this.mandateType,
     @required this.loadType,
     @required this.trukType,
+    @required this.truckModel,
   }) : super(key: key);
 
   @override
@@ -104,6 +106,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                   loadType: widget.loadType,
                   mandateType: widget.mandateType,
                   isInsured: isInsured,
+                  truckModel: widget.truckModel
                 );
                 setState(() {
                   isLoading = false;
@@ -319,6 +322,11 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                   widget.trukType.toLowerCase().contains('closed')
                       ? LocaleKey.closedTruk
                       : LocaleKey.openTruk)),
+          SizedBox(
+            height: 10,
+          ),
+          createTypes(
+             'Truck Model',widget.truckModel??''),
         ],
       ),
     );

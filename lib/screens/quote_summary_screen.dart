@@ -599,6 +599,17 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   widget.quoteModel.truk.toLowerCase().contains('closed')
                       ? LocaleKey.closedTruk
                       : LocaleKey.openTruk)),
+          SizedBox(
+            height: 10,
+          ),
+          createTypes(
+    AppLocalizations.getLocalizationValue(
+    locale, LocaleKey.trukModel),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.quoteModel.truk.toLowerCase().contains('closed')
+                      ? LocaleKey.closedTruk
+                      : LocaleKey.openTruk)),
         ],
       ),
     );

@@ -96,6 +96,7 @@ class FirebaseHelper {
     @required String loadType,
     @required String mandateType,
     @required bool isInsured,
+    @required String truckModel,
   }) async {
     User user = FirebaseAuth.instance.currentUser;
     String phoneNumber = user.phoneNumber;
@@ -123,7 +124,8 @@ class FirebaseHelper {
       'load': loadType,
       'truk': trukType,
       'sourceString': sourceString,
-    'destinationString': destinationString
+    'destinationString': destinationString,
+      'truckModel':truckModel
     });
     return bookingDate.toString();
   }

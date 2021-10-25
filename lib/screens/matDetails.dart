@@ -43,7 +43,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
   List<MaterialModel> materials = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
-  String trukTypeValue, mandateTypeValue, loadTypeValue;
+  String trukTypeValue, mandateTypeValue, loadTypeValue, truckModel;
   String materialType;
   Locale locale;
   String unitType = "KG";
@@ -62,6 +62,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
       trukTypeValue = "openTruk";
       mandateTypeValue = "lease";
       loadTypeValue = "fullTruk";
+      truckModel = 'No Preference';
       pickupDate = q.pickupDate;
       this.s = q.source;
       this.d = q.destination;
@@ -110,6 +111,11 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 Fluttertoast.showToast(msg: 'Please select truk type');
                 return;
               }
+
+              if (truckModel == null || truckModel.isEmpty) {
+                Fluttertoast.showToast(msg: 'Please select truk model');
+                return;
+              }
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -121,6 +127,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     materials: materials,
                     pickupDate: pickupDate,
                     trukType: trukTypeValue,
+                    truckModel: truckModel,
                   ),
                 ),
               );
@@ -579,6 +586,43 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black,
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(left:10.0),
+                    child: DropdownButton<String>(
+                      underline: Container(),
+                      isExpanded: true,
+                      hint: Text(AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.trukModel),),
+                      value: truckModel,
+                      onChanged: (_) {
+                        FocusScope.of(context).unfocus();
+                        truckModel = _;
+                        print(_);
+                        setState(() {});
+                      },
+                      items: trukModels
+                          .map(
+                            (e) => DropdownMenuItem<String>(
+                          child: Text(
+                            e,
+                          ),
+                          value: e,
+                        ),
+                      )
+                          .toList(),
+                    ),
+                  ),
+                ),
+
                 SizedBox(
                   height: 20,
                 )

@@ -2,6 +2,7 @@ import 'package:trukapp/locale/locale_keys.dart';
 
 Map<String, String> english() {
   return {
+    "trukModel": "Truk Model",
     "about": "About Us",
     "accept": "Accept",
     LocaleKey.accepted: "Accepted",

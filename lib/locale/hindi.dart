@@ -2,6 +2,7 @@ import 'package:trukapp/locale/locale_keys.dart';
 
 Map<String, String> hindi() {
   return {
+    "trukModel": "Truk मॉडल",
     "about": "हमारे बारे में",
     "accept": "स्वीकारें ",
     LocaleKey.accepted: "स्वीकृत",
