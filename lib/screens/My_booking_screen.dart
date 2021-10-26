@@ -37,10 +37,9 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: Container(
+      body: SizedBox(
         height: size.height,
         width: size.width,
-        padding: const EdgeInsets.all(16),
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('Request')
@@ -61,7 +60,6 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                     locale, LocaleKey.noData)),
               );
             }
-            print(snapshot.data.docs.length);
             int actualLength = 0;
             for (QueryDocumentSnapshot sd in snapshot.data.docs) {
               RequestModel model = RequestModel.fromSnapshot(sd);
@@ -69,7 +67,6 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                 actualLength++;
               }
             }
-            print(actualLength);
             if (actualLength == 0) {
               return NoDataPage(
                 text: AppLocalizations.getLocalizationValue(
@@ -84,7 +81,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                 String id = snapshot.data.docs[index].id;
                 return model.status == RequestStatus.pending
                     ? buildRequestCard(model, id)
-                    : Container();
+                    : SizedBox.shrink();
               },
             );
           },
@@ -107,13 +104,14 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
           closeOnTap: true,
           onTap: () {
             Navigator.pushReplacement(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => MaterialDetails(
-                    prevQuote: model,
-                    isUpdate: true,
-                  ),
-                ));
+              context,
+              CupertinoPageRoute(
+                builder: (context) => MaterialDetails(
+                  prevQuote: model,
+                  isUpdate: true,
+                ),
+              ),
+            );
           },
         ),
         IconSlideAction(
@@ -135,90 +133,186 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
         ),
       ],
       child: Card(
-        elevation: 8,
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: Row(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        elevation: 12,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${AppLocalizations.getLocalizationValue(this.locale, model.truk)} $weight KG",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                    ),
-                    SizedBox(height: 5),
-                    FutureBuilder<String>(
-                        future: Helper().setLocationText(model.source) ??
-                            Future.value("Location,Location,location"),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Text('Address...');
-                          }
-                          return Text(
-                            "${snapshot.data.split(',')[2].trimLeft()}",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 12),
-                          );
-                        }),
-                    FutureBuilder<String>(
-                        future: Helper().setLocationText(model.destination) ??
-                            Future.value("Location,Location,location"),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Text('|');
-                          }
-                          return Text(
-                            "|\n${snapshot.data.split(',')[2].trimLeft()}",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 12),
-                          );
-                        }),
-                    SizedBox(height: 5),
-                    Text(
-                      AppLocalizations.getLocalizationValue(
-                          this.locale, model.mandate),
-                      style: TextStyle(fontSize: 12, color: Colors.orange),
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text(
+                    "${AppLocalizations.getLocalizationValue(this.locale, model.truk)} $weight KG",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                  ),
                   Text(
                     "ID ${model.bookingId}",
                     style: TextStyle(fontSize: 12),
                   ),
-                  SizedBox(
-                    height: 5,
+                ],
+              ),
+              SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: FutureBuilder<String>(
+                      future: Helper().setLocationText(model.source) ??
+                          Future.value("Location,Location,location"),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text('Source');
+                        }
+                        return Text(
+                          "${snapshot.data.split(',')[2].trimLeft()}",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: 16, color: primaryColor),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Icon(
+                      Icons.arrow_right_alt_rounded,
+                      color: primaryColor,
+                    ),
+                  ),
+                  Expanded(
+                    child: FutureBuilder<String>(
+                      future: Helper().setLocationText(model.destination) ??
+                          Future.value("Location,Location,location"),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text('Destination');
+                        }
+                        return Text(
+                          "${snapshot.data.split(',')[2].trimLeft()}",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(fontSize: 16, color: primaryColor),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insurance)} : ${model.insured ? AppLocalizations.getLocalizationValue(this.locale, LocaleKey.yes) : AppLocalizations.getLocalizationValue(this.locale, LocaleKey.no)}",
+                    style: TextStyle(fontSize: 12),
                   ),
                   Text(
                     "${model.pickupDate}",
                     style: TextStyle(fontSize: 12),
                   ),
-                  SizedBox(
-                    height: 5,
+                ],
+              ),
+              SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.getLocalizationValue(
+                        this.locale, model.mandate),
+                    style: TextStyle(fontSize: 14, color: Colors.orange),
                   ),
                   Text(
                     AppLocalizations.getLocalizationValue(
                         this.locale, model.truk),
-                    style: TextStyle(fontSize: 12, color: Colors.orange),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insurance)} : ${model.insured ? AppLocalizations.getLocalizationValue(this.locale, LocaleKey.yes) : AppLocalizations.getLocalizationValue(this.locale, LocaleKey.no)}",
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: 14, color: Colors.orange),
                   ),
                 ],
               ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Column(
+              //         mainAxisSize: MainAxisSize.min,
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Text(
+              //             "${AppLocalizations.getLocalizationValue(this.locale, model.truk)} $weight KG",
+              //             style: TextStyle(
+              //                 fontWeight: FontWeight.bold, fontSize: 12),
+              //           ),
+              //           SizedBox(height: 5),
+              //           FutureBuilder<String>(
+              //               future: Helper().setLocationText(model.source) ??
+              //                   Future.value("Location,Location,location"),
+              //               builder: (context, snapshot) {
+              //                 if (!snapshot.hasData) {
+              //                   return Text('Address...');
+              //                 }
+              //                 return Text(
+              //                   "${snapshot.data.split(',')[2].trimLeft()}",
+              //                   textAlign: TextAlign.start,
+              //                   style: TextStyle(fontSize: 12),
+              //                 );
+              //               }),
+              //           FutureBuilder<String>(
+              //               future:
+              //                   Helper().setLocationText(model.destination) ??
+              //                       Future.value("Location,Location,location"),
+              //               builder: (context, snapshot) {
+              //                 if (!snapshot.hasData) {
+              //                   return Text('|');
+              //                 }
+              //                 return Text(
+              //                   "|\n${snapshot.data.split(',')[2].trimLeft()}",
+              //                   textAlign: TextAlign.start,
+              //                   style: TextStyle(fontSize: 12),
+              //                 );
+              //               }),
+              //           SizedBox(height: 5),
+              //           Text(
+              //             AppLocalizations.getLocalizationValue(
+              //                 this.locale, model.mandate),
+              //             style: TextStyle(fontSize: 12, color: Colors.orange),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //     Column(
+              //       mainAxisSize: MainAxisSize.min,
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           "ID ${model.bookingId}",
+              //           style: TextStyle(fontSize: 12),
+              //         ),
+              //         SizedBox(
+              //           height: 5,
+              //         ),
+              //         Text(
+              //           "${model.pickupDate}",
+              //           style: TextStyle(fontSize: 12),
+              //         ),
+              //         SizedBox(
+              //           height: 5,
+              //         ),
+              //         Text(
+              //           AppLocalizations.getLocalizationValue(
+              //               this.locale, model.truk),
+              //           style: TextStyle(fontSize: 12, color: Colors.orange),
+              //         ),
+              //         SizedBox(
+              //           height: 5,
+              //         ),
+              //         Text(
+              //           "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.insurance)} : ${model.insured ? AppLocalizations.getLocalizationValue(this.locale, LocaleKey.yes) : AppLocalizations.getLocalizationValue(this.locale, LocaleKey.no)}",
+              //           style: TextStyle(fontSize: 12),
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
