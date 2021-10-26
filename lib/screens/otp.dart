@@ -279,9 +279,10 @@ class _OTPState extends State<OTP> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: height * 0.30,
-                  ),
+                  // SizedBox(
+                  //   height: height * 0.30,
+                  // ),
+                  Spacer(),
                   Container(
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(10)),
@@ -312,6 +313,7 @@ class _OTPState extends State<OTP> {
                             ),
                     ),
                   ),
+                  SizedBox(height: height * 0.05),
                 ],
               ),
             ),

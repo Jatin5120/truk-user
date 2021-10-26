@@ -6,7 +6,7 @@ import 'package:trukapp/utils/constants.dart';
 
 class TCPage extends StatelessWidget {
   Locale locale;
-  String data ;
+  String data;
 
   TCPage({this.data});
 
@@ -23,23 +23,25 @@ class TCPage extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body:
-      data == null ? SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child:Container(
-                child: RichText(
-              text: TextSpan(
-                text:
-                    "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.TC)}",
-                style: TextStyle(color: Colors.black),
+      body: data == null
+          ? SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      child: RichText(
+                    text: TextSpan(
+                      text:
+                          "${AppLocalizations.getLocalizationValue(this.locale, LocaleKey.TC)}",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  )),
+                ),
               ),
-            )) ,
-          ),
-        ),
-      ) :
-      Markdown(data: data,),
+            )
+          : Markdown(
+              data: data,
+            ),
     );
   }
 }

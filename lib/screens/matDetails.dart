@@ -122,12 +122,12 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                   builder: (context) => ShipmentSummary(
                     destination: d,
                     source: s,
-                    loadType: loadTypeValue,
-                    mandateType: mandateTypeValue,
+                    load: loadTypeValue,
+                    mandate: mandateTypeValue,
                     materials: materials,
                     pickupDate: pickupDate,
-                    trukType: trukTypeValue,
-                    truckModel: truckModel,
+                    truk: trukTypeValue,
+                    trukModel: truckModel,
                   ),
                 ),
               );
@@ -213,6 +213,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                       onChanged: (_) {
                         materialType = _;
                         _materialController.text = _;
+                        _quantityController.text = "";
                         setState(() {});
                       },
                     ),
@@ -596,12 +597,14 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                         color: Colors.black,
                       ),
                     ),
-                    padding: const EdgeInsets.only(left:10.0),
+                    padding: const EdgeInsets.only(left: 10.0),
                     child: DropdownButton<String>(
                       underline: Container(),
                       isExpanded: true,
-                      hint: Text(AppLocalizations.getLocalizationValue(
-                          locale, LocaleKey.trukModel),),
+                      hint: Text(
+                        AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.trukModel),
+                      ),
                       value: truckModel,
                       onChanged: (_) {
                         FocusScope.of(context).unfocus();
@@ -612,17 +615,16 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                       items: trukModels
                           .map(
                             (e) => DropdownMenuItem<String>(
-                          child: Text(
-                            e,
-                          ),
-                          value: e,
-                        ),
-                      )
+                              child: Text(
+                                e,
+                              ),
+                              value: e,
+                            ),
+                          )
                           .toList(),
                     ),
                   ),
                 ),
-
                 SizedBox(
                   height: 20,
                 )

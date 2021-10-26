@@ -33,7 +33,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          AppLocalizations.getLocalizationValue(locale, LocaleKey.myRequest),
+          AppLocalizations.getLocalizationValue(locale, LocaleKey.myBooking),
           style: TextStyle(color: Colors.black),
         ),
       ),

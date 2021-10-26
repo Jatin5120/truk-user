@@ -410,8 +410,10 @@ class _QuotesScreenState extends State<QuotesScreen>
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                              builder: (context) =>
-                                  QuoteSummaryScreen(quoteModel: quoteModel,id: id,),
+                              builder: (context) => QuoteSummaryScreen(
+                                quoteModel: quoteModel,
+                                id: id,
+                              ),
                             ),
                           );
                         },
@@ -506,7 +508,7 @@ class _QuotesScreenState extends State<QuotesScreen>
         ),
         SizedBox(width: size.width * 0.075),
         Expanded(
-          child: status == RequestStatus.accepted
+          child: status == RequestStatus.assigned
               ? ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue,

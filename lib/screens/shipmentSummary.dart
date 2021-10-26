@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/models/request_model.dart';
 import 'package:trukapp/screens/tcPage.dart';
 import '../firebase_helper/firebase_helper.dart';
 import '../helper/helper.dart';
@@ -20,20 +22,20 @@ class ShipmentSummary extends StatefulWidget {
   final LatLng source;
   final LatLng destination;
   final String pickupDate;
-  final String mandateType;
-  final String loadType;
-  final String trukType;
-  final String truckModel;
+  final String mandate;
+  final String load;
+  final String truk;
+  final String trukModel;
   const ShipmentSummary({
     Key key,
     @required this.materials,
     @required this.source,
     @required this.destination,
     @required this.pickupDate,
-    @required this.mandateType,
-    @required this.loadType,
-    @required this.trukType,
-    @required this.truckModel,
+    @required this.mandate,
+    @required this.load,
+    @required this.truk,
+    @required this.trukModel,
   }) : super(key: key);
 
   @override
@@ -48,10 +50,12 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
   // bool isCompanyInsured = false;
   // bool isAppInsured = false;
   Locale locale;
+  User user;
 
   @override
   void initState() {
     super.initState();
+    user = FirebaseAuth.instance.currentUser;
     Helper()
         .setLocationText(widget.source)
         .then((value) => setState(() => sourceAddress = value));
@@ -97,17 +101,28 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                 setState(() {
                   isLoading = true;
                 });
-                String id = await FirebaseHelper().insertRequest(
-                  pickupDate: widget.pickupDate,
+                final String sourceString =
+                    await Helper().setLocationText(widget.source);
+                final String destinationString =
+                    await Helper().setLocationText(widget.destination);
+                RequestModel requestModel = RequestModel(
+                  bookingId: DateTime.now().millisecondsSinceEpoch,
+                  uid: user.uid,
+                  bookingDate: DateTime.now().millisecondsSinceEpoch,
+                  mobile: user.phoneNumber,
                   materials: widget.materials,
+                  pickupDate: widget.pickupDate,
                   source: widget.source,
                   destination: widget.destination,
-                  trukType: widget.trukType,
-                  loadType: widget.loadType,
-                  mandateType: widget.mandateType,
-                  isInsured: isInsured,
-                  truckModel: widget.truckModel
+                  insured: isInsured,
+                  mandate: widget.mandate,
+                  load: widget.load,
+                  truk: widget.truk,
+                  sourceString: sourceString,
+                  destinationString: destinationString,
+                  trukModel: widget.trukModel,
                 );
+                String id = await FirebaseHelper().insertRequest(requestModel);
                 setState(() {
                   isLoading = false;
                 });
@@ -297,7 +312,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                   this.locale, LocaleKey.mandateType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.mandateType.toLowerCase().contains('ondemand')
+                  widget.mandate.toLowerCase().contains('ondemand')
                       ? LocaleKey.onDemand
                       : LocaleKey.lease)),
           SizedBox(
@@ -308,7 +323,7 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                   this.locale, LocaleKey.loadType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.loadType.toLowerCase().contains('partial')
+                  widget.load.toLowerCase().contains('partial')
                       ? LocaleKey.partialLoad
                       : LocaleKey.fullLoad)),
           SizedBox(
@@ -319,14 +334,13 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                   this.locale, LocaleKey.trukType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.trukType.toLowerCase().contains('closed')
+                  widget.truk.toLowerCase().contains('closed')
                       ? LocaleKey.closedTruk
                       : LocaleKey.openTruk)),
           SizedBox(
             height: 10,
           ),
-          createTypes(
-             'Truck Model',widget.truckModel??''),
+          createTypes('Truck Model', widget.trukModel ?? ''),
         ],
       ),
     );

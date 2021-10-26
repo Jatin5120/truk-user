@@ -50,6 +50,7 @@ class _MoreAboutState extends State<MoreAbout> {
   void initState() {
     super.initState();
     user = _auth.currentUser;
+    _companyNameController.text = radioValue;
   }
 
   @override
@@ -65,6 +66,7 @@ class _MoreAboutState extends State<MoreAbout> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context).locale;
+    print(_auth.currentUser.displayName);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -74,49 +76,56 @@ class _MoreAboutState extends State<MoreAbout> {
           height: 65,
           width: width,
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-          child: RaisedButton(
-            color: primaryColor,
-            onPressed: () async {
-              if (_formKey.currentState.validate()) {
-                setState(() {
-                  isLoading = true;
-                });
-                if (user != null && isTC) {
-                  String uid = user.uid;
-                  String mobile = user.phoneNumber;
-                  String email = _emailController.text.trim();
-                  String name = _nameController.text.trim();
-                  String city = _cityController.text.trim();
-                  String state = _stateController.text.trim();
-                  String gst =
-                      _gstController.text.isEmpty ? "NA" : _gstController.text;
-                  String company = _companyNameController.text.trim().isEmpty
-                      ? 'Individual'
-                      : _companyNameController.text.trim();
-                  await FirebaseHelper().insertUser(
-                      uid, name, email, mobile, company, city, state,
-                      gst: gst);
-                  setState(() {
-                    isLoading = false;
-                  });
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                      (b) => false);
-                } else {
-                  if (user == null) {
-                    Fluttertoast.showToast(msg: 'Please fill all the fields');
-                  } else if (!isTC) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Fluttertoast.showToast(
-                        msg: 'Please Accept terms and conditions');
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: primaryColor,
+            ),
+            onPressed: isTC
+                ? () async {
+                    if (_formKey.currentState.validate()) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      if (user != null && isTC) {
+                        String uid = user.uid;
+                        String mobile = user.phoneNumber;
+                        String email = _emailController.text.trim();
+                        String name = _nameController.text.trim();
+                        String city = _cityController.text.trim();
+                        String state = _stateController.text.trim();
+                        String gst = _gstController.text.isEmpty
+                            ? "NA"
+                            : _gstController.text;
+                        String company =
+                            _companyNameController.text.trim().isEmpty
+                                ? 'Individual'
+                                : _companyNameController.text.trim();
+                        await FirebaseHelper().insertUser(
+                            uid, name, email, mobile, company, city, state,
+                            gst: gst);
+                        setState(() {
+                          isLoading = false;
+                        });
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
+                            (b) => false);
+                      } else {
+                        if (user == null) {
+                          Fluttertoast.showToast(
+                              msg: 'Please fill all the fields');
+                        } else if (!isTC) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          Fluttertoast.showToast(
+                              msg: 'Please Accept terms and conditions');
+                        }
+                      }
+                    }
                   }
-                }
-              }
-            },
+                : null,
             child: isLoading
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -222,7 +231,7 @@ class _MoreAboutState extends State<MoreAbout> {
                       ),
                       TextFormField(
                         controller: _emailController,
-                        validator: (input) => input.isValidEmail()
+                        validator: (input) => input.trim().isValidEmail()
                             ? null
                             : AppLocalizations.getLocalizationValue(
                                 locale, LocaleKey.invalidEmail),
@@ -252,11 +261,10 @@ class _MoreAboutState extends State<MoreAbout> {
                           border: OutlineInputBorder(),
                         ),
                       ),
-                      if (radioValue == "Company")
+                      if (radioValue == "Company") ...[
                         SizedBox(
                           height: 15,
                         ),
-                      if (radioValue == "Company")
                         TextFormField(
                           controller: _gstController,
                           validator: (value) {
@@ -272,6 +280,7 @@ class _MoreAboutState extends State<MoreAbout> {
                             border: OutlineInputBorder(),
                           ),
                         ),
+                      ],
                       SizedBox(
                         height: 15,
                       ),
@@ -308,18 +317,17 @@ class _MoreAboutState extends State<MoreAbout> {
                           border: OutlineInputBorder(),
                         ),
                       ),
-
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left :10.0),
+                  padding: const EdgeInsets.only(left: 10.0),
                   child: Row(
                     children: [
                       Checkbox(
                           checkColor: Colors.white,
                           fillColor:
-                          MaterialStateProperty.resolveWith(getColor),
+                              MaterialStateProperty.resolveWith(getColor),
                           value: isTC,
                           onChanged: (bool value) {
                             setState(() {
@@ -337,17 +345,20 @@ class _MoreAboutState extends State<MoreAbout> {
                               // ),
                               TextSpan(
                                 text:
-                                " ${AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceText2)}",
+                                    "${AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceText2)}",
                                 style: TextStyle(
                                     color: primaryColor,
                                     decoration: TextDecoration.underline),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () async{
-                                    var insurance = await FirebaseHelper().getCompanyInsurance() ;
+                                  ..onTap = () async {
+                                    var insurance = await FirebaseHelper()
+                                        .getCompanyInsurance();
                                     Navigator.push(
                                       context,
                                       CupertinoPageRoute(
-                                        builder: (context) => TCPage(data: insurance,),
+                                        builder: (context) => TCPage(
+                                          data: insurance,
+                                        ),
                                       ),
                                     );
                                   },
