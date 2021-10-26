@@ -97,6 +97,9 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       FirebaseHelper.transactionCollection,
       note: "Payment for booking Id - ${widget.quoteModel.bookingId}",
     );
+
+    await FirebaseFirestore.instance.collection(FirebaseHelper.shipmentCollection).doc(widget.id).update({'isPaymentPending' : false});
+
     setState(() {
       isPaymentLoading = false;
       isCouponApplied = false;
@@ -607,9 +610,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     locale, LocaleKey.trukModel),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.quoteModel.truk.toLowerCase().contains('closed')
-                      ? LocaleKey.closedTruk
-                      : LocaleKey.openTruk)),
+                  widget.quoteModel.truk.toLowerCase())),
         ],
       ),
     );

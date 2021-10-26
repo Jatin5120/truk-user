@@ -411,7 +411,7 @@ class _QuotesScreenState extends State<QuotesScreen>
                             context,
                             CupertinoPageRoute(
                               builder: (context) =>
-                                  QuoteSummaryScreen(quoteModel: quoteModel),
+                                  QuoteSummaryScreen(quoteModel: quoteModel,id: id,),
                             ),
                           );
                         },

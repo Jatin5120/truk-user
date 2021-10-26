@@ -35,7 +35,8 @@ class ShipmentModel {
   String amountPaid;
   String ewaybill;
   String driverId;
-  // String truckModel;
+  String trukModel;
+  bool isPaymentPending;
 
   ShipmentModel({
     @required this.uid,
@@ -61,7 +62,8 @@ class ShipmentModel {
     this.amountPaid,
     @required this.ewaybill,
     @required this.driverId,
-    // @required this.truckModel,
+    @required this.trukModel,
+    @required this.isPaymentPending,
   });
 
   ShipmentModel copyWith({
@@ -88,7 +90,8 @@ class ShipmentModel {
     String amountPaid,
     String ewaybill,
     String driverId,
-    // String truckModel,
+    String trukModel,
+    String isPaymentPending,
   }) {
     return ShipmentModel(
       uid: uid ?? this.uid,
@@ -114,7 +117,8 @@ class ShipmentModel {
       amountPaid: amountPaid ?? this.amountPaid,
       ewaybill: ewaybill ?? this.ewaybill,
         driverId: driverId?? this.driverId,
-      // truckModel: truckModel?? this.truckModel,
+      trukModel: trukModel?? this.trukModel,
+      isPaymentPending: isPaymentPending?? this.isPaymentPending,
     );
   }
 
@@ -143,7 +147,8 @@ class ShipmentModel {
       'amountPaid': amountPaid,
       'ewaybill': ewaybill,
       'driverId':driverId,
-      // 'truckModel':truckModel
+      'trukModel':trukModel,
+      'isPaymentPending':isPaymentPending
     };
   }
 
@@ -173,7 +178,8 @@ class ShipmentModel {
       amountPaid: map['amountPaid'],
       ewaybill: map['ewaybill'],
         driverId: map['driverId'],
-        // truckModel:map['truckModel']
+        trukModel:map['trukModel'],
+        isPaymentPending:map['isPaymentPending']
     );
   }
 
@@ -207,7 +213,8 @@ class ShipmentModel {
             : "NA",
         amountPaid: map.get('amountPaid'),
         driverId: map.get('driverId'),
-      // truckModel: map.get('truckModel'),
+      trukModel: map.get('trukModel'),
+      isPaymentPending: map.get('isPaymentPending'),
     );
   }
 
@@ -218,8 +225,8 @@ class ShipmentModel {
 
   @override
   String toString() {
-    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId, )';
-    // return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId, truckModel: $truckModel)';
+    // return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId, )';
+    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId, trukModel: $trukModel,isPaymentPending: $isPaymentPending)';
   }
 
   @override
@@ -249,9 +256,10 @@ class ShipmentModel {
         other.commission == commission &&
         other.amountPaid == amountPaid &&
         other.ewaybill == ewaybill &&
+        other.isPaymentPending == isPaymentPending &&
     other.driverId == driverId
-        // &&
-    // other.truckModel == truckModel
+        &&
+    other.trukModel == trukModel
     ;
   }
 
@@ -279,8 +287,9 @@ class ShipmentModel {
         commission.hashCode ^
         amountPaid.hashCode ^
         ewaybill.hashCode ^
-    driverId.hashCode
-    // ^ truckModel.hashCode
+    driverId.hashCode^
+    isPaymentPending.hashCode
+    ^ trukModel.hashCode
     ;
   }
 }

@@ -28,7 +28,7 @@ class QuoteModel {
   String agent;
   String paymentStatus;
   double advance;
-  String truckModel;
+  String trukModel;
   QuoteModel(
       {this.uid,
       this.mobile,
@@ -49,7 +49,7 @@ class QuoteModel {
       this.status = RequestStatus.pending,
       this.trukName = 'Eicher',
       this.advance = 0.0,
-      this.truckModel,
+      this.trukModel,
       });
 
   QuoteModel copyWith({
@@ -72,7 +72,7 @@ class QuoteModel {
     String agent,
     String id,
     double advance,
-    String truckModel,
+    String trukModel,
   }) {
     return QuoteModel(
       uid: uid ?? this.uid,
@@ -94,7 +94,7 @@ class QuoteModel {
       agent: agent ?? this.agent,
       paymentStatus: paymentStatus ?? this.paymentStatus,
       advance: advance ?? this.advance,
-      truckModel: truckModel ?? this.truckModel,
+      trukModel: trukModel ?? this.trukModel,
     );
   }
 
@@ -118,7 +118,7 @@ class QuoteModel {
       'agent': agent ?? 'na',
       'paymentStatus': paymentStatus ?? PaymentType.cod,
       'advance': advance ?? 0.0,
-      // 'truckModel': truckModel,
+      'trukModel': trukModel,
     };
   }
 
@@ -144,7 +144,7 @@ class QuoteModel {
       agent: map['agent'] ?? 'na',
       paymentStatus: map['paymentStatus'] ?? PaymentType.cod,
       advance: map['advance'] ?? 0.0,
-      // truckModel: map['truckModel'],
+      trukModel: map['trukModel'],
     );
   }
 
@@ -171,7 +171,7 @@ class QuoteModel {
       agent: map.get('agent') ?? 'na',
       paymentStatus: map.data().containsKey('paymentStatus') ? map.get('paymentStatus') : PaymentType.cod,
       advance: map.data().containsKey('advance') ? double.parse(map.get('advance').toString()) : 0.0,
-      // truckModel: map.get('truckModel'),
+      trukModel: map.get('trukModel'),
     );
   }
 }

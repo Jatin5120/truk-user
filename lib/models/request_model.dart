@@ -23,7 +23,7 @@ class RequestModel {
   String status;
   String destinationString;
   String sourceString;
-  String truckModel;
+  String trukModel;
   RequestModel({
     this.uid,
     this.id,
@@ -42,7 +42,7 @@ class RequestModel {
     this.paymentStatus,
     this.destinationString,
     this.sourceString,
-    this.truckModel,
+    this.trukModel,
   });
 
   RequestModel copyWith({
@@ -62,7 +62,7 @@ class RequestModel {
     String id,
     String destinationString,
     String sourceString,
-    String truckModel,
+    String trukModel,
   }) {
     return RequestModel(
       uid: uid ?? this.uid,
@@ -82,7 +82,7 @@ class RequestModel {
       paymentStatus: paymentStatus ?? this.paymentStatus,
       destinationString: destinationString ?? this.destinationString,
       sourceString: sourceString ?? this.sourceString,
-      truckModel: truckModel ?? this.truckModel,
+      trukModel: trukModel ?? this.trukModel,
     );
   }
 
@@ -104,7 +104,7 @@ class RequestModel {
       'paymentStatus': paymentStatus ?? PaymentType.cod,
       'destinationString': destinationString,
       'sourceString': sourceString,
-      // 'truckModel': truckModel,
+      'trukModel': trukModel,
     };
   }
 
@@ -129,7 +129,7 @@ class RequestModel {
       paymentStatus: map['paymentStatus'] ?? PaymentType.cod,
       destinationString: map['destinationString'],
       sourceString:  map['sourceString'],
-      // truckModel:  map['truckModel'],
+      trukModel:  map['trukModel'],
 
     );
   }
@@ -161,7 +161,7 @@ class RequestModel {
           : PaymentType.cod,
       destinationString: map.get('destinationString'),
       sourceString: map.get('sourceString'),
-      // truckModel: map.get('truckModel'),
+      trukModel: map.get('trukModel'),
 
     );
   }
