@@ -228,11 +228,17 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         ),
                         onPressed: () async {
                           String invoice = await getInvoice();
-                          if (await canLaunch(invoice)) {
+                          try{
                             await launch(invoice);
-                          } else {
-                            throw 'Could not launch $invoice';
+
+                          }catch(e){
+                            if (await canLaunch(invoice)) {
+                              await launch(invoice);
+                            } else {
+                              throw 'Could not launch $invoice';
+                            }
                           }
+
                         },
                         child: Text(
                           'Invoice',
