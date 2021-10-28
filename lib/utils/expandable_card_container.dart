@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,15 @@ import 'package:trukapp/helper/helper.dart';
 import 'package:trukapp/helper/request_status.dart';
 import 'package:trukapp/locale/app_localization.dart';
 import 'package:trukapp/locale/locale_keys.dart';
+import 'package:trukapp/models/chatting_list_model.dart';
 import 'package:trukapp/models/material_model.dart';
 import 'package:trukapp/models/quote_model.dart';
 import 'package:trukapp/models/request_model.dart';
 import 'package:trukapp/models/shipment_model.dart';
+import 'package:trukapp/models/user_model.dart';
 import 'package:trukapp/screens/matDetails.dart';
 import 'package:trukapp/screens/quote_summary_screen.dart';
+import 'package:trukapp/screens/support.dart';
 import 'package:trukapp/screens/track.dart';
 import 'package:trukapp/screens/trackShipment.dart';
 import 'package:trukapp/widgets/widgets.dart';
@@ -388,7 +392,56 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                if(widget.model.status == RequestStatus.started)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: GestureDetector(
+                      onTap: () async{
+                        CollectionReference reference = FirebaseFirestore.instance
+                            .collection(FirebaseHelper.fleetOwnerCollection);
+
+                        final d = await reference.doc(quoteModel.agent).get();
+                        UserModel agent = UserModel.fromSnapshot(d);
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Support(
+                              chatListModel: ChattingListModel(
+                                id: '',
+                                quoteModel: quoteModel,
+                                userModel: agent,
+                                time: DateTime.now().millisecondsSinceEpoch,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 40.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(width: 1.0, color: Colors.amber),
+                          color: Colors.amber,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.amber.withOpacity(0.8),
+                              offset: Offset(0, 3),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.chat),
+                            style: enabledTextStyle,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
