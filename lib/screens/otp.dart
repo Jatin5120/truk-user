@@ -120,7 +120,28 @@ class _OTPState extends State<OTP> {
         }
       });
       Fluttertoast.showToast(msg: _message);
-      if (user != null) matchOtp(user);
+      // if (user != null) matchOtp(user);
+      if(user != null)
+      SchedulerBinding.instance.addPostFrameCallback((_) async {
+        UserModel userModel =
+        await FirebaseHelper().getCurrentUser(uid: user.uid);
+        if (userModel == null) {
+          //new user
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => MoreAbout()),
+                (b) => false,
+          );
+        } else {
+          //existing user
+          await SharedPref().createSession(user.uid, userModel.name,
+              userModel.email, user.phoneNumber);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => HomeScreen()),
+                  (b) => false);
+        }
+      });
     } catch (e) {
       setState(() {
         isLoading = false;

@@ -340,7 +340,8 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
           SizedBox(
             height: 10,
           ),
-          createTypes('Truck Model', widget.trukModel ?? ''),
+          createTypes(AppLocalizations.getLocalizationValue(
+              locale, LocaleKey.trukModel), widget.trukModel ?? ''),
         ],
       ),
     );
