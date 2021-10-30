@@ -28,6 +28,8 @@ class _HomeMapFragmentState extends State<HomeMapFragment>
   final _sourceTextController = TextEditingController();
   final _destinationTextController = TextEditingController();
 
+  int selectedMarker = 0;
+
   bool isLoading = true;
   final Permission _permission = Permission.location;
   PermissionStatus _permissionStatus = PermissionStatus.denied;
@@ -225,8 +227,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment>
                   ),
                   zoomGesturesEnabled: true,
                   onTap: (latlng) async {
-                    int count = myMarker.length;
-                    if (count == 0) {
+                    if (selectedMarker == 0) {
                       myMarker['source'] = Marker(
                         markerId: MarkerId('source'),
                         position: latlng,
@@ -235,7 +236,7 @@ class _HomeMapFragmentState extends State<HomeMapFragment>
                         infoWindow: InfoWindow(title: 'Source'),
                       );
                       await setLocationText(0);
-                    } else if (count == 1) {
+                    } else if (selectedMarker == 1) {
                       myMarker['destination'] = Marker(
                         markerId: MarkerId('destination'),
                         position: latlng,
@@ -267,58 +268,85 @@ class _HomeMapFragmentState extends State<HomeMapFragment>
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: Card(
                     elevation: 12.0,
-                    child: TextFormField(
-                      onTap: () async {
-                        Prediction p = await places.PlacesAutocomplete.show(
-                          context: context,
-                          types: [],
-                          strictbounds: false,
-                          apiKey: kGoogleApiKey,
-                          mode: _mode, // Mode.fullscreen
-                          onError: (PlacesAutocompleteResponse response) {
-                            Fluttertoast.showToast(msg: response.errorMessage);
-                            print(
-                                'Error Predictions --> ${response.predictions}');
-                            log(response.errorMessage);
-                          },
-                          language: locale.languageCode,
-                          radius: 100000,
-                          components: [
-                            Component(Component.country, 'in'),
-                          ],
-                        );
-                        print("place --> $p");
-                        if (p == null) {
-                          return;
-                        }
-                        if (p != null) {
-                          _sourceTextController.text = p.description;
-                          PlacesDetailsResponse detail =
-                              await _places.getDetailsByPlaceId(p.placeId);
-                          double lat = detail.result.geometry.location.lat;
-                          double lng = detail.result.geometry.location.lng;
-                          myMarker['source'] = Marker(
-                            markerId: MarkerId('source'),
-                            position: LatLng(lat, lng),
-                            icon: BitmapDescriptor.defaultMarkerWithHue(
-                                BitmapDescriptor.hueGreen),
-                            infoWindow: InfoWindow(title: 'Source'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: TextFormField(
+                        onTap: () async {
+                          Prediction p = await places.PlacesAutocomplete.show(
+                            context: context,
+                            types: [],
+                            strictbounds: false,
+                            apiKey: kGoogleApiKey,
+                            mode: _mode, // Mode.fullscreen
+                            onError: (PlacesAutocompleteResponse response) {
+                              Fluttertoast.showToast(
+                                  msg: response.errorMessage);
+                              print(
+                                  'Error Predictions --> ${response.predictions}');
+                              log(response.errorMessage);
+                            },
+                            language: locale.languageCode,
+                            radius: 100000,
+                            components: [
+                              Component(Component.country, 'in'),
+                            ],
                           );
-                          CameraUpdate c =
-                              CameraUpdate.newLatLngZoom(LatLng(lat, lng), 16);
-                          mapController.animateCamera(c);
-                          setState(() {});
-                        }
-                      },
-                      controller: _sourceTextController,
-                      decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.only(left: 10, top: 15),
-                        prefixIcon: Icon(Icons.map),
-                        alignLabelWithHint: false,
-                        hintText: AppLocalizations.getLocalizationValue(
-                            locale, LocaleKey.enterPickup),
-                        border: InputBorder.none,
+                          print("place --> $p");
+                          if (p == null) {
+                            return;
+                          }
+                          if (p != null) {
+                            _sourceTextController.text = p.description;
+                            PlacesDetailsResponse detail =
+                                await _places.getDetailsByPlaceId(p.placeId);
+                            double lat = detail.result.geometry.location.lat;
+                            double lng = detail.result.geometry.location.lng;
+                            myMarker['source'] = Marker(
+                              markerId: MarkerId('source'),
+                              position: LatLng(lat, lng),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueGreen),
+                              infoWindow: InfoWindow(title: 'Source'),
+                            );
+                            CameraUpdate c = CameraUpdate.newLatLngZoom(
+                                LatLng(lat, lng), 16);
+                            mapController.animateCamera(c);
+                            setState(() {});
+                          }
+                        },
+                        controller: _sourceTextController,
+                        decoration: InputDecoration(
+                          suffixIcon: Container(
+                            height: 32,
+                            width: 32,
+                            decoration: BoxDecoration(
+                              color: selectedMarker == 0
+                                  ? Colors.green
+                                  : Colors.grey,
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  selectedMarker = 0;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.location_on_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          contentPadding:
+                              const EdgeInsets.only(left: 10, top: 15),
+                          prefixIcon: Icon(Icons.map),
+                          alignLabelWithHint: false,
+                          hintText: AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.enterPickup),
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                   ),
@@ -331,60 +359,87 @@ class _HomeMapFragmentState extends State<HomeMapFragment>
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: Card(
                     elevation: 12.0,
-                    child: TextFormField(
-                      controller: _destinationTextController,
-                      onTap: () async {
-                        Prediction p = await places.PlacesAutocomplete.show(
-                          context: context,
-                          apiKey: kGoogleApiKey,
-                          types: [],
-                          strictbounds: false,
-                          mode: _mode, // Mode.fullscreen
-                          onError: (PlacesAutocompleteResponse response) {
-                            Fluttertoast.showToast(msg: response.errorMessage);
-                            print(
-                                'Error Predictions --> ${response.predictions}');
-                            log(response.errorMessage);
-                          },
-                          language: locale.languageCode,
-                          logo: Text(""),
-                          components: [
-                            Component(Component.country, 'in'),
-                          ],
-                        );
-                        if (p == null) {
-                          return;
-                        }
-                        if (p != null) {
-                          print('hi');
-                          _destinationTextController.text = p.description;
-                          PlacesDetailsResponse detail =
-                              await _places.getDetailsByPlaceId(p.placeId);
-                          double lat = detail.result.geometry.location.lat;
-                          double lng = detail.result.geometry.location.lng;
-                          myMarker['destination'] = Marker(
-                            markerId: MarkerId('destination'),
-                            position: LatLng(lat, lng),
-                            icon: BitmapDescriptor.defaultMarkerWithHue(
-                                BitmapDescriptor.hueRed),
-                            infoWindow: InfoWindow(title: 'Destination'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: TextFormField(
+                        controller: _destinationTextController,
+                        onTap: () async {
+                          Prediction p = await places.PlacesAutocomplete.show(
+                            context: context,
+                            apiKey: kGoogleApiKey,
+                            types: [],
+                            strictbounds: false,
+                            mode: _mode, // Mode.fullscreen
+                            onError: (PlacesAutocompleteResponse response) {
+                              Fluttertoast.showToast(
+                                  msg: response.errorMessage);
+                              print(
+                                  'Error Predictions --> ${response.predictions}');
+                              log(response.errorMessage);
+                            },
+                            language: locale.languageCode,
+                            logo: Text(""),
+                            components: [
+                              Component(Component.country, 'in'),
+                            ],
                           );
-                          CameraUpdate c =
-                              CameraUpdate.newLatLngZoom(LatLng(lat, lng), 16);
-                          mapController.animateCamera(c);
-                          setState(() {});
-                        }
-                      },
-                      decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.only(left: 10, top: 15),
-                        prefixIcon: Icon(
-                          Icons.pin_drop,
+                          if (p == null) {
+                            return;
+                          }
+                          if (p != null) {
+                            print('hi');
+                            _destinationTextController.text = p.description;
+                            PlacesDetailsResponse detail =
+                                await _places.getDetailsByPlaceId(p.placeId);
+                            double lat = detail.result.geometry.location.lat;
+                            double lng = detail.result.geometry.location.lng;
+                            myMarker['destination'] = Marker(
+                              markerId: MarkerId('destination'),
+                              position: LatLng(lat, lng),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueRed),
+                              infoWindow: InfoWindow(title: 'Destination'),
+                            );
+                            CameraUpdate c = CameraUpdate.newLatLngZoom(
+                                LatLng(lat, lng), 16);
+                            mapController.animateCamera(c);
+                            setState(() {});
+                          }
+                        },
+                        decoration: InputDecoration(
+                          suffixIcon: Container(
+                            height: 32,
+                            width: 32,
+                            decoration: BoxDecoration(
+                              color: selectedMarker == 1
+                                  ? Colors.red
+                                  : Colors.grey,
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  selectedMarker = 1;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.location_on_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          contentPadding:
+                              const EdgeInsets.only(left: 10, top: 15),
+                          prefixIcon: Icon(
+                            Icons.pin_drop,
+                          ),
+                          alignLabelWithHint: false,
+                          hintText: AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.enterDrop),
+                          border: InputBorder.none,
                         ),
-                        alignLabelWithHint: false,
-                        hintText: AppLocalizations.getLocalizationValue(
-                            locale, LocaleKey.enterDrop),
-                        border: InputBorder.none,
                       ),
                     ),
                   ),
