@@ -393,12 +393,13 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                       ),
                     ),
                   ),
-                if(widget.model.status == RequestStatus.started)
+                if (widget.model.status == RequestStatus.assigned)
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: GestureDetector(
-                      onTap: () async{
-                        CollectionReference reference = FirebaseFirestore.instance
+                      onTap: () async {
+                        CollectionReference reference = FirebaseFirestore
+                            .instance
                             .collection(FirebaseHelper.fleetOwnerCollection);
 
                         final d = await reference.doc(quoteModel.agent).get();

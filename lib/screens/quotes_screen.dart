@@ -368,7 +368,7 @@ class _QuotesScreenState extends State<QuotesScreen>
         padding: const EdgeInsets.all(5),
       );
     }
-    if (status == 'assigned') {
+    if (status == RequestStatus.assigned) {
       return Container(
         child: Text(
           'Assinged'.toUpperCase(),
