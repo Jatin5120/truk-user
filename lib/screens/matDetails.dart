@@ -60,7 +60,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
       materials = q.materials;
       print(q.load);
       trukTypeValue = "openTruk";
-      mandateTypeValue = "lease";
+      mandateTypeValue = LocaleKey.onDemand;
       loadTypeValue = "fullTruk";
       truckModel = 'No Preference';
       pickupDate = q.pickupDate;
@@ -102,10 +102,10 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 Fluttertoast.showToast(msg: 'Please enter pickup date');
                 return;
               }
-              if (mandateTypeValue == null || mandateTypeValue.isEmpty) {
-                Fluttertoast.showToast(msg: 'Please select mandate type');
-                return;
-              }
+              // if (mandateTypeValue == null || mandateTypeValue.isEmpty) {
+              //   Fluttertoast.showToast(msg: 'Please select mandate type');
+              //   return;
+              // }
 
               if (trukTypeValue == null || trukTypeValue.isEmpty) {
                 Fluttertoast.showToast(msg: 'Please select truk type');
@@ -522,38 +522,38 @@ class _MaterialDetailsState extends State<MaterialDetails> {
                 SizedBox(
                   height: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.black,
-                      ),
-                    ),
-                    child: DropdownButton<String>(
-                      underline: Container(),
-                      isExpanded: true,
-                      hint: Text(AppLocalizations.getLocalizationValue(
-                          locale, LocaleKey.selectMandateType)),
-                      value: mandateTypeValue,
-                      items: Constants(locale).mandateType.map((value) {
-                        return DropdownMenuItem<String>(
-                          value: value['key'],
-                          child: Text(value['value']),
-                        );
-                      }).toList(),
-                      onChanged: (_) {
-                        FocusScope.of(context).unfocus();
-                        mandateTypeValue = _;
-                        print(_);
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                //   child: Container(
+                //     padding: const EdgeInsets.only(left: 10),
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(5),
+                //       border: Border.all(
+                //         width: 1,
+                //         color: Colors.black,
+                //       ),
+                //     ),
+                //     child: DropdownButton<String>(
+                //       underline: Container(),
+                //       isExpanded: true,
+                //       hint: Text(AppLocalizations.getLocalizationValue(
+                //           locale, LocaleKey.selectMandateType)),
+                //       value: mandateTypeValue,
+                //       items: Constants(locale).mandateType.map((value) {
+                //         return DropdownMenuItem<String>(
+                //           value: value['key'],
+                //           child: Text(value['value']),
+                //         );
+                //       }).toList(),
+                //       onChanged: (_) {
+                //         FocusScope.of(context).unfocus();
+                //         mandateTypeValue = _;
+                //         print(_);
+                //         setState(() {});
+                //       },
+                //     ),
+                //   ),
+                // ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

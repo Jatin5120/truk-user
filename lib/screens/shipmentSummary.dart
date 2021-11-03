@@ -312,9 +312,11 @@ class _ShipmentSummaryState extends State<ShipmentSummary> {
                   this.locale, LocaleKey.mandateType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.mandate.toLowerCase().contains('ondemand')
-                      ? LocaleKey.onDemand
-                      : LocaleKey.lease)),
+                  LocaleKey.onDemand)
+                  // widget.mandate.toLowerCase().contains('ondemand')
+                  //     ? LocaleKey.onDemand
+                  //     : LocaleKey.lease)
+          ),
           SizedBox(
             height: 10,
           ),
