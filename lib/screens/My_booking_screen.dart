@@ -218,10 +218,12 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppLocalizations.getLocalizationValue(
-                        this.locale, model.mandate),
+                    // AppLocalizations.getLocalizationValue(
+                    //     this.locale, model.mandate),
+              AppLocalizations.getLocalizationValue(
+              this.locale,LocaleKey.onDemand),
                     style: TextStyle(fontSize: 14, color: Colors.orange),
-                  ),
+                   ),
                   Text(
                     AppLocalizations.getLocalizationValue(
                         this.locale, model.truk),

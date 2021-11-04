@@ -393,7 +393,7 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                       ),
                     ),
                   ),
-                if (widget.model.status == RequestStatus.assigned)
+                if (widget.model.status == RequestStatus.pending)
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: GestureDetector(
