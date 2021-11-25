@@ -21,6 +21,12 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -39,12 +45,12 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.agumentik.trukapp"
+        applicationId "com.trukapp"
         minSdkVersion 20
-        targetSdkVersion 29
+        targetSdkVersion 30
         multiDexEnabled true
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 1
+        versionName "1.0.1"
     }
 
     buildTypes {
@@ -53,7 +59,21 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+
+//        release {
+//            signingConfig signingConfigs.release
+//        }
     }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['key0']
+            keyPassword keystoreProperties['trukuser']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['C:\\Projects\\truk-user\\trukuser.jks']) : null
+            storePassword keystoreProperties['trukuser']
+        }
+    }
+
 }
 
 flutter {

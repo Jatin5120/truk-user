@@ -61,7 +61,7 @@ class _MaterialDetailsState extends State<MaterialDetails> {
       print(q.load);
       trukTypeValue = "openTruk";
       mandateTypeValue = LocaleKey.onDemand;
-      loadTypeValue = "fullTruk";
+      loadTypeValue = "fullLoad";
       truckModel = 'No Preference';
       pickupDate = q.pickupDate;
       this.s = q.source;

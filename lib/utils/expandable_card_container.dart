@@ -94,7 +94,6 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
     for (MaterialModel val in widget.model.materials) {
       weight += val.quantity;
     }
-
     return Card(
       elevation: 8,
       child: ExpandablePanel(
